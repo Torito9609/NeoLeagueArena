@@ -4,4 +4,8 @@ import co.edu.unbosque.vista.admin.VistaAdmin;
 
 public class AdminController {
 	private VistaAdmin vistaAdmin;
+	
+	public AdminController() {
+		vistaAdmin = new VistaAdmin();
+	}
 }

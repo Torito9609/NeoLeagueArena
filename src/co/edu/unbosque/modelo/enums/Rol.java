@@ -1,5 +1,5 @@
 package co.edu.unbosque.modelo.enums;
 
 public enum Rol {
-	ADMIN, JUGADOR, ENTRENAOR
+	ADMIN, JUGADOR, ENTRENADOR
 }

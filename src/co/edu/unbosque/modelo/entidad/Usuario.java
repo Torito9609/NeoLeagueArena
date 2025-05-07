@@ -8,5 +8,7 @@ public class Usuario {
 	private String celular;
 	private String pais;
 	private String zonaHoraria;
-	private String password;
+	private String passwordHash;
+	private String rutaFoto;
+	private boolean necesitaCambioPassword;
 }

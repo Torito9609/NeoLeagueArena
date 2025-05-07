@@ -4,18 +4,18 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 public class VistaAdmin {
-	private VentanaPrincipal ventanaPrincipal;
+	private VentanaPrincipalAdmin ventanaPrincipal;
 	private VentanaProducto ventanaProducto;
 	
 	public VistaAdmin() {
-		ventanaPrincipal = new VentanaPrincipal();
+		ventanaPrincipal = new VentanaPrincipalAdmin();
 		ventanaProducto = new VentanaProducto();
 	}
 	
-	public VentanaPrincipal getVentanaPrincipal() {
+	public VentanaPrincipalAdmin getVentanaPrincipal() {
 		return ventanaPrincipal;
 	}
-	public void setVentanaPrincipal(VentanaPrincipal ventanaPrincipal) {
+	public void setVentanaPrincipal(VentanaPrincipalAdmin ventanaPrincipal) {
 		this.ventanaPrincipal = ventanaPrincipal;
 	}
 	public VentanaProducto getVentanaProducto() {

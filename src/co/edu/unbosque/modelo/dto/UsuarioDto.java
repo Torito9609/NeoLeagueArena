@@ -8,6 +8,15 @@ public class UsuarioDto {
 	private Rol rol;
 	private String pais;
 	private String ciudad;
+	private String rutaFoto;
+
+	public String getRutaFoto() {
+		return rutaFoto;
+	}
+
+	public void setRutaFoto(String rutaFoto) {
+		this.rutaFoto = rutaFoto;
+	}
 
 	public String getCiudad() {
 		return ciudad;

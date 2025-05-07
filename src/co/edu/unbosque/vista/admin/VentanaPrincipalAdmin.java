@@ -1,0 +1,165 @@
+package co.edu.unbosque.vista.admin;
+
+import java.awt.*;
+import javax.swing.*;
+
+/**
+ * Clase que representa la ventana principal del módulo de administración.
+ * Contiene todos los paneles necesarios para gestionar usuarios, incluyendo:
+ * búsqueda, tabla de usuarios, opciones laterales y botones inferiores.
+ * <p>
+ * Esta ventana se ajusta automáticamente al tamaño completo de la pantalla
+ * y no permite redimensionamiento por parte del usuario.
+ * </p>
+ * 
+ * @author Kevin Andres Toro Moreno
+ */
+public class VentanaPrincipalAdmin extends JFrame {
+
+    private PanelBusquedaAdmin panelBusqueda;
+    private PanelLateralAdmin panelLateral;
+    private PanelTabla panelTabla;
+    private PanelInferiorAdmin panelInferior;
+    private PanelInicioAdmin panelInicio;
+    private PanelAnalisisReportesAdmin panelAnalisis;
+    private PanelNotificacionesAdmin panelNotificaciones;
+
+    /**
+     * Constructor que inicializa la ventana principal, la configura en pantalla completa
+     * y organiza sus componentes internos.
+     */
+    public VentanaPrincipalAdmin() {
+        setTitle("Gestión de Usuarios");
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(screenSize);
+        setResizable(false);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        inicializarComponentes();
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    /**
+     * Inicializa y agrega los paneles que componen la ventana principal.
+     */
+    public void inicializarComponentes() {
+        panelBusqueda = new PanelBusquedaAdmin();
+        panelTabla = new PanelTabla();
+        panelInferior = new PanelInferiorAdmin();
+        panelLateral = new PanelLateralAdmin();
+        panelInicio = new PanelInicioAdmin();
+        panelAnalisis = new PanelAnalisisReportesAdmin();
+        panelNotificaciones = new PanelNotificacionesAdmin();
+
+        JPanel panelContenido = new JPanel(new BorderLayout());
+        panelContenido.add(panelBusqueda, BorderLayout.NORTH);
+        panelContenido.add(panelTabla, BorderLayout.CENTER);
+
+        add(panelLateral, BorderLayout.WEST);
+        add(panelContenido, BorderLayout.CENTER);
+        add(panelInferior, BorderLayout.SOUTH);
+        
+        add(panelInicio, BorderLayout.CENTER);
+        add(panelAnalisis, BorderLayout.CENTER);
+        add(panelNotificaciones, BorderLayout.CENTER);
+
+        panelInicio.setVisible(true);
+        panelAnalisis.setVisible(false);
+        panelNotificaciones.setVisible(false);
+        panelLateral.setVisible(true);
+        panelInferior.setVisible(false);
+        panelTabla.setVisible(false);
+        panelBusqueda.setVisible(false);
+    }
+
+    /**
+     * @return el panel de búsqueda.
+     */
+    public PanelBusquedaAdmin getPanelBusqueda() {
+        return panelBusqueda;
+    }
+
+    /**
+     * Establece el panel de búsqueda.
+     * @param panelBusqueda el nuevo panel de búsqueda.
+     */
+    public void setPanelBusqueda(PanelBusquedaAdmin panelBusqueda) {
+        this.panelBusqueda = panelBusqueda;
+    }
+
+    /**
+     * @return el panel lateral.
+     */
+    public PanelLateralAdmin getPanelLateral() {
+        return panelLateral;
+    }
+
+    /**
+     * Establece el panel lateral.
+     * @param panelSidebar el nuevo panel lateral.
+     */
+    public void setPanelLateral(PanelLateralAdmin panelSidebar) {
+        this.panelLateral = panelSidebar;
+    }
+
+    /**
+     * @return el panel que contiene la tabla de usuarios.
+     */
+    public PanelTabla getPanelTabla() {
+        return panelTabla;
+    }
+
+    /**
+     * Establece el panel de tabla.
+     * @param panelTabla el nuevo panel de tabla.
+     */
+    public void setPanelTabla(PanelTabla panelTabla) {
+        this.panelTabla = panelTabla;
+    }
+
+    /**
+     * @return el panel inferior con las acciones disponibles.
+     */
+    public PanelInferiorAdmin getPanelInferior() {
+        return panelInferior;
+    }
+
+    /**
+     * Establece el panel inferior.
+     * @param panelDetalles el nuevo panel inferior.
+     */
+    public void setPanelInferior(PanelInferiorAdmin panelDetalles) {
+        this.panelInferior = panelDetalles;
+    }
+
+	public PanelInicioAdmin getPanelInicio() {
+		return panelInicio;
+	}
+
+	public void setPanelInicio(PanelInicioAdmin panelInicio) {
+		this.panelInicio = panelInicio;
+	}
+
+	public PanelAnalisisReportesAdmin getPanelAnalisis() {
+		return panelAnalisis;
+	}
+
+	public void setPanelAnalisis(PanelAnalisisReportesAdmin panelAnalisis) {
+		this.panelAnalisis = panelAnalisis;
+	}
+
+	public PanelNotificacionesAdmin getPanelNotificaciones() {
+		return panelNotificaciones;
+	}
+
+	public void setPanelNotificaciones(PanelNotificacionesAdmin panelNotificaciones) {
+		this.panelNotificaciones = panelNotificaciones;
+	}
+    
+    
+}

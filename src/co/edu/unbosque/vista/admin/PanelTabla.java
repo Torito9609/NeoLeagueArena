@@ -49,7 +49,7 @@ public class PanelTabla extends JPanel {
      * con columnas predefinidas y comportamiento no editable.
      */
     private void inicializarComponentes() {
-        String[] columnas = { "Nombre", "Correo", "Rol", "$ País", "Ciudad" };
+        String[] columnas = { "Nombre", "Correo", "Rol", "País", "Ciudad" };
 
         modeloTabla = new DefaultTableModel(null, columnas) {
             @Override

@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * 
  * @author Kevin Andres Toro Moreno
  */
-public class PanelBusqueda extends JPanel {
+public class PanelBusquedaAdmin extends JPanel {
 
     private JComboBox<String> buscarPorComboBox, filtroComboBox, tipoUsuarioComboBox, paisComboBox, ciudadComboBox;
     private JButton buscarButton, filtrarButton;
@@ -24,7 +24,7 @@ public class PanelBusqueda extends JPanel {
     /**
      * Constructor que inicializa el panel con su disposición y componentes visuales.
      */
-    public PanelBusqueda() {
+    public PanelBusquedaAdmin() {
         setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
         setBackground(Color.LIGHT_GRAY);
 
