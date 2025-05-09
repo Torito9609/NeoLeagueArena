@@ -8,134 +8,155 @@ import javax.swing.*;
  * Contiene todos los paneles necesarios para gestionar usuarios, incluyendo:
  * búsqueda, tabla de usuarios, opciones laterales y botones inferiores.
  * <p>
- * Esta ventana se ajusta automáticamente al tamaño completo de la pantalla
- * y no permite redimensionamiento por parte del usuario.
+ * Esta ventana se ajusta automáticamente al tamaño completo de la pantalla y no
+ * permite redimensionamiento por parte del usuario.
  * </p>
  * 
  * @author Kevin Andres Toro Moreno
  */
 public class VentanaPrincipalAdmin extends JFrame {
 
-    private PanelBusquedaAdmin panelBusqueda;
-    private PanelLateralAdmin panelLateral;
-    private PanelTabla panelTabla;
-    private PanelInferiorAdmin panelInferior;
-    private PanelInicioAdmin panelInicio;
-    private PanelAnalisisReportesAdmin panelAnalisis;
-    private PanelNotificacionesAdmin panelNotificaciones;
+	private PanelBusquedaAdmin panelBusqueda;
+	private PanelLateralAdmin panelLateral;
+	private PanelTabla panelTabla;
+	private PanelInferiorAdmin panelInferior;
+	private PanelInicioAdmin panelInicio;
+	private PanelAnalisisReportesAdmin panelAnalisis;
+	private PanelNotificacionesAdmin panelNotificaciones;
+	private CardLayout layoutCentral;
+	private JPanel panelCentral;
 
-    /**
-     * Constructor que inicializa la ventana principal, la configura en pantalla completa
-     * y organiza sus componentes internos.
-     */
-    public VentanaPrincipalAdmin() {
-        setTitle("Gestión de Usuarios");
+	/**
+	 * Constructor que inicializa la ventana principal, la configura en pantalla
+	 * completa y organiza sus componentes internos.
+	 */
+	public VentanaPrincipalAdmin() {
+		setTitle("Gestión de Usuarios");
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setSize(screenSize);
-        setResizable(false);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setSize(screenSize);
+		setResizable(false);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLayout(new BorderLayout());
 
-        inicializarComponentes();
+		inicializarComponentes();
 
-        setLocationRelativeTo(null);
-        setVisible(true);
-    }
+		setLocationRelativeTo(null);
+		setVisible(true);
+	}
 
-    /**
-     * Inicializa y agrega los paneles que componen la ventana principal.
-     */
-    public void inicializarComponentes() {
-        panelBusqueda = new PanelBusquedaAdmin();
-        panelTabla = new PanelTabla();
-        panelInferior = new PanelInferiorAdmin();
-        panelLateral = new PanelLateralAdmin();
-        panelInicio = new PanelInicioAdmin();
-        panelAnalisis = new PanelAnalisisReportesAdmin();
-        panelNotificaciones = new PanelNotificacionesAdmin();
+	/**
+	 * Inicializa y agrega los paneles que componen la ventana principal.
+	 */
+	public void inicializarComponentes() {
+		panelBusqueda = new PanelBusquedaAdmin();
+		panelTabla = new PanelTabla();
+		panelInferior = new PanelInferiorAdmin();
+		panelLateral = new PanelLateralAdmin();
+		panelInicio = new PanelInicioAdmin();
+		panelAnalisis = new PanelAnalisisReportesAdmin();
+		panelNotificaciones = new PanelNotificacionesAdmin();
 
-        JPanel panelContenido = new JPanel(new BorderLayout());
-        panelContenido.add(panelBusqueda, BorderLayout.NORTH);
-        panelContenido.add(panelTabla, BorderLayout.CENTER);
+		JPanel panelContenido = new JPanel(new BorderLayout());
+		panelContenido.add(panelBusqueda, BorderLayout.NORTH);
+		panelContenido.add(panelTabla, BorderLayout.CENTER);
 
-        add(panelLateral, BorderLayout.WEST);
-        add(panelContenido, BorderLayout.CENTER);
-        add(panelInferior, BorderLayout.SOUTH);
-        
-        add(panelInicio, BorderLayout.CENTER);
-        add(panelAnalisis, BorderLayout.CENTER);
-        add(panelNotificaciones, BorderLayout.CENTER);
+		layoutCentral = new CardLayout();
+		panelCentral = new JPanel(layoutCentral);
 
-        panelInicio.setVisible(true);
-        panelAnalisis.setVisible(false);
-        panelNotificaciones.setVisible(false);
-        panelLateral.setVisible(true);
-        panelInferior.setVisible(false);
-        panelTabla.setVisible(false);
-        panelBusqueda.setVisible(false);
-    }
+		panelCentral.add(panelContenido, "USUARIOS");
+		panelCentral.add(panelInicio, "INICIO");
+		panelCentral.add(panelAnalisis, "ANALISIS");
+		panelCentral.add(panelNotificaciones, "NOTIFICACIONES");
 
-    /**
-     * @return el panel de búsqueda.
-     */
-    public PanelBusquedaAdmin getPanelBusqueda() {
-        return panelBusqueda;
-    }
+		add(panelLateral, BorderLayout.WEST);
+		add(panelInferior, BorderLayout.SOUTH);
+		add(panelCentral, BorderLayout.CENTER);
 
-    /**
-     * Establece el panel de búsqueda.
-     * @param panelBusqueda el nuevo panel de búsqueda.
-     */
-    public void setPanelBusqueda(PanelBusquedaAdmin panelBusqueda) {
-        this.panelBusqueda = panelBusqueda;
-    }
+		layoutCentral.show(panelCentral, "INICIO");
 
-    /**
-     * @return el panel lateral.
-     */
-    public PanelLateralAdmin getPanelLateral() {
-        return panelLateral;
-    }
+	}
 
-    /**
-     * Establece el panel lateral.
-     * @param panelSidebar el nuevo panel lateral.
-     */
-    public void setPanelLateral(PanelLateralAdmin panelSidebar) {
-        this.panelLateral = panelSidebar;
-    }
+	public CardLayout getLayoutCentral() {
+		return layoutCentral;
+	}
 
-    /**
-     * @return el panel que contiene la tabla de usuarios.
-     */
-    public PanelTabla getPanelTabla() {
-        return panelTabla;
-    }
+	public void setLayoutCentral(CardLayout layoutCentral) {
+		this.layoutCentral = layoutCentral;
+	}
 
-    /**
-     * Establece el panel de tabla.
-     * @param panelTabla el nuevo panel de tabla.
-     */
-    public void setPanelTabla(PanelTabla panelTabla) {
-        this.panelTabla = panelTabla;
-    }
+	public JPanel getPanelCentral() {
+		return panelCentral;
+	}
 
-    /**
-     * @return el panel inferior con las acciones disponibles.
-     */
-    public PanelInferiorAdmin getPanelInferior() {
-        return panelInferior;
-    }
+	public void setPanelCentral(JPanel panelCentral) {
+		this.panelCentral = panelCentral;
+	}
 
-    /**
-     * Establece el panel inferior.
-     * @param panelDetalles el nuevo panel inferior.
-     */
-    public void setPanelInferior(PanelInferiorAdmin panelDetalles) {
-        this.panelInferior = panelDetalles;
-    }
+	/**
+	 * @return el panel de búsqueda.
+	 */
+	public PanelBusquedaAdmin getPanelBusqueda() {
+		return panelBusqueda;
+	}
+
+	/**
+	 * Establece el panel de búsqueda.
+	 * 
+	 * @param panelBusqueda el nuevo panel de búsqueda.
+	 */
+	public void setPanelBusqueda(PanelBusquedaAdmin panelBusqueda) {
+		this.panelBusqueda = panelBusqueda;
+	}
+
+	/**
+	 * @return el panel lateral.
+	 */
+	public PanelLateralAdmin getPanelLateral() {
+		return panelLateral;
+	}
+
+	/**
+	 * Establece el panel lateral.
+	 * 
+	 * @param panelSidebar el nuevo panel lateral.
+	 */
+	public void setPanelLateral(PanelLateralAdmin panelSidebar) {
+		this.panelLateral = panelSidebar;
+	}
+
+	/**
+	 * @return el panel que contiene la tabla de usuarios.
+	 */
+	public PanelTabla getPanelTabla() {
+		return panelTabla;
+	}
+
+	/**
+	 * Establece el panel de tabla.
+	 * 
+	 * @param panelTabla el nuevo panel de tabla.
+	 */
+	public void setPanelTabla(PanelTabla panelTabla) {
+		this.panelTabla = panelTabla;
+	}
+
+	/**
+	 * @return el panel inferior con las acciones disponibles.
+	 */
+	public PanelInferiorAdmin getPanelInferior() {
+		return panelInferior;
+	}
+
+	/**
+	 * Establece el panel inferior.
+	 * 
+	 * @param panelDetalles el nuevo panel inferior.
+	 */
+	public void setPanelInferior(PanelInferiorAdmin panelDetalles) {
+		this.panelInferior = panelDetalles;
+	}
 
 	public PanelInicioAdmin getPanelInicio() {
 		return panelInicio;
@@ -160,6 +181,5 @@ public class VentanaPrincipalAdmin extends JFrame {
 	public void setPanelNotificaciones(PanelNotificacionesAdmin panelNotificaciones) {
 		this.panelNotificaciones = panelNotificaciones;
 	}
-    
-    
+
 }
