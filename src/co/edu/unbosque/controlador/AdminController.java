@@ -34,6 +34,7 @@ public class AdminController implements ActionListener {
 		comandos.put("FILTRO_TIPO", this::filtrarPorTipoUsuario);
 		comandos.put("FILTRO_PAIS", this::filtrarPorPais);
 		comandos.put("FILTRO_CIUDAD", this::filtrarPorCiudad);
+		comandos.put("CREAR_USUARIO", this::mostrarVentanaCrearUsuario);
 
 	}
 
@@ -55,6 +56,10 @@ public class AdminController implements ActionListener {
 		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarPorComboBox().addActionListener(this);
 		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getFiltroComboBox().addActionListener(this);
 		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarButton().addActionListener(this);
+		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(true);
+		vistaAdmin.getVentanaPrincipal().getPanelInferior().getCrearButton().addActionListener(this);
+		vistaAdmin.getVentanaPrincipal().getPanelInferior().getEditarButton().addActionListener(this);
+		vistaAdmin.getVentanaPrincipal().getPanelInferior().getEliminarButton().addActionListener(this);
 	}
 
 	private String buscarPorOpcion() {
@@ -136,38 +141,45 @@ public class AdminController implements ActionListener {
 	private void filtrarPorCiudad() {
 
 	}
+	
+	private void mostrarVentanaCrearUsuario() {
+		vistaAdmin.getVentanaCreacionUsuario().setVisible(true);
+	}
 
 	// ------------------------------------------- GESTION DE USUARIOS  -------------------------------------------------------------------//
 
 	private void mostrarPanelEquipos() {
-
+		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 	}
 
 	private void mostrarPanelTorneos() {
-
+		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 	}
 
 	private void mostrarPanelPartidas() {
-
+		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 	}
 
 	private void mostrarPanelReportes() {
+		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(),
 				"ANALISIS");
 	}
 
 	private void mostrarPanelNotificaciones() {
+		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(),
 				"NOTIFICACIONES");
 	}
 
 	private void mostrarPanelInicio() {
+		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(),
 				"INICIO");
 	}
 
 	private void cerrarSesion() {
-
+		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 	}
 
 	@Override

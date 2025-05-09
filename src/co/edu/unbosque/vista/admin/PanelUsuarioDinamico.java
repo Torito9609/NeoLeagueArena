@@ -3,13 +3,13 @@ package co.edu.unbosque.vista.admin;
 import javax.swing.*;
 import java.awt.*;
 
-public class PanelProductoDinamico extends JPanel {
+public class PanelUsuarioDinamico extends JPanel {
 
 	private CardLayout cardLayout;
 	private JPanel panelCentro;
 	private JButton crearButton, cancelarButton, editarButton;
 
-	public PanelProductoDinamico() {
+	public PanelUsuarioDinamico() {
 
 		setLayout(new BorderLayout());
 
@@ -19,11 +19,11 @@ public class PanelProductoDinamico extends JPanel {
 
 		JPanel panelBotones = new JPanel();
 		crearButton = new JButton("Crear");
-		crearButton.setActionCommand("CREAR");
+		crearButton.setActionCommand("CREAR_GUARDAR_USUARIO");
 		cancelarButton = new JButton("Cancelar");
-		cancelarButton.setActionCommand("CANCELAR");
+		cancelarButton.setActionCommand("CANCELAR_GUARDAR_USUARIO");
 		editarButton = new JButton("Editar");
-		editarButton.setActionCommand("EDITAR");
+		editarButton.setActionCommand("EDITAR_GUARDAR_USUARIO");
 		panelBotones.add(crearButton);
 		panelBotones.add(cancelarButton);
 		panelBotones.add(editarButton);

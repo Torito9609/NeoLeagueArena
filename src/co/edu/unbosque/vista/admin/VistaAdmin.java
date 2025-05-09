@@ -5,11 +5,11 @@ import javax.swing.UIManager;
 
 public class VistaAdmin {
 	private VentanaPrincipalAdmin ventanaPrincipal;
-	private VentanaProducto ventanaProducto;
+	private VentanaCreacionUsuario ventanaCreacionUsuario;
 	
 	public VistaAdmin() {
 		ventanaPrincipal = new VentanaPrincipalAdmin();
-		ventanaProducto = new VentanaProducto();
+		ventanaCreacionUsuario = new VentanaCreacionUsuario();
 	}
 	
 	public VentanaPrincipalAdmin getVentanaPrincipal() {
@@ -18,11 +18,11 @@ public class VistaAdmin {
 	public void setVentanaPrincipal(VentanaPrincipalAdmin ventanaPrincipal) {
 		this.ventanaPrincipal = ventanaPrincipal;
 	}
-	public VentanaProducto getVentanaProducto() {
-		return ventanaProducto;
+	public VentanaCreacionUsuario getVentanaCreacionUsuario() {
+		return ventanaCreacionUsuario;
 	}
-	public void setVentanaProducto(VentanaProducto ventanaProducto) {
-		this.ventanaProducto = ventanaProducto;
+	public void setVentanaProducto(VentanaCreacionUsuario ventanaProducto) {
+		this.ventanaCreacionUsuario = ventanaProducto;
 	}
 	
    

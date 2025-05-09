@@ -75,6 +75,7 @@ public class VentanaPrincipalAdmin extends JFrame {
 		add(panelCentral, BorderLayout.CENTER);
 
 		layoutCentral.show(panelCentral, "INICIO");
+		panelInferior.setVisible(false);
 
 	}
 
