@@ -2,7 +2,7 @@ package co.edu.unbosque.vista.admin;
 
 import javax.swing.*;
 
-public class FabricaPanelProductoDinamico {
+public class FabricaPanelUsuarioDinamico {
     
 	public static JPanel crearPanel(String tipoProducto) {
 	    if (tipoProducto == null) return new JPanel();

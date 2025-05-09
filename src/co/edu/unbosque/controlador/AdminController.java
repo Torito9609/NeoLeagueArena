@@ -35,6 +35,10 @@ public class AdminController implements ActionListener {
 		comandos.put("FILTRO_PAIS", this::filtrarPorPais);
 		comandos.put("FILTRO_CIUDAD", this::filtrarPorCiudad);
 		comandos.put("CREAR_USUARIO", this::mostrarVentanaCrearUsuario);
+		comandos.put("CREAR_GUARDAR_USUARIO", this::crearGuardarUsuario);
+		comandos.put("CANCELAR_GUARDAR_USUARIO", this::cancelarGuardarUsuario);
+		comandos.put("EDITAR_GUARDAR_USUARIO", this::editarGuardarUsuario);
+		comandos.put("SELECCIONAR_TIPO_USUARIO", this::mostrarPanelDinamicoUsuario);
 
 	}
 
@@ -144,33 +148,74 @@ public class AdminController implements ActionListener {
 	
 	private void mostrarVentanaCrearUsuario() {
 		vistaAdmin.getVentanaCreacionUsuario().setVisible(true);
+		vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getSeleccionarFotoButton().addActionListener(this);
+		vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().addActionListener(this);
+		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getCrearButton().addActionListener(this);
+		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getEditarButton().setVisible(false);
+		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getCancelarButton().addActionListener(this);		
+	}
+	
+	private void cancelarGuardarUsuario() {
+		vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
+	}
+	
+	private void crearGuardarUsuario() {
+		
+	}
+	
+	private void editarGuardarUsuario() {
+		
+	}
+	
+	private void mostrarPanelDinamicoUsuario() {
+		
 	}
 
 	// ------------------------------------------- GESTION DE USUARIOS  -------------------------------------------------------------------//
+	
+	// ------------------------------------------- GESTION DE EQUIPOS  -------------------------------------------------------------------//
 
 	private void mostrarPanelEquipos() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 	}
+	
+	// ------------------------------------------- GESTION DE EQUIPOS  -------------------------------------------------------------------//
+	
+	// ------------------------------------------- GESTION DE TORNEOS  -------------------------------------------------------------------//
 
 	private void mostrarPanelTorneos() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 	}
+	
+	// ------------------------------------------- GESTION DE TORNEOS  -------------------------------------------------------------------//
+	
+	// ------------------------------------------- GESTION DE PARTIDAS  -------------------------------------------------------------------//
 
 	private void mostrarPanelPartidas() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 	}
+	
+	// ------------------------------------------- GESTION DE PARTIDAS  -------------------------------------------------------------------//
+	
+	// ------------------------------------------- GESTION DE REPORTES  -------------------------------------------------------------------//
 
 	private void mostrarPanelReportes() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(),
 				"ANALISIS");
 	}
+	
+	// ------------------------------------------- GESTION DE REPORTES  -------------------------------------------------------------------//
+	
+	// ------------------------------------------- GESTION DE NOTIFICACIONES  -------------------------------------------------------------------//
 
 	private void mostrarPanelNotificaciones() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(),
 				"NOTIFICACIONES");
 	}
+	
+	// ------------------------------------------- GESTION DE NOTIFICACIONES  -------------------------------------------------------------------//
 
 	private void mostrarPanelInicio() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);

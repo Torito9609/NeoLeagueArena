@@ -57,7 +57,8 @@ public class PanelUsuarioSuperior extends JPanel {
 		add(fotoPanel);
 		
 		add(new JLabel("Tipo de usuario:"));
-		tipoUsuarioComboBox = new JComboBox<>(new String[] {"Entrenador", "Jugador"});
+		tipoUsuarioComboBox = new JComboBox<>(new String[] {"Seleccionar", "Entrenador", "Jugador"});
+		tipoUsuarioComboBox.setActionCommand("SELECCIONAR_TIPO_USUARIO");
 		add(tipoUsuarioComboBox);
 	}
 

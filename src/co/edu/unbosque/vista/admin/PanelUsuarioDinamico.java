@@ -31,7 +31,7 @@ public class PanelUsuarioDinamico extends JPanel {
 	}
 
 	public void mostrarPanel(String tipoProducto) {
-		JPanel nuevoPanel = FabricaPanelProductoDinamico.crearPanel(tipoProducto);
+		JPanel nuevoPanel = FabricaPanelUsuarioDinamico.crearPanel(tipoProducto);
 		panelCentro.removeAll();
 		panelCentro.add(nuevoPanel, "panel");
 		cardLayout.show(panelCentro, "panel");
