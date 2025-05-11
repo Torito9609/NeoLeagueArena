@@ -11,14 +11,10 @@ public class Circuito {
 		this.nombre = nombre;
 		this.rutaFoto = rutaFoto;
 	}
-	
-	
 
 	public Circuito() {
 		super();
 	}
-
-
 
 	public String getId() {
 		return id;
