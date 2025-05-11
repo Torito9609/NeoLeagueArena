@@ -1,10 +1,91 @@
 package co.edu.unbosque.modelo.dto;
 
-import java.util.List;
+import java.io.Serializable;
+import java.time.LocalDate;
 
-public class PartidaDto {
-	private String id;
-	private String torneo;
-	private List<String> equiposParticipantes;
-	private String resultadoResumen;
+import co.edu.unbosque.modelo.enums.EstadoPartida;
+
+public class PartidaDto implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private String id;
+    private String idEquipoLocal;
+    private String idEquipoVisitante;
+    private LocalDate fecha;
+    private EstadoPartida estado;
+    private String resultadoSerializado;
+
+    public PartidaDto() { }
+
+    public PartidaDto(
+            String id,
+            String idEquipoLocal,
+            String idEquipoVisitante,
+            LocalDate fecha,
+            EstadoPartida estado,
+            String resultadoSerializado
+    ) {
+        this.id = id;
+        this.idEquipoLocal = idEquipoLocal;
+        this.idEquipoVisitante = idEquipoVisitante;
+        this.fecha = fecha;
+        this.estado = estado;
+        this.resultadoSerializado = resultadoSerializado;
+    }
+
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getIdEquipoLocal() {
+        return idEquipoLocal;
+    }
+    public void setIdEquipoLocal(String idEquipoLocal) {
+        this.idEquipoLocal = idEquipoLocal;
+    }
+
+    public String getIdEquipoVisitante() {
+        return idEquipoVisitante;
+    }
+    public void setIdEquipoVisitante(String idEquipoVisitante) {
+        this.idEquipoVisitante = idEquipoVisitante;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public EstadoPartida getEstado() {
+        return estado;
+    }
+    public void setEstado(EstadoPartida estado) {
+        this.estado = estado;
+    }
+
+    public String getResultadoSerializado() {
+        return resultadoSerializado;
+    }
+    public void setResultadoSerializado(String resultadoSerializado) {
+        this.resultadoSerializado = resultadoSerializado;
+    }
+
+    @Override
+    public String toString() {
+        return "PartidaDto{" +
+               "id='" + id + '\'' +
+               ", idEquipoLocal='" + idEquipoLocal + '\'' +
+               ", idEquipoVisitante='" + idEquipoVisitante + '\'' +
+               ", fecha=" + fecha +
+               ", estado=" + estado +
+               ", resultadoSerializado='" + resultadoSerializado + '\'' +
+               '}';
+    }
 }

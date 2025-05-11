@@ -6,13 +6,13 @@ public class Entrenador extends Usuario{
 	private String nickname;
 	private int aniosExperiencia;
 	private String biografia;
-	private Juego juegoPrincipalEspecializado;
+	private Juego<?> juegoPrincipalEspecializado;
 	private List<AsignacionEntrenador> equiposAsignados;
 
 public Entrenador() {
 }
 
-public Entrenador(String nickname, int aniosExperiencia, String biografia, Juego juegoPrincipalEspecializado,
+public Entrenador(String nickname, int aniosExperiencia, String biografia, Juego<?> juegoPrincipalEspecializado,
 		List<AsignacionEntrenador> equiposAsignados) {
 	super();
 	this.nickname = nickname;
@@ -46,11 +46,11 @@ public void setBiografia(String biografia) {
 	this.biografia = biografia;
 }
 
-public Juego getJuegoPrincipalEspecializado() {
+public Juego<?> getJuegoPrincipalEspecializado() {
 	return juegoPrincipalEspecializado;
 }
 
-public void setJuegoPrincipalEspecializado(Juego juegoPrincipalEspecializado) {
+public void setJuegoPrincipalEspecializado(Juego<?> juegoPrincipalEspecializado) {
 	this.juegoPrincipalEspecializado = juegoPrincipalEspecializado;
 }
 

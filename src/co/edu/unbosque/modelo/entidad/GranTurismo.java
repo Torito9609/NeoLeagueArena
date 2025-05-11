@@ -17,8 +17,11 @@ public class GranTurismo extends Juego<ResultadoGranTurismo> {
 		LocalDate hoy = LocalDate.now();
 		for (int i = 0; i < equipos.size(); i++) {
 			for (int j = i + 1; j < equipos.size(); j++) {
-				calendario
-						.add(new PartidaGranTurismo(UUID.randomUUID().toString(), equipos.get(i), equipos.get(j), hoy));
+				calendario.add(
+						new PartidaGranTurismo(UUID.randomUUID().toString(), 
+						equipos.get(i), 
+						equipos.get(j), 
+						hoy));
 			}
 		}
 		return calendario;

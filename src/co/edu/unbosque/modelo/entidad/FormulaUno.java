@@ -17,8 +17,8 @@ public class FormulaUno extends Juego<ResultadoFormulaUno> {
         LocalDate hoy = LocalDate.now();
         for (int i = 0; i < equipos.size(); i++) {
             for (int j = i + 1; j < equipos.size(); j++) {
-                calendario.add(new PartidaFormulaUno(
-                    UUID.randomUUID().toString(),
+                calendario.add(
+                	new PartidaFormulaUno(UUID.randomUUID().toString(),
                     equipos.get(i),
                     equipos.get(j),
                     hoy

@@ -3,40 +3,28 @@ package co.edu.unbosque.modelo.dto;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-/**
- * DTO para AsignacionEntrenador: representa la relación
- * entre un Entrenador y un Equipo, sin referenciar entidades
- * directamente, solo sus identificadores.
- */
 public class AsignacionEntrenadorDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /** Identificador único de la asignación (p.ej. UUID) */
     private String idAsignacion;
-
-    /** ID del entrenador asignado */
     private String idEntrenador;
-
-    /** ID del equipo al que se asigna */
     private String idEquipo;
-
-    /** Fecha en que se realizó la asignación */
     private LocalDate fechaAsignacion;
 
     public AsignacionEntrenadorDto() { }
 
-    public AsignacionEntrenadorDto(String idAsignacion,
-                                   String idEntrenador,
-                                   String idEquipo,
-                                   LocalDate fechaAsignacion) {
+    public AsignacionEntrenadorDto(
+            String idAsignacion,
+            String idEntrenador,
+            String idEquipo,
+            LocalDate fechaAsignacion
+    ) {
         this.idAsignacion   = idAsignacion;
         this.idEntrenador   = idEntrenador;
         this.idEquipo       = idEquipo;
         this.fechaAsignacion = fechaAsignacion;
     }
-
-    // —— Getters y setters ——
 
     public String getIdAsignacion() {
         return idAsignacion;

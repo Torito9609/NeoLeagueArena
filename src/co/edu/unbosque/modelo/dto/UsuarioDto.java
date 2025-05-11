@@ -1,12 +1,8 @@
 package co.edu.unbosque.modelo.dto;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
-/**
- * DTO base para todos los usuarios del sistema.
- * Incluye los atributos comunes y un campo tipoUsuario
- * para identificar si es "Entrenador", "Jugador", etc.
- */
 public class UsuarioDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -18,28 +14,30 @@ public class UsuarioDto implements Serializable {
     private String celular;
     private String pais;
     private String ciudad;
+    private LocalDate fechaNacimiento;
     private String zonaHoraria;
     private String passwordHash;
     private String rutaFoto;
     private boolean necesitaCambioPassword;
-
-    /** Para saber si al deserializar o en la vista es Entrenador, Jugador, etc. */
-    private String tipoUsuario;  
+    private String tipoUsuario;
 
     public UsuarioDto() { }
 
-    public UsuarioDto(String id,
-                      String nombres,
-                      String apellidos,
-                      String correo,
-                      String celular,
-                      String pais,
-                      String ciudad,
-                      String zonaHoraria,
-                      String passwordHash,
-                      String rutaFoto,
-                      boolean necesitaCambioPassword,
-                      String tipoUsuario) {
+    public UsuarioDto(
+            String id,
+            String nombres,
+            String apellidos,
+            String correo,
+            String celular,
+            String pais,
+            String ciudad,
+            LocalDate fechaNacimiento,
+            String zonaHoraria,
+            String passwordHash,
+            String rutaFoto,
+            boolean necesitaCambioPassword,
+            String tipoUsuario
+    ) {
         this.id = id;
         this.nombres = nombres;
         this.apellidos = apellidos;
@@ -47,6 +45,7 @@ public class UsuarioDto implements Serializable {
         this.celular = celular;
         this.pais = pais;
         this.ciudad = ciudad;
+        this.fechaNacimiento = fechaNacimiento;
         this.zonaHoraria = zonaHoraria;
         this.passwordHash = passwordHash;
         this.rutaFoto = rutaFoto;
@@ -105,6 +104,13 @@ public class UsuarioDto implements Serializable {
         this.ciudad = ciudad;
     }
 
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
     public String getZonaHoraria() {
         return zonaHoraria;
     }
@@ -138,5 +144,16 @@ public class UsuarioDto implements Serializable {
     }
     public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    @Override
+    public String toString() {
+        return "UsuarioDTO{" +
+               "id='" + id + '\'' +
+               ", nombres='" + nombres + '\'' +
+               ", apellidos='" + apellidos + '\'' +
+               ", correo='" + correo + '\'' +
+               ", tipoUsuario='" + tipoUsuario + '\'' +
+               '}';
     }
 }

@@ -17,8 +17,8 @@ public class RocketLeague extends Juego<ResultadoRocketLeague>{
         LocalDate hoy = LocalDate.now();
         for (int i = 0; i < equipos.size(); i++) {
             for (int j = i + 1; j < equipos.size(); j++) {
-                calendario.add(new PartidaRocketLeague(
-                    UUID.randomUUID().toString(),
+                calendario.add(
+                	new PartidaRocketLeague(UUID.randomUUID().toString(),
                     equipos.get(i),
                     equipos.get(j),
                     hoy

@@ -86,7 +86,7 @@ public abstract class Partida <R extends Resultado>{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Partida)) return false;
-        Partida that = (Partida) o;
+        Partida<?> that = (Partida<?>) o;
         return Objects.equals(id, that.id);
     }
     
