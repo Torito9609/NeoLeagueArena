@@ -1,7 +1,7 @@
 package co.edu.unbosque.modelo.entidad;
 
 public class ResultadoFormulaUno implements Resultado {
-	private double tiempoLocal;
+	private List<Equipo> clasificacion;
 	private double tiempoVisitante;
 
 	public ResultadoFormulaUno(double tiempoLocal, double tiempoVisitante) {
