@@ -7,15 +7,15 @@ import java.util.Optional;
 import co.edu.unbosque.modelo.entidad.Usuario;
 import co.edu.unbosque.modelo.entidad.Jugador;
 import co.edu.unbosque.modelo.entidad.Entrenador;
-import co.edu.unbosque.modelo.dao.UsuarioDao;
+import co.edu.unbosque.modelo.dao.UsuarioDaoImpl;
 import co.edu.unbosque.utils.Encriptador;
 
 public class UsuarioService {
 
-    private UsuarioDao usuarioDao;
+    private UsuarioDaoImpl usuarioDao;
 
     public UsuarioService() {
-        usuarioDao = new UsuarioDao();
+        usuarioDao = new UsuarioDaoImpl();
     }
 
     public List<Usuario> obtenerTodos() {

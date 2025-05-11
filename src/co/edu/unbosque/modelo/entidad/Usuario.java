@@ -1,12 +1,10 @@
 package co.edu.unbosque.modelo.entidad;
 
-import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.Period;
 
-public class Usuario implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Usuario{
+	
 	private String id;
 	private String nombres;
 	private String apellidos;
@@ -14,10 +12,38 @@ public class Usuario implements Serializable{
 	private String celular;
 	private String pais;
 	private String ciudad;
+	private LocalDate fechaNacimiento;
 	private String zonaHoraria;
 	private String passwordHash;
 	private String rutaFoto;
 	private boolean necesitaCambioPassword;
+	
+	public Usuario() {
+		super();
+	}
+	public Usuario(String id, String nombres, String apellidos, String correo, String celular, String pais,
+			String ciudad, LocalDate fechaNacimiento, String zonaHoraria, String passwordHash, String rutaFoto,
+			boolean necesitaCambioPassword) {
+		super();
+		this.id = id;
+		this.nombres = nombres;
+		this.apellidos = apellidos;
+		this.correo = correo;
+		this.celular = celular;
+		this.pais = pais;
+		this.ciudad = ciudad;
+		this.fechaNacimiento = fechaNacimiento;
+		this.zonaHoraria = zonaHoraria;
+		this.passwordHash = passwordHash;
+		this.rutaFoto = rutaFoto;
+		this.necesitaCambioPassword = necesitaCambioPassword;
+	}
+	
+	public int calcularEdad() {
+		LocalDate fn = getFechaNacimiento();
+		return (fn == null) ? 0 : Period.between(fn, LocalDate.now()).getYears();
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -84,6 +110,11 @@ public class Usuario implements Serializable{
 	public void setNecesitaCambioPassword(boolean necesitaCambioPassword) {
 		this.necesitaCambioPassword = necesitaCambioPassword;
 	}
-	
+	public LocalDate getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
 	
 }
