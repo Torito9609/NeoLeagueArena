@@ -1,15 +1,18 @@
 package co.edu.unbosque.modelo.dao;
 
+import java.io.IOException;
 import java.util.List;
 
+import co.edu.unbosque.modelo.exception.AccesoDatosException;
+
 public interface IUsuarioDao<T> {
-	List<T> obtenerTodos();
+	List<T> obtenerTodos() throws AccesoDatosException;
 
-	boolean guardar(T u);
+	boolean guardar(T u) throws AccesoDatosException;
 
-	boolean eliminar(String id);
+	boolean eliminar(String id) throws AccesoDatosException, IOException;
 
-	boolean actualizar(String idActualizar, T uActualizado);
+	boolean actualizar(String idActualizar, T uActualizado) throws AccesoDatosException, IOException;
 
 	T buscarPorId(String id);
 

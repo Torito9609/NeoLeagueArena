@@ -24,38 +24,69 @@ public class UsuarioDaoImpl implements IUsuarioDao<Usuario> {
 		actualizarBD();
 	}
 
-	private void actualizarBD() {
-		// TODO Auto-generated method stub
+	private void actualizarBD() throws AccesoDatosException {
+		usuarios = gestor.cargar();
 
 	}
 
 	@Override
-	public List<Usuario> obtenerTodos() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Usuario> obtenerTodos() throws AccesoDatosException {
+		usuarios = gestor.cargar();
+		return usuarios.isEmpty() ? List.of() : usuarios;
 	}
 
 	@Override
-	public boolean guardar(Usuario u) {
-		// TODO Auto-generated method stub
+	public boolean guardar(Usuario u) throws AccesoDatosException {
+		if(buscarPorId(u.getId()) == null) {
+			usuarios.add(u);
+			gestor.guardar(usuarios);
+			return true;
+		}
 		return false;
 	}
 
 	@Override
-	public boolean eliminar(String id) {
-		// TODO Auto-generated method stub
+	public boolean eliminar(String id) throws AccesoDatosException, IOException {
+		Usuario usuarioEliminar = buscarPorId(id);
+		if(usuarioEliminar != null) {
+			usuarios.remove(usuarioEliminar);
+			recrearArchivo();
+			gestor.guardar(usuarios);
+			return true;
+		}
 		return false;
 	}
 
 	@Override
-	public boolean actualizar(String idActualizar, Usuario uActualizado) {
-		// TODO Auto-generated method stub
+	public boolean actualizar(String idActualizar, Usuario uActualizado) throws AccesoDatosException, IOException {
+		Usuario usuarioActualizar = buscarPorId(idActualizar);
+		if(usuarioActualizar != null) {
+			int indice = usuarios.indexOf(usuarioActualizar);
+			if(indice != -1) {
+				usuarios.set(indice, uActualizado);
+				recrearArchivo();
+				gestor.guardar(usuarios);
+				return true;
+			}
+		}
 		return false;
+	}
+
+	private void recrearArchivo() throws IOException {
+		if (gestor.getUbicacionArchivo().exists()) {
+			gestor.getUbicacionArchivo().delete();
+		}
+		gestor.getUbicacionArchivo().createNewFile();
+		
 	}
 
 	@Override
 	public Usuario buscarPorId(String id) {
-		// TODO Auto-generated method stub
+		for(Usuario usuario : usuarios) {
+			if(usuario.getId().equals(id)) {
+				return usuario;
+			}
+		}
 		return null;
 	}
 

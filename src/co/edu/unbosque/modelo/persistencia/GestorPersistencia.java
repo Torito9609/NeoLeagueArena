@@ -83,4 +83,8 @@ public class GestorPersistencia<E, D> {
                 "Error al leer desde el archivo: " + ubicacionArchivo, ex);
         }
     }
+
+	public File getUbicacionArchivo() {
+		return ubicacionArchivo;
+	}
 }
