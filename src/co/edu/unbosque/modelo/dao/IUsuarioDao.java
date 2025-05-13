@@ -7,7 +7,7 @@ public interface IUsuarioDao<T> {
 
 	boolean guardar(T u);
 
-	boolean eliminar(T u);
+	boolean eliminar(String id);
 
 	boolean actualizar(String idActualizar, T uActualizado);
 

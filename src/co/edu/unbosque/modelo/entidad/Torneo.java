@@ -7,63 +7,25 @@ import java.util.Objects;
 
 import co.edu.unbosque.modelo.enums.EstadoTorneo;
 
-/**
- * Representa un torneo de un juego específico.  
- * La relación Equipo–Torneo se maneja vía ParticipacionTorneo.
- */
-public class Torneo implements Serializable {
+public class Torneo<R extends Resultado> implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    /** Identificador único del torneo */
     private String id;
-
-    /** Nombre descriptivo */
     private String nombre;
-
-    /** Juego al que pertenece este torneo */
-    private Juego juego;
-
-    /** Estado actual (PLANIFICACIÓN, ABIERTO, FINALIZADO, etc.) */
+    private Juego<R> juego;
     private EstadoTorneo estado;
-
-    /**
-     * Participaciones de equipos en este torneo.
-     * Cada ParticipacionTorneo liga un Equipo con este Torneo.
-     */
     private List<ParticipacionTorneo> participaciones = new ArrayList<>();
-
-    /** Partidas jugadas en el marco de este torneo */
-    private List<Partida> partidas = new ArrayList<>();
+    private List<Fase> fases = new ArrayList<>();
+    private List<Partida<R>> partidas = new ArrayList<>();
 
     public Torneo() { }
 
-    public Torneo(String id,
-                  String nombre,
-                  Juego juego,
-                  EstadoTorneo estado) {
+    public Torneo(String id, String nombre, Juego<R> juego, EstadoTorneo estado) {
         this.id     = id;
         this.nombre = nombre;
         this.juego  = juego;
         this.estado = estado;
     }
-
-    public Torneo(String id,
-                  String nombre,
-                  Juego juego,
-                  EstadoTorneo estado,
-                  List<ParticipacionTorneo> participaciones,
-                  List<Partida> partidas) {
-        this(id, nombre, juego, estado);
-        this.participaciones = participaciones != null
-            ? participaciones
-            : new ArrayList<>();
-        this.partidas = partidas != null
-            ? partidas
-            : new ArrayList<>();
-    }
-
-    // —— Getters y setters ——
 
     public String getId() {
         return id;
@@ -79,10 +41,10 @@ public class Torneo implements Serializable {
         this.nombre = nombre;
     }
 
-    public Juego getJuego() {
+    public Juego<R> getJuego() {
         return juego;
     }
-    public void setJuego(Juego juego) {
+    public void setJuego(Juego<R> juego) {
         this.juego = juego;
     }
 
@@ -102,44 +64,76 @@ public class Torneo implements Serializable {
             : new ArrayList<>();
     }
 
-    public List<Partida> getPartidas() {
+    public List<Fase> getFases() {
+        return fases;
+    }
+    public void setFases(List<Fase> fases) {
+        this.fases = fases != null
+            ? fases
+            : new ArrayList<>();
+    }
+
+    public List<Partida<R>> getPartidas() {
         return partidas;
     }
-    public void setPartidas(List<Partida> partidas) {
+    public void setPartidas(List<Partida<R>> partidas) {
         this.partidas = partidas != null
             ? partidas
             : new ArrayList<>();
     }
 
-    // —— Métodos de conveniencia ——
+    // —— Inscripción de equipos ——
 
-    /**
-     * Inscribe un equipo en el torneo.
-     */
-    public void inscribirEquipo(ParticipacionTorneo participacion) {
-        if (participacion != null && 
-            participacion.getTorneo().equals(this) &&
-            !participaciones.contains(participacion)) {
-            participaciones.add(participacion);
+    /** Inscribe un equipo (vía ParticipacionTorneo) en el torneo */
+    public void inscribirEquipo(ParticipacionTorneo p) {
+        if (p != null
+         && p.getTorneo().equals(this)
+         && !participaciones.contains(p)) {
+            participaciones.add(p);
         }
     }
 
-    /**
-     * Quita la inscripción de un equipo.
-     */
-    public void removerParticipacion(ParticipacionTorneo participacion) {
-        participaciones.remove(participacion);
+    /** Elimina la inscripción de un equipo */
+    public void removerParticipacion(ParticipacionTorneo p) {
+        participaciones.remove(p);
     }
 
-    /**
-     * Devuelve la lista de equipos inscritos actualmente.
-     */
+    /** Devuelve la lista de equipos actualmente inscritos */
     public List<Equipo> listarEquipos() {
-        List<Equipo> equipos = new ArrayList<>();
+        List<Equipo> lista = new ArrayList<>();
         for (ParticipacionTorneo p : participaciones) {
-            equipos.add(p.getEquipo());
+            lista.add(p.getEquipo());
         }
-        return equipos;
+        return lista;
+    }
+
+    // —— Ejecución del torneo ——
+
+    /**
+     * Ejecuta todas las fases en orden:
+     *  1) Genera las partidas de la fase
+     *  2) (aquí se registrarían resultados)
+     *  3) Calcula avanzadores
+     *  4) Repite hasta acabar
+     */
+    public void ejecutarTorneo() {
+        List<Equipo> actuales = listarEquipos();
+        partidas.clear();
+
+        for (Fase fase : fases) {
+            // 1) Generar partidas para esta fase
+            List<Partida<R>> fasePartidas = fase.generarPartidas(actuales, juego);
+
+            // 2) (El registro de resultados se haría externamente, 
+            //    antes de calcular avanzadores)
+            partidas.addAll(fasePartidas);
+
+            // 3) Extraer avanzadores
+            actuales = fase.calcularAvanzadores(fasePartidas);
+        }
+
+        // 4) Marcar torneo como finalizado
+        estado = EstadoTorneo.FINALIZADO;
     }
 
     // —— equals/hashCode basados en id ——
@@ -148,7 +142,7 @@ public class Torneo implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Torneo)) return false;
-        Torneo that = (Torneo) o;
+        Torneo<?> that = (Torneo<?>) o;
         return Objects.equals(id, that.id);
     }
 
@@ -157,7 +151,7 @@ public class Torneo implements Serializable {
         return Objects.hash(id);
     }
 
-    // —— toString para depuración ——
+    // —— toString para depuración —— 
 
     @Override
     public String toString() {
@@ -166,7 +160,8 @@ public class Torneo implements Serializable {
                ", nombre='" + nombre + '\'' +
                ", juego=" + (juego != null ? juego.getNombre() : "null") +
                ", estado=" + estado +
-               ", equiposInscritos=" + participaciones.size() +
+               ", inscritos=" + participaciones.size() +
+               ", fases=" + fases.size() +
                ", partidas=" + partidas.size() +
                '}';
     }

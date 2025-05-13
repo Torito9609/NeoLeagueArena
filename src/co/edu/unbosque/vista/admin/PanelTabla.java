@@ -75,9 +75,9 @@ public class PanelTabla extends JPanel {
 
         for (UsuarioDto usuario : usuarios) {
             Object[] fila = {
-                usuario.getNombre(),
+                usuario.getNombres(),
                 usuario.getCorreo(),
-                usuario.getRol(),
+                usuario.getTipoUsuario(),
                 usuario.getPais(),
                 usuario.getCiudad()
             };

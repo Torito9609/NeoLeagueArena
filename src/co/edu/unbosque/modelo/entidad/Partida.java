@@ -82,6 +82,8 @@ public abstract class Partida <R extends Resultado>{
     
     public abstract R getResultado();
     
+    public abstract Equipo getGanador();
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

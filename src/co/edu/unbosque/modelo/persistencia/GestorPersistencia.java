@@ -1,64 +1,86 @@
 package co.edu.unbosque.modelo.persistencia;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.edu.unbosque.model.dto.ProductoDTO;
-import co.edu.unbosque.model.entity.Producto;
-import co.edu.unbosque.model.persistence.MapHandler;
-import co.edu.unbosque.modelo.dto.UsuarioDto;
-import co.edu.unbosque.modelo.entidad.Usuario;
 import co.edu.unbosque.modelo.exception.AccesoDatosException;
+import co.edu.unbosque.modelo.mapper.Mapper;
 
-public class GestorPersistencia<T> {
-	private ObjectInputStream entrada;
-	private ObjectOutputStream salida;
-	private File ubicacionArchivo;
+/**
+ * Gestor genérico de persistencia que:
+ *  - Recibe una lista de entidades E
+ *  - Mapea a DTOs D usando un Mapper<E,D>
+ *  - Guarda la lista de DTOs en un archivo binario
+ *  - Carga la lista de DTOs y la vuelve a mapear a entidades
+ */
+public class GestorPersistencia<E, D> {
 
-	public GestorPersistencia(String rutaArchivo) throws AccesoDatosException{
-		ubicacionArchivo = new File(rutaArchivo);
-		try {
-			File parentDir = ubicacionArchivo.getParentFile();
-	        if (parentDir != null && !parentDir.exists()) {
-	            if (!parentDir.mkdirs()) {
-	                throw new AccesoDatosException("No se pudo crear el directorio para el archivo de usuarios.");
-	            }
-	        }
+    private final File ubicacionArchivo;
+    private final Mapper<E, D> mapper;
 
-	        if (!ubicacionArchivo.exists()) {
-	            if (!ubicacionArchivo.createNewFile()) {
-	                throw new AccesoDatosException("No se pudo crear el archivo de usuarios");
-	            }
-	        }
-		}catch(IOException ex) {
-			throw new AccesoDatosException("Error al cargar el archivo de usuarios. ", ex);
-		}
-	}
+    public GestorPersistencia(String rutaArchivo, Mapper<E, D> mapper)
+            throws AccesoDatosException {
+        this.ubicacionArchivo = new File(rutaArchivo);
+        this.mapper = mapper;
 
-	public void guardar(List<Usuario> usuarios) throws AccesoDatosException {
-		try {
-			salida = new ObjectOutputStream(new FileOutputStream(ubicacionArchivo));
-			List<UsuarioDto> datos = MapHandler.todosProductoADTO(productos);
-			salida.writeObject(datos);
-			salida.close();
-		} catch (IOException e) {
-			throw new AccesoDatosException("Error al escribir en el archivo de datos.", e);
-		}
-	}
+        try {
+            File parent = ubicacionArchivo.getParentFile();
+            if (parent != null && !parent.exists()) {
+                parent.mkdirs();
+            }
+            if (!ubicacionArchivo.exists()) {
+                ubicacionArchivo.createNewFile();
+            }
+        } catch (IOException ex) {
+            throw new AccesoDatosException(
+                "No se pudo inicializar el archivo de persistencia: " + rutaArchivo, ex);
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public List<T> cargarLista(String rutaArchivo) throws IOException, ClassNotFoundException {
-		File file = new File(rutaArchivo);
-		if (!file.exists())
-			return new ArrayList<>();
-		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-			return (List<T>) ois.readObject();
-		}
-	}
+    /**
+     * Guarda en disco la lista de entidades E:
+     *   1) Mapea cada E a su D con mapper.toDto(...)
+     *   2) Serializa la lista de D al archivo
+     */
+    public void guardar(List<E> entidades) throws AccesoDatosException {
+        List<D> dtos = new ArrayList<>(entidades.size());
+        for (E entidad : entidades) {
+            dtos.add(mapper.toDto(entidad));
+        }
+
+        try (ObjectOutputStream oos = 
+                 new ObjectOutputStream(new FileOutputStream(ubicacionArchivo))) {
+            oos.writeObject(dtos);
+        } catch (IOException ex) {
+            throw new AccesoDatosException(
+                "Error al escribir en el archivo: " + ubicacionArchivo, ex);
+        }
+    }
+
+    /**
+     * Carga desde disco la lista de DTOs, los mapea a entidades E
+     * y devuelve la lista de E.
+     */
+    @SuppressWarnings("unchecked")
+    public List<E> cargar() throws AccesoDatosException {
+        // fichero vacío → lista vacía
+        if (ubicacionArchivo.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        try (ObjectInputStream ois = 
+                 new ObjectInputStream(new FileInputStream(ubicacionArchivo))) {
+            List<D> dtos = (List<D>) ois.readObject();
+            List<E> entidades = new ArrayList<>(dtos.size());
+            for (D dto : dtos) {
+                entidades.add(mapper.toEntity(dto));
+            }
+            return entidades;
+
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new AccesoDatosException(
+                "Error al leer desde el archivo: " + ubicacionArchivo, ex);
+        }
+    }
 }

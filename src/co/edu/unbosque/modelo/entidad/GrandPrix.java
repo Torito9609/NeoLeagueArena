@@ -6,18 +6,16 @@ public class GrandPrix {
 	private String id;
 	private String nombre;
 	private Circuito circuito;
-	private LocalDate fecha;
 
 	public GrandPrix() {
 		super();
 	}
 
-	public GrandPrix(String id, String nombre, Circuito circuito, LocalDate fecha) {
+	public GrandPrix(String id, String nombre, Circuito circuito) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.circuito = circuito;
-		this.fecha = fecha;
 	}
 
 	public String getId() {
@@ -43,15 +41,4 @@ public class GrandPrix {
 	public void setCircuito(Circuito circuito) {
 		this.circuito = circuito;
 	}
-
-	public LocalDate getFecha() {
-		return fecha;
-	}
-
-	public void setFecha(LocalDate fecha) {
-		this.fecha = fecha;
-	}
-	
-	
-
 }

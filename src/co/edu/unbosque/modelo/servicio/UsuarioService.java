@@ -38,8 +38,8 @@ public class UsuarioService {
         usuarioDao.guardar(usuario);
     }
 
-    public void actualizarUsuario(Usuario usuarioActualizado) {
-        usuarioDao.actualizar(usuarioActualizado);
+    public void actualizarUsuario(String idActualizar, Usuario usuarioActualizado) {
+        usuarioDao.actualizar(idActualizar, usuarioActualizado);
     }
 
     public void eliminarUsuario(String id) {
