@@ -34,9 +34,7 @@ public class EntrenadorDto extends UsuarioDto implements Serializable {
             boolean necesitaCambioPassword,
             String nickname,
             int aniosExperiencia,
-            String biografia,
-            String juegoPrincipalEspecializado,
-            List<AsignacionEntrenadorDto> equiposAsignados
+            String biografia
     ) {
         super(
             id,
@@ -56,8 +54,6 @@ public class EntrenadorDto extends UsuarioDto implements Serializable {
         this.nickname = nickname;
         this.aniosExperiencia = aniosExperiencia;
         this.biografia = biografia;
-        this.juegoPrincipalEspecializado = juegoPrincipalEspecializado;
-        this.equiposAsignados = equiposAsignados;
     }
 
     public String getNickname() {

@@ -1,6 +1,3 @@
-// ---------------------------
-// 3) Juego.java
-// ---------------------------
 package co.edu.unbosque.modelo.entidad;
 
 import java.util.List;

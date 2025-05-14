@@ -5,7 +5,7 @@ import java.util.List;
 
 import co.edu.unbosque.modelo.exception.AccesoDatosException;
 
-public interface IUsuarioDao<T> {
+public interface ICrudDao<T> {
 	List<T> obtenerTodos() throws AccesoDatosException;
 
 	boolean guardar(T u) throws AccesoDatosException;

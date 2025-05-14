@@ -11,21 +11,29 @@ import co.edu.unbosque.modelo.mapper.UsuarioMapHandler;
 import co.edu.unbosque.modelo.persistencia.ConstanteArchivo;
 import co.edu.unbosque.modelo.persistencia.GestorPersistencia;
 
-public class UsuarioDaoImpl implements IUsuarioDao<Usuario> {
+public class UsuarioDaoImpl implements ICrudDao<Usuario> {
 
-	private final String ruta = ConstanteArchivo.ARCHIVO_USUARIOS;
+	private final String RUTA_ARCHIVO = ConstanteArchivo.ARCHIVO_USUARIOS;
 	private final GestorPersistencia<Usuario, UsuarioDto> gestor;
 	private List<Usuario> usuarios;
 
 	public UsuarioDaoImpl() throws AccesoDatosException {
 		this.usuarios = new ArrayList<Usuario>();
 		UsuarioMapHandler usuarioMapper = new UsuarioMapHandler();
-		this.gestor = new GestorPersistencia<>(ruta, usuarioMapper);
+		this.gestor = new GestorPersistencia<>(RUTA_ARCHIVO, usuarioMapper);
 		actualizarBD();
 	}
 
 	private void actualizarBD() throws AccesoDatosException {
 		usuarios = gestor.cargar();
+
+	}
+
+	private void recrearArchivo() throws IOException {
+		if (gestor.getUbicacionArchivo().exists()) {
+			gestor.getUbicacionArchivo().delete();
+		}
+		gestor.getUbicacionArchivo().createNewFile();
 
 	}
 
@@ -37,7 +45,7 @@ public class UsuarioDaoImpl implements IUsuarioDao<Usuario> {
 
 	@Override
 	public boolean guardar(Usuario u) throws AccesoDatosException {
-		if(buscarPorId(u.getId()) == null) {
+		if (buscarPorId(u.getId()) == null) {
 			usuarios.add(u);
 			gestor.guardar(usuarios);
 			return true;
@@ -48,7 +56,7 @@ public class UsuarioDaoImpl implements IUsuarioDao<Usuario> {
 	@Override
 	public boolean eliminar(String id) throws AccesoDatosException, IOException {
 		Usuario usuarioEliminar = buscarPorId(id);
-		if(usuarioEliminar != null) {
+		if (usuarioEliminar != null) {
 			usuarios.remove(usuarioEliminar);
 			recrearArchivo();
 			gestor.guardar(usuarios);
@@ -60,9 +68,9 @@ public class UsuarioDaoImpl implements IUsuarioDao<Usuario> {
 	@Override
 	public boolean actualizar(String idActualizar, Usuario uActualizado) throws AccesoDatosException, IOException {
 		Usuario usuarioActualizar = buscarPorId(idActualizar);
-		if(usuarioActualizar != null) {
+		if (usuarioActualizar != null) {
 			int indice = usuarios.indexOf(usuarioActualizar);
-			if(indice != -1) {
+			if (indice != -1) {
 				usuarios.set(indice, uActualizado);
 				recrearArchivo();
 				gestor.guardar(usuarios);
@@ -72,18 +80,10 @@ public class UsuarioDaoImpl implements IUsuarioDao<Usuario> {
 		return false;
 	}
 
-	private void recrearArchivo() throws IOException {
-		if (gestor.getUbicacionArchivo().exists()) {
-			gestor.getUbicacionArchivo().delete();
-		}
-		gestor.getUbicacionArchivo().createNewFile();
-		
-	}
-
 	@Override
 	public Usuario buscarPorId(String id) {
-		for(Usuario usuario : usuarios) {
-			if(usuario.getId().equals(id)) {
+		for (Usuario usuario : usuarios) {
+			if (usuario.getId().equals(id)) {
 				return usuario;
 			}
 		}

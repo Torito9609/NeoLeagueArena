@@ -6,15 +6,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import co.edu.unbosque.modelo.exception.AccesoDatosException;
+import co.edu.unbosque.modelo.servicio.UsuarioService;
 import co.edu.unbosque.vista.admin.VistaAdmin;
 
 public class AdminController implements ActionListener {
 	private VistaAdmin vistaAdmin;
 	private Map<String, Runnable> comandos;
+	private UsuarioService usuarioService;
 
 	public AdminController() {
 		vistaAdmin = new VistaAdmin();
 		comandos = new HashMap<>();
+		try {
+			usuarioService = new UsuarioService();
+		} catch (AccesoDatosException e) {
+			vistaAdmin.mostrarMensajeError(e.getMessage());
+		}
 		registrarComandos();
 		asignaOyentesPanelLateral();
 	}

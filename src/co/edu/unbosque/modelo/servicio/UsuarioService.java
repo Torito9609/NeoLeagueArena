@@ -15,7 +15,6 @@ import co.edu.unbosque.utils.Encriptador;
 public class UsuarioService {
 
     private final UsuarioDaoImpl usuarioDao;
-    private final Encriptador encriptador = new Encriptador();
 
     public UsuarioService() throws AccesoDatosException {
         usuarioDao = new UsuarioDaoImpl();
@@ -33,7 +32,7 @@ public class UsuarioService {
     }
 
     public void crearUsuario(Usuario usuario, String passwordInicial) throws AccesoDatosException {
-        usuario.setPasswordHash(encriptador.encriptarSHA256(passwordInicial));
+        usuario.setPasswordHash(Encriptador.encriptarSHA256(passwordInicial));
         usuario.setNecesitaCambioPassword(true);
         usuarioDao.guardar(usuario);
     }
@@ -77,7 +76,7 @@ public class UsuarioService {
 
     public boolean verificarCredenciales(String correo, String password) 
             throws AccesoDatosException {
-        String hash = encriptador.encriptarSHA256(password);
+        String hash = Encriptador.encriptarSHA256(password);
         for (Usuario u : usuarioDao.obtenerTodos()) {
             if (u.getCorreo().equalsIgnoreCase(correo)
              && u.getPasswordHash().equals(hash)) {
@@ -93,7 +92,7 @@ public class UsuarioService {
         if (u == null) {
             throw new UsuarioNoEncontradoException("Usuario no encontrado");
         }
-        u.setPasswordHash(encriptador.encriptarSHA256(nuevaPassword));
+        u.setPasswordHash(Encriptador.encriptarSHA256(nuevaPassword));
         u.setNecesitaCambioPassword(false);
         actualizarUsuario(u);
     }
