@@ -25,15 +25,17 @@ public class UsuarioService {
     }
 
     public Usuario buscarPorId(String id) throws AccesoDatosException {
-        return usuarioDao.obtenerTodos().stream()
-            .filter(u -> u.getId().equals(id))
-            .findFirst()
-            .orElse(null);
+        List<Usuario> todos = usuarioDao.obtenerTodos();
+        for (Usuario u : todos) {
+            if (u.getId().equals(id)) {
+                return u;
+            }
+        }
+        return null;
     }
 
     public void crearUsuario(Usuario usuario, String passwordInicial) throws AccesoDatosException {
-        usuario.setPasswordHash(Encriptador.encriptarSHA256(passwordInicial));
-        usuario.setNecesitaCambioPassword(true);
+        prepararNuevoUsuario(usuario, passwordInicial);
         usuarioDao.guardar(usuario);
     }
 
@@ -44,14 +46,6 @@ public class UsuarioService {
 
     public void eliminarUsuario(String id) throws AccesoDatosException, IOException {
         usuarioDao.eliminar(id);
-    }
-
-    public List<Jugador> obtenerSoloJugadores() throws AccesoDatosException {
-        return filtrarPorClase(Jugador.class);
-    }
-
-    public List<Entrenador> obtenerSoloEntrenadores() throws AccesoDatosException {
-        return filtrarPorClase(Entrenador.class);
     }
 
     public List<Usuario> filtrarPorPais(String pais) throws AccesoDatosException {
@@ -72,6 +66,12 @@ public class UsuarioService {
             }
         }
         return resultado;
+    }
+    
+    public void prepararNuevoUsuario(Usuario usuario, String passwordInicial) {
+    	String passwordHash = Encriptador.encriptarSHA256(passwordInicial);
+    	usuario.setPasswordHash(passwordHash);
+    	usuario.setNecesitaCambioPassword(true);
     }
 
     public boolean verificarCredenciales(String correo, String password) 
@@ -97,17 +97,4 @@ public class UsuarioService {
         actualizarUsuario(u);
     }
 
-    // ——— Helpers ———
-
-    @SuppressWarnings("unchecked")
-    private <T extends Usuario> List<T> filtrarPorClase(Class<T> tipo) 
-            throws AccesoDatosException {
-        List<T> lista = new ArrayList<>();
-        for (Usuario u : usuarioDao.obtenerTodos()) {
-            if (tipo.isInstance(u)) {
-                lista.add((T) u);
-            }
-        }
-        return lista;
-    }
 }
