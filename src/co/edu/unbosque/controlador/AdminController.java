@@ -72,7 +72,10 @@ public class AdminController implements ActionListener {
 				
 				if(confirmacion == JOptionPane.YES_OPTION) {
 					crearGuardarUsuario();
+					reiniciarTablaUsuarios();
+					vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
 				}else {
+					vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
 					return;
 				}		
 			} catch (AccesoDatosException e) {
@@ -103,6 +106,7 @@ public class AdminController implements ActionListener {
 		List<UsuarioDto> todosUsuarios = new ArrayList<UsuarioDto>();
 		try {
 			for(Usuario u : usuarioService.obtenerTodos()) {
+				System.out.println(u.getClass());
 				todosUsuarios.add(UsuarioMapHandler.convertirADto(u));
 			}
 		} catch (AccesoDatosException e) {
@@ -256,6 +260,8 @@ public class AdminController implements ActionListener {
 				entrenadorDto.setNickname(nickName);
 				entrenadorDto.setAniosExperiencia(aniosExp);
 				entrenadorDto.setBiografia(biografia);
+				
+				entrenadorService.crearEntrenador(EntrenadorMapHandler.convertirAEntidad(entrenadorDto), passworHash);
 				break;
 				
 			case "jugador" :

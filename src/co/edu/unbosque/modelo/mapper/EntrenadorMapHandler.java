@@ -8,20 +8,26 @@ public class EntrenadorMapHandler implements Mapper<Entrenador, EntrenadorDto> {
 
     @Override
     public EntrenadorDto toDto(Entrenador entidad) {
+    	
+    	var base = UsuarioMapHandler.convertirADto(entidad);
         EntrenadorDto eDto = new EntrenadorDto();
-        eDto.setNombres(entidad.getNombres());
-        eDto.setApellidos(entidad.getApellidos());
-        eDto.setId(entidad.getId());
-        eDto.setCorreo(entidad.getCorreo());
-        eDto.setCelular(entidad.getCelular());
-        eDto.setPais(entidad.getPais());
-        eDto.setCiudad(entidad.getCiudad());
-        eDto.setFechaNacimiento(entidad.getFechaNacimiento());
-        eDto.setZonaHoraria(entidad.getZonaHoraria());
-        eDto.setPasswordHash(entidad.getPasswordHash());
-        eDto.setRutaFoto(entidad.getRutaFoto());
-        eDto.setNecesitaCambioPassword(entidad.isNecesitaCambioPassword());
+        
+        eDto.setNombres(base.getNombres());
+        eDto.setApellidos(base.getApellidos());
+        eDto.setId(base.getId());
+        eDto.setCorreo(base.getCorreo());
+        eDto.setCelular(base.getCelular());
+        eDto.setPais(base.getPais());
+        eDto.setCiudad(base.getCiudad());
+        eDto.setFechaNacimiento(base.getFechaNacimiento());
+        eDto.setZonaHoraria(base.getZonaHoraria());
+        eDto.setPasswordHash(base.getPasswordHash());
+        eDto.setRutaFoto(base.getRutaFoto());
+        eDto.setNecesitaCambioPassword(base.isNecesitaCambioPassword());
         eDto.setNickname(entidad.getNickname());
+        eDto.setAniosExperiencia(entidad.getAniosExperiencia());
+        eDto.setBiografia(entidad.getBiografia());
+        eDto.setTipoUsuario("Entrenador");
         return eDto;
     }
     
