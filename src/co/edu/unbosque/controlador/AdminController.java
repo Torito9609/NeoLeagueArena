@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import co.edu.unbosque.modelo.exception.AccesoDatosException;
+import co.edu.unbosque.modelo.servicio.EntrenadorService;
+import co.edu.unbosque.modelo.servicio.JugadorService;
 import co.edu.unbosque.modelo.servicio.UsuarioService;
 import co.edu.unbosque.vista.admin.VistaAdmin;
 
@@ -14,6 +16,8 @@ public class AdminController implements ActionListener {
 	private VistaAdmin vistaAdmin;
 	private Map<String, Runnable> comandos;
 	private UsuarioService usuarioService;
+	private EntrenadorService entrenadorService;
+	private JugadorService jugadorService;
 
 	public AdminController() {
 		vistaAdmin = new VistaAdmin();

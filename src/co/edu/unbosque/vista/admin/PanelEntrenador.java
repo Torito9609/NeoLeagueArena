@@ -3,13 +3,13 @@ package co.edu.unbosque.vista.admin;
 import javax.swing.*;
 import java.awt.*;
 
-public class PanelGalleta extends JPanel {
+public class PanelEntrenador extends JPanel {
 
     private JRadioButton conChispas;
     private JRadioButton sinChispas;
     private ButtonGroup grupoChispas;
 
-    public PanelGalleta() {
+    public PanelEntrenador() {
         setLayout(new FlowLayout(FlowLayout.LEFT));
         setBorder(BorderFactory.createTitledBorder("Atributos específicos de la Galleta"));
 

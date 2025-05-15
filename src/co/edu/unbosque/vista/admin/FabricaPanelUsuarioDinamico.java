@@ -4,14 +4,14 @@ import javax.swing.*;
 
 public class FabricaPanelUsuarioDinamico {
     
-	public static JPanel crearPanel(String tipoProducto) {
-	    if (tipoProducto == null) return new JPanel();
+	public static JPanel crearPanel(String tipoUsuario) {
+	    if (tipoUsuario == null) return new JPanel();
 
-	    switch (tipoProducto.trim().toLowerCase()) {
+	    switch (tipoUsuario.trim().toLowerCase()) {
 	        case "pan":
 	            return new PanelPan();
 	        case "galleta":
-	            return new PanelGalleta();
+	            return new PanelEntrenador();
 	        default:
 	            return new JPanel();
 	    }
