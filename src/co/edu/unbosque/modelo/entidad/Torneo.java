@@ -136,8 +136,6 @@ public class Torneo<R extends Resultado> implements Serializable {
         estado = EstadoTorneo.FINALIZADO;
     }
 
-    // —— equals/hashCode basados en id ——
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -150,8 +148,6 @@ public class Torneo<R extends Resultado> implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-    // —— toString para depuración —— 
 
     @Override
     public String toString() {

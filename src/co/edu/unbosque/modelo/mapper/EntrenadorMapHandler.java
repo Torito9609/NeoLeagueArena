@@ -6,39 +6,27 @@ import co.edu.unbosque.modelo.entidad.Entrenador;
 
 public class EntrenadorMapHandler implements Mapper<Entrenador, EntrenadorDto> {
 
-    private final UsuarioMapHandler usuarioMapper = new UsuarioMapHandler();
-
     @Override
     public EntrenadorDto toDto(Entrenador entidad) {
-        if (entidad == null) {
-            return null;
-        }
-        var base = usuarioMapper.toDto(entidad);
-
-        return new EntrenadorDto(
-            base.getId(),
-            base.getNombres(),
-            base.getApellidos(),
-            base.getCorreo(),
-            base.getCelular(),
-            base.getPais(),
-            base.getCiudad(),
-            base.getFechaNacimiento(),
-            base.getZonaHoraria(),
-            base.getPasswordHash(),
-            base.getRutaFoto(),
-            base.isNecesitaCambioPassword(),
-            entidad.getNickname(),
-            entidad.getAniosExperiencia(),
-            entidad.getBiografia()
-        );
+        EntrenadorDto eDto = new EntrenadorDto();
+        eDto.setNombres(entidad.getNombres());
+        eDto.setApellidos(entidad.getApellidos());
+        eDto.setId(entidad.getId());
+        eDto.setCorreo(entidad.getCorreo());
+        eDto.setCelular(entidad.getCelular());
+        eDto.setPais(entidad.getPais());
+        eDto.setCiudad(entidad.getCiudad());
+        eDto.setFechaNacimiento(entidad.getFechaNacimiento());
+        eDto.setZonaHoraria(entidad.getZonaHoraria());
+        eDto.setPasswordHash(entidad.getPasswordHash());
+        eDto.setRutaFoto(entidad.getRutaFoto());
+        eDto.setNecesitaCambioPassword(entidad.isNecesitaCambioPassword());
+        eDto.setNickname(entidad.getNickname());
+        return eDto;
     }
 
     @Override
     public Entrenador toEntity(EntrenadorDto dto) {
-        if (dto == null) {
-            return null;
-        }
         Entrenador e = new Entrenador();
         e.setId(dto.getId());
         e.setNombres(dto.getNombres());

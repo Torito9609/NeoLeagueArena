@@ -14,53 +14,6 @@ public class JugadorDto extends UsuarioDto implements Serializable {
     private NivelCompetitivoJugador nivelCompetitivo;
     private String gamerTag;
     private int rankingPuntos;
-    private List<ParticipacionTorneoDto> historialParticipacion = new ArrayList<>();
-
-    public JugadorDto() {
-        super();
-        setTipoUsuario("Jugador");
-    }
-
-    public JugadorDto(
-            String id,
-            String nombres,
-            String apellidos,
-            String correo,
-            String celular,
-            String pais,
-            String ciudad,
-            LocalDate fechaNacimiento,
-            String zonaHoraria,
-            String passwordHash,
-            String rutaFoto,
-            boolean necesitaCambioPassword,
-            NivelCompetitivoJugador nivelCompetitivo,
-            String gamerTag,
-            int rankingPuntos,
-            List<ParticipacionTorneoDto> historialParticipacion
-    ) {
-        super(
-            id,
-            nombres,
-            apellidos,
-            correo,
-            celular,
-            pais,
-            ciudad,
-            fechaNacimiento,
-            zonaHoraria,
-            passwordHash,
-            rutaFoto,
-            necesitaCambioPassword,
-            "Jugador"
-        );
-        this.nivelCompetitivo = nivelCompetitivo;
-        this.gamerTag = gamerTag;
-        this.rankingPuntos = rankingPuntos;
-        this.historialParticipacion = historialParticipacion != null
-            ? historialParticipacion
-            : new ArrayList<>();
-    }
 
     public NivelCompetitivoJugador getNivelCompetitivo() {
         return nivelCompetitivo;
@@ -86,24 +39,12 @@ public class JugadorDto extends UsuarioDto implements Serializable {
         this.rankingPuntos = rankingPuntos;
     }
 
-    public List<ParticipacionTorneoDto> getHistorialParticipacion() {
-        return historialParticipacion;
-    }
-
-    public void setHistorialParticipacion(List<ParticipacionTorneoDto> historialParticipacion) {
-        this.historialParticipacion = historialParticipacion != null
-            ? historialParticipacion
-            : new ArrayList<>();
-    }
-
     @Override
     public String toString() {
         return "JugadorDto{" +
                "id='" + getId() + '\'' +
                ", gamerTag='" + gamerTag + '\'' +
                ", nivelCompetitivo=" + nivelCompetitivo +
-               ", rankingPuntos=" + rankingPuntos +
-               ", historialParticipacion=" + historialParticipacion.size() +
-               '}';
+               ", rankingPuntos=" + rankingPuntos;
     }
 }
