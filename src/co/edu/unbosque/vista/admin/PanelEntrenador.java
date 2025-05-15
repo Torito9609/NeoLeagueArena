@@ -5,40 +5,45 @@ import java.awt.*;
 
 public class PanelEntrenador extends JPanel {
 
-    private JRadioButton conChispas;
-    private JRadioButton sinChispas;
-    private ButtonGroup grupoChispas;
+	private JTextField nickNameField;
+	private JTextField aniosXpField;
+	private JTextArea bioTextArea;
 
-    public PanelEntrenador() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
-        setBorder(BorderFactory.createTitledBorder("Atributos específicos de la Galleta"));
+	public PanelEntrenador() {
+		setBorder(BorderFactory.createTitledBorder("Atributos específicos del Entrenador"));
+		setLayout(new BorderLayout());
 
-        conChispas = new JRadioButton("Con chispas");
-        sinChispas = new JRadioButton("Sin chispas");
+		JPanel camposPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+		nickNameField = new JTextField(20);
+		aniosXpField = new JTextField(5);
 
-        grupoChispas = new ButtonGroup();
-        grupoChispas.add(conChispas);
-        grupoChispas.add(sinChispas);
+		camposPanel.add(new JLabel("Nickname:"));
+		camposPanel.add(nickNameField);
+		camposPanel.add(new JLabel("Años de experiencia:"));
+		camposPanel.add(aniosXpField);
 
-        add(conChispas);
-        add(sinChispas);
-    }
+		JPanel bioPanel = new JPanel(new BorderLayout(5, 5));
+		bioTextArea = new JTextArea(4, 20);
+		bioTextArea.setLineWrap(true);
+		bioTextArea.setWrapStyleWord(true);
+		JScrollPane bioScroll = new JScrollPane(bioTextArea);
 
-    public boolean isConChispas() {
-        return conChispas.isSelected();
-    }
+		bioPanel.add(new JLabel("Biografía:"), BorderLayout.NORTH);
+		bioPanel.add(bioScroll, BorderLayout.CENTER);
 
-    public void setConChispas(boolean valor) {
-        if (valor) {
-            conChispas.setSelected(true);
-        } else {
-            sinChispas.setSelected(true);
-        }
-    }
+		add(camposPanel, BorderLayout.NORTH);
+		add(bioPanel, BorderLayout.CENTER);
+	}
 
-    public void limpiar() {
-        grupoChispas.clearSelection();
-    }
-    
-    
+	public JTextField getNickNameField() {
+		return nickNameField;
+	}
+
+	public JTextField getAniosXpField() {
+		return aniosXpField;
+	}
+
+	public JTextArea getBioTextArea() {
+		return bioTextArea;
+	}
 }

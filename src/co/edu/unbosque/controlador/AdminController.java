@@ -5,7 +5,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
+import co.edu.unbosque.modelo.dto.EntrenadorDto;
 import co.edu.unbosque.modelo.exception.AccesoDatosException;
 import co.edu.unbosque.modelo.servicio.EntrenadorService;
 import co.edu.unbosque.modelo.servicio.JugadorService;
@@ -24,6 +26,8 @@ public class AdminController implements ActionListener {
 		comandos = new HashMap<>();
 		try {
 			usuarioService = new UsuarioService();
+			entrenadorService = new EntrenadorService();
+			jugadorService = new JugadorService();
 		} catch (AccesoDatosException e) {
 			vistaAdmin.mostrarMensajeError(e.getMessage());
 		}
@@ -172,6 +176,22 @@ public class AdminController implements ActionListener {
 	}
 	
 	private void crearGuardarUsuario() {
+		String tipoUsuario = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().getSelectedItem().toString();
+		switch(tipoUsuario) {
+			case "entrenador":
+				String id = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getIdField().getText().trim();
+				String nombres = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getNombreField().getText().trim();
+				String apellidos = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getApellidoField().getText().trim();
+				String correo = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getCorreoField().getText().trim();
+				String celular = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getCelularField().getText().trim();
+				String pais = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getPaisComboBox().getSelectedItem().toString();
+				String ciudad = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getCiudadComboBox().getSelectedItem().toString();
+				
+				EntrenadorDto entrenadorDto= new EntrenadorDto();
+				break;
+			case "jugador" :
+				break;
+		}
 		
 	}
 	
@@ -180,7 +200,8 @@ public class AdminController implements ActionListener {
 	}
 	
 	private void mostrarPanelDinamicoUsuario() {
-		
+		String tipoUsuario = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().getSelectedItem().toString();
+		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().mostrarPanel(tipoUsuario);	
 	}
 
 	// ------------------------------------------- GESTION DE USUARIOS  -------------------------------------------------------------------//

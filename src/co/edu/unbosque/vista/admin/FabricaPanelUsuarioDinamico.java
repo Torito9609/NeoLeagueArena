@@ -8,9 +8,9 @@ public class FabricaPanelUsuarioDinamico {
 	    if (tipoUsuario == null) return new JPanel();
 
 	    switch (tipoUsuario.trim().toLowerCase()) {
-	        case "pan":
-	            return new PanelPan();
-	        case "galleta":
+	        case "jugador":
+	            return new PanelJugador();
+	        case "entrenador":
 	            return new PanelEntrenador();
 	        default:
 	            return new JPanel();
