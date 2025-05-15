@@ -24,6 +24,10 @@ public class EntrenadorMapHandler implements Mapper<Entrenador, EntrenadorDto> {
         eDto.setNickname(entidad.getNickname());
         return eDto;
     }
+    
+    public static Entrenador convertirAEntidad(EntrenadorDto dto) {
+    	return new EntrenadorMapHandler().toEntity(dto);
+    }
 
     @Override
     public Entrenador toEntity(EntrenadorDto dto) {
@@ -44,5 +48,9 @@ public class EntrenadorMapHandler implements Mapper<Entrenador, EntrenadorDto> {
         e.setAniosExperiencia(dto.getAniosExperiencia());
         e.setBiografia(dto.getBiografia());
         return e;
+    }
+    
+    public static EntrenadorDto convertirADto(Entrenador e) {
+    	return new EntrenadorMapHandler().toDto(e);
     }
 }

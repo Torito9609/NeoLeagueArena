@@ -10,7 +10,7 @@ public class VentanaCreacionUsuario extends JFrame {
 
     public VentanaCreacionUsuario() {
         setTitle("Editar/Crear Producto");
-        setSize(800, 600);
+        setSize(700, 800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
         setVisible(false);
@@ -19,7 +19,7 @@ public class VentanaCreacionUsuario extends JFrame {
         panelDinamico = new PanelUsuarioDinamico();
 
         add(panelSuperior, BorderLayout.NORTH);
-        add(panelDinamico, BorderLayout.SOUTH);
+        add(panelDinamico, BorderLayout.CENTER);
     }
 
     public PanelUsuarioSuperior getPanelSuperior() {

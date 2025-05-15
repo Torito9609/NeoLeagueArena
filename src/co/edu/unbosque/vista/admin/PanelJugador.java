@@ -16,7 +16,7 @@ public class PanelJugador extends JPanel {
 		JPanel camposPanel = new JPanel(new GridLayout(3, 2, 10, 10));
 
 		nivelCompetitivoComboBox = new JComboBox<>(new String[] {
-			"Principiante", "Intermedio", "Avanzado", "Profesional", "Elite"
+			"PRINCIPIANTE", "INTERMEDIO", "AVANZADO", "PROFESIONAL", "ELITE"
 		});
 		gamerTagField = new JTextField(20);
 		rankingPuntosField = new JTextField(10);

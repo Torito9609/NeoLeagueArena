@@ -14,6 +14,11 @@ public class JugadorDto extends UsuarioDto implements Serializable {
     private NivelCompetitivoJugador nivelCompetitivo;
     private String gamerTag;
     private int rankingPuntos;
+    
+    public JugadorDto() {
+    	super();
+    	setTipoUsuario("Jugador");
+    }
 
     public NivelCompetitivoJugador getNivelCompetitivo() {
         return nivelCompetitivo;

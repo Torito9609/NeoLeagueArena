@@ -25,6 +25,10 @@ public class JugadorMapHandler implements Mapper<Jugador, JugadorDto>{
         jDto.setGamerTag(entidad.getGamerTag());
 		return jDto;
 	}
+	
+	public static JugadorDto convertirADto(Jugador e) {
+		return new JugadorMapHandler().toDto(e);
+	}
 
 	@Override
 	public Jugador toEntity(JugadorDto dto) {
@@ -45,6 +49,10 @@ public class JugadorMapHandler implements Mapper<Jugador, JugadorDto>{
         j.setRankingPuntos(dto.getRankingPuntos());
         j.setGamerTag(dto.getGamerTag());
         return j;
+	}
+	
+	public static Jugador convertirAEntidad(JugadorDto dto) {
+		return new JugadorMapHandler().toEntity(dto);
 	}
 
 }

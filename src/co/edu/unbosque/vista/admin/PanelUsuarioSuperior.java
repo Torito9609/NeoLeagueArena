@@ -8,13 +8,13 @@ import java.awt.*;
 
 public class PanelUsuarioSuperior extends JPanel {
 
-	private JTextField idField, nombreField, apellidoField, correoField, celularField;
+	private JTextField idField, nombreField, apellidoField, correoField, celularField, fechaNacimientoField;
 	private JComboBox<String> paisComboBox, zonaHorariaComboBox, ciudadComboBox, tipoUsuarioComboBox;
 	private JLabel fotoLabel;
 	private JButton seleccionarFotoButton;
 
 	public PanelUsuarioSuperior() {
-		setLayout(new GridLayout(10, 2, 10, 10));
+		setLayout(new GridLayout(13, 2, 13, 13));
 		inicializarComponentes();
 	}
 
@@ -42,6 +42,14 @@ public class PanelUsuarioSuperior extends JPanel {
 		add(new JLabel("País:"));
 		paisComboBox = new JComboBox<>(new String[] { "Colombia", "México", "Argentina", "..." });
 		add(paisComboBox);
+		
+		add(new JLabel("Ciudad:"));
+		ciudadComboBox = new JComboBox<>(new String[] { "Bogota", "Medellin", "Cali", "..." });
+		add(ciudadComboBox);
+		
+		add(new JLabel("Fecha de Nacimiento"));
+		fechaNacimientoField = new JTextField();
+		add(fechaNacimientoField);
 
 		add(new JLabel("Zona Horaria:"));
 		zonaHorariaComboBox = new JComboBox<>(new String[] { "GMT-5", "GMT-6", "GMT-3", "..." });
@@ -172,5 +180,15 @@ public class PanelUsuarioSuperior extends JPanel {
 	public void setSeleccionarFotoButton(JButton seleccionarFotoButton) {
 		this.seleccionarFotoButton = seleccionarFotoButton;
 	}
+
+	public JTextField getFechaNacimientoField() {
+		return fechaNacimientoField;
+	}
+
+	public void setFechaNacimientoField(JTextField fechaNacimientoField) {
+		this.fechaNacimientoField = fechaNacimientoField;
+	}
+	
+	
 
 }

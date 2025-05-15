@@ -2,16 +2,31 @@ package co.edu.unbosque.controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 import co.edu.unbosque.modelo.dto.EntrenadorDto;
+import co.edu.unbosque.modelo.dto.JugadorDto;
+import co.edu.unbosque.modelo.dto.UsuarioDto;
+import co.edu.unbosque.modelo.entidad.Usuario;
+import co.edu.unbosque.modelo.enums.NivelCompetitivoJugador;
 import co.edu.unbosque.modelo.exception.AccesoDatosException;
+import co.edu.unbosque.modelo.mapper.EntrenadorMapHandler;
+import co.edu.unbosque.modelo.mapper.JugadorMapHandler;
+import co.edu.unbosque.modelo.mapper.UsuarioMapHandler;
 import co.edu.unbosque.modelo.servicio.EntrenadorService;
 import co.edu.unbosque.modelo.servicio.JugadorService;
 import co.edu.unbosque.modelo.servicio.UsuarioService;
+import co.edu.unbosque.utils.Encriptador;
+import co.edu.unbosque.vista.admin.PanelEntrenador;
+import co.edu.unbosque.vista.admin.PanelJugador;
 import co.edu.unbosque.vista.admin.VistaAdmin;
 
 public class AdminController implements ActionListener {
@@ -51,7 +66,19 @@ public class AdminController implements ActionListener {
 		comandos.put("FILTRO_PAIS", this::filtrarPorPais);
 		comandos.put("FILTRO_CIUDAD", this::filtrarPorCiudad);
 		comandos.put("CREAR_USUARIO", this::mostrarVentanaCrearUsuario);
-		comandos.put("CREAR_GUARDAR_USUARIO", this::crearGuardarUsuario);
+		comandos.put("CREAR_GUARDAR_USUARIO", () -> {
+			try {
+				int confirmacion = vistaAdmin.mostrarMensajeConfirmacion("¿Esta seguro que desea crear el usuario?");
+				
+				if(confirmacion == JOptionPane.YES_OPTION) {
+					crearGuardarUsuario();
+				}else {
+					return;
+				}		
+			} catch (AccesoDatosException e) {
+				vistaAdmin.mostrarMensajeAdvertencia(e.getMessage());
+			}
+		});
 		comandos.put("CANCELAR_GUARDAR_USUARIO", this::cancelarGuardarUsuario);
 		comandos.put("EDITAR_GUARDAR_USUARIO", this::editarGuardarUsuario);
 		comandos.put("SELECCIONAR_TIPO_USUARIO", this::mostrarPanelDinamicoUsuario);
@@ -71,6 +98,20 @@ public class AdminController implements ActionListener {
 	}
 
 	// ---------------------------------- GESTION DE USUARIOS --------------------------------------------------------------------------------------------//
+	
+	private void reiniciarTablaUsuarios() {
+		List<UsuarioDto> todosUsuarios = new ArrayList<UsuarioDto>();
+		try {
+			for(Usuario u : usuarioService.obtenerTodos()) {
+				todosUsuarios.add(UsuarioMapHandler.convertirADto(u));
+			}
+		} catch (AccesoDatosException e) {
+			vistaAdmin.mostrarMensajeError(e.getMessage());
+		}
+		
+		vistaAdmin.getVentanaPrincipal().getPanelTabla().actualizarTabla(todosUsuarios);
+	}
+	
 	private void mostrarPanelUsuarios() {
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(), "USUARIOS");
 		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarPorComboBox().addActionListener(this);
@@ -80,6 +121,7 @@ public class AdminController implements ActionListener {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().getCrearButton().addActionListener(this);
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().getEditarButton().addActionListener(this);
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().getEliminarButton().addActionListener(this);
+		reiniciarTablaUsuarios();
 	}
 
 	private String buscarPorOpcion() {
@@ -175,8 +217,8 @@ public class AdminController implements ActionListener {
 		vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
 	}
 	
-	private void crearGuardarUsuario() {
-		String tipoUsuario = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().getSelectedItem().toString();
+	private void crearGuardarUsuario() throws AccesoDatosException {
+		String tipoUsuario = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().getSelectedItem().toString().toLowerCase();
 		switch(tipoUsuario) {
 			case "entrenador":
 				String id = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getIdField().getText().trim();
@@ -186,10 +228,74 @@ public class AdminController implements ActionListener {
 				String celular = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getCelularField().getText().trim();
 				String pais = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getPaisComboBox().getSelectedItem().toString();
 				String ciudad = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getCiudadComboBox().getSelectedItem().toString();
+				String fechaString = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getFechaNacimientoField().getText().toString().trim();
+				LocalDate fechaNacimiento = LocalDate.parse(fechaString);
+				String zonaHoraria = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getZonaHorariaComboBox().getSelectedItem().toString();
+				String passworHash = Encriptador.encriptarSHA256(nombres+apellidos+id+"*");
+				String rutaFoto = "";
+				boolean necesitaCambioPassword = true;
+				PanelEntrenador panelEntrenador = (PanelEntrenador) vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getPanelActual();
+				String nickName = panelEntrenador.getNickNameField().getText().toString().trim();
+				int aniosExp = Integer.parseInt(panelEntrenador.getAniosXpField().getText().trim());
+				String biografia = panelEntrenador.getBioTextArea().getText().trim();
 				
 				EntrenadorDto entrenadorDto= new EntrenadorDto();
+				
+				entrenadorDto.setId(id);
+				entrenadorDto.setNombres(nombres);
+				entrenadorDto.setApellidos(apellidos);
+				entrenadorDto.setCorreo(correo);
+				entrenadorDto.setCelular(celular);
+				entrenadorDto.setPais(pais);
+				entrenadorDto.setCiudad(ciudad);
+				entrenadorDto.setFechaNacimiento(fechaNacimiento);
+				entrenadorDto.setZonaHoraria(zonaHoraria);
+				entrenadorDto.setPasswordHash(passworHash);
+				entrenadorDto.setRutaFoto(rutaFoto);
+				entrenadorDto.setNecesitaCambioPassword(necesitaCambioPassword);
+				entrenadorDto.setNickname(nickName);
+				entrenadorDto.setAniosExperiencia(aniosExp);
+				entrenadorDto.setBiografia(biografia);
 				break;
+				
 			case "jugador" :
+				String idJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getIdField().getText().trim();
+				String nombresJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getNombreField().getText().trim();
+				String apellidosJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getApellidoField().getText().trim();
+				String correoJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getCorreoField().getText().trim();
+				String celularJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getCelularField().getText().trim();
+				String paisJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getPaisComboBox().getSelectedItem().toString();
+				String ciudadJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getCiudadComboBox().getSelectedItem().toString();
+				String fechaStringJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getFechaNacimientoField().getText().toString().trim();
+				LocalDate fechaNacimientoJ = LocalDate.parse(fechaStringJ);
+				String zonaHorariaJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getZonaHorariaComboBox().getSelectedItem().toString();
+				String passworHashJ = Encriptador.encriptarSHA256(nombresJ.split(" ")[0] + apellidosJ.split(" ")[0] + idJ + "*");
+				String rutaFotoJ = "";
+				boolean necesitaCambioPasswordJ = true;
+				PanelJugador panelJugador = (PanelJugador) vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getPanelActual();
+				NivelCompetitivoJugador nivel = NivelCompetitivoJugador.valueOf(panelJugador.getNivelCompetitivoComboBox().getSelectedItem().toString());
+				String gamerTag = panelJugador.getGamerTagField().getText().trim();
+				int rankingPuntos = Integer.parseInt(panelJugador.getRankingPuntosField().getText().trim());
+				
+				JugadorDto jugadorDto = new JugadorDto();
+				
+				jugadorDto.setId(idJ);
+				jugadorDto.setNombres(nombresJ);
+				jugadorDto.setApellidos(apellidosJ);
+				jugadorDto.setCorreo(correoJ);
+				jugadorDto.setCelular(celularJ);
+				jugadorDto.setPais(paisJ);
+				jugadorDto.setCiudad(ciudadJ);
+				jugadorDto.setFechaNacimiento(fechaNacimientoJ);
+				jugadorDto.setZonaHoraria(zonaHorariaJ);
+				jugadorDto.setPasswordHash(passworHashJ);
+				jugadorDto.setRutaFoto(rutaFotoJ);
+				jugadorDto.setNecesitaCambioPassword(necesitaCambioPasswordJ);
+				jugadorDto.setNivelCompetitivo(nivel);
+				jugadorDto.setGamerTag(gamerTag);
+				jugadorDto.setRankingPuntos(rankingPuntos);
+				
+				jugadorService.crearJugador(JugadorMapHandler.convertirAEntidad(jugadorDto), passworHashJ);
 				break;
 		}
 		

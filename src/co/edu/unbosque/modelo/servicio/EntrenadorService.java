@@ -46,6 +46,7 @@ public class EntrenadorService {
 
 	public void crearEntrenador(Entrenador entrenador, String passwordInicial) throws AccesoDatosException {
 		usuarioService.prepararNuevoUsuario(entrenador, passwordInicial);
+		usuarioService.crearUsuario(entrenador, passwordInicial);
 		entrenadorDao.guardar(entrenador);
 	}
 

@@ -21,38 +21,6 @@ public class UsuarioDto implements Serializable {
     private boolean necesitaCambioPassword;
     private String tipoUsuario;
 
-    public UsuarioDto() { }
-
-    public UsuarioDto(
-            String id,
-            String nombres,
-            String apellidos,
-            String correo,
-            String celular,
-            String pais,
-            String ciudad,
-            LocalDate fechaNacimiento,
-            String zonaHoraria,
-            String passwordHash,
-            String rutaFoto,
-            boolean necesitaCambioPassword,
-            String tipoUsuario
-    ) {
-        this.id = id;
-        this.nombres = nombres;
-        this.apellidos = apellidos;
-        this.correo = correo;
-        this.celular = celular;
-        this.pais = pais;
-        this.ciudad = ciudad;
-        this.fechaNacimiento = fechaNacimiento;
-        this.zonaHoraria = zonaHoraria;
-        this.passwordHash = passwordHash;
-        this.rutaFoto = rutaFoto;
-        this.necesitaCambioPassword = necesitaCambioPassword;
-        this.tipoUsuario = tipoUsuario;
-    }
-
     // Getters y setters
 
     public String getId() {
