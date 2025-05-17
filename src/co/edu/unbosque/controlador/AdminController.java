@@ -49,7 +49,9 @@ public class AdminController implements ActionListener {
 		}
 		registrarComandos();
 		asignaOyentesPanelLateral();
-		System.out.println("xc");	}
+		System.out.println("xc");	
+		System.out.println("Prueba de github con Miguel");
+		}
 
 	private void registrarComandos() {
 		comandos.put("GESTIONAR_USUARIOS", this::mostrarPanelUsuarios);
