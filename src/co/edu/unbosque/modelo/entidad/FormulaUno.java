@@ -1,26 +1,53 @@
 package co.edu.unbosque.modelo.entidad;
 
 import java.util.List;
+// Asumo que Juego, ResultadoCampeonato, Equipo y Partida
+// están definidos en el mismo paquete o importados correctamente.
 
 /**
- * Fórmula 1 como Juego: ya no se encarga de generar sus carreras,
- * esa responsabilidad recae sobre la FaseCampeonato (que añade fechas dinámicas).
+ * Representa el juego Fórmula 1, una subclase de {@link Juego}.
+ * <p>
+ * Esta clase está diseñada para ser utilizada en conjunto con una fase de tipo
+ * campeonato (como {@link FaseCampeonato}), donde la generación de carreras (partidas)
+ * y la asignación de fechas se maneja externamente por la lógica de la fase.
+ * Por lo tanto, el método {@code generarPartidas} de esta clase lanza una
+ * {@link UnsupportedOperationException} si se invoca directamente.
+ * </p>
+ *
+ * @see Juego
+ * @see ResultadoCampeonato
+ * @see FaseCampeonato
+ * @see Equipo
+ * @see Partida
+ * @autor TuNombreCompletoAquí
+ * @version 1.0
  */
 public class FormulaUno extends Juego<ResultadoCampeonato> {
 
     /**
-     * @param id     identificador único (p. ej. "f1")
-     * @param nombre nombre legible (p. ej. "F1 e-sports 2025")
+     * Constructor para crear una instancia del juego Fórmula 1.
+     * Llama al constructor de la superclase {@link Juego} para establecer el ID y el nombre.
+     *
+     * @param id     El identificador único para esta instancia de juego Fórmula 1 (p. ej. "f1").
+     * @param nombre El nombre descriptivo para esta instancia de juego (p. ej. "F1 e-sports 2025").
      */
     public FormulaUno(String id, String nombre) {
         super(id, nombre);
     }
 
     /**
-     * La generación de partidas (carreras) se hace en la fase de campeonato,
-     * porque allí se calculan las fechas dinámicas a partir de la fecha de inicio
-     * y el intervalo entre Grand Prix. 
-     * Si alguien llama directamente a este método, es un uso incorrecto.
+     * Este método no está soportado para la clase {@code FormulaUno}.
+     * <p>
+     * La generación de partidas (carreras) para Fórmula 1 se delega a una
+     * implementación de {@link Fase} (específicamente, una como {@link FaseCampeonato})
+     * que puede manejar la lógica de calendarios con fechas dinámicas, circuitos
+     * y el formato de un campeonato.
+     * </p>
+     *
+     * @param equipos La lista de equipos participantes.
+     * @return No devuelve valor, ya que siempre lanza una excepción.
+     * @throws UnsupportedOperationException Siempre, para indicar que este método
+     * no debe ser invocado directamente para esta clase de juego.
      */
     @Override
     public List<Partida<ResultadoCampeonato>> generarPartidas(List<Equipo> equipos) {
