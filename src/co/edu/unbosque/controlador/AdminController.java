@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import co.edu.unbosque.modelo.dto.EntrenadorDto;
 import co.edu.unbosque.modelo.dto.JugadorDto;
 import co.edu.unbosque.modelo.dto.UsuarioDto;
+import co.edu.unbosque.modelo.entidad.Entrenador;
 import co.edu.unbosque.modelo.entidad.Usuario;
 import co.edu.unbosque.modelo.enums.NivelCompetitivoJugador;
 import co.edu.unbosque.modelo.exception.AccesoDatosException;
@@ -48,7 +49,7 @@ public class AdminController implements ActionListener {
 		}
 		registrarComandos();
 		asignaOyentesPanelLateral();
-	}
+		System.out.println("xc");	}
 
 	private void registrarComandos() {
 		comandos.put("GESTIONAR_USUARIOS", this::mostrarPanelUsuarios);
@@ -107,7 +108,7 @@ public class AdminController implements ActionListener {
 		try {
 			for(Usuario u : usuarioService.obtenerTodos()) {
 				System.out.println(u.getClass());
-				todosUsuarios.add(UsuarioMapHandler.convertirADto(u));
+				//todosUsuarios.add(UsuarioMapHandler.convertirADto(u));
 			}
 		} catch (AccesoDatosException e) {
 			vistaAdmin.mostrarMensajeError(e.getMessage());
@@ -242,6 +243,7 @@ public class AdminController implements ActionListener {
 				String nickName = panelEntrenador.getNickNameField().getText().toString().trim();
 				int aniosExp = Integer.parseInt(panelEntrenador.getAniosXpField().getText().trim());
 				String biografia = panelEntrenador.getBioTextArea().getText().trim();
+				String tipoUsuarioE = "Entrenador";
 				
 				EntrenadorDto entrenadorDto= new EntrenadorDto();
 				
@@ -260,6 +262,7 @@ public class AdminController implements ActionListener {
 				entrenadorDto.setNickname(nickName);
 				entrenadorDto.setAniosExperiencia(aniosExp);
 				entrenadorDto.setBiografia(biografia);
+				entrenadorDto.setTipoUsuario(tipoUsuario);
 				
 				entrenadorService.crearEntrenador(EntrenadorMapHandler.convertirAEntidad(entrenadorDto), passworHash);
 				break;
@@ -282,6 +285,7 @@ public class AdminController implements ActionListener {
 				NivelCompetitivoJugador nivel = NivelCompetitivoJugador.valueOf(panelJugador.getNivelCompetitivoComboBox().getSelectedItem().toString());
 				String gamerTag = panelJugador.getGamerTagField().getText().trim();
 				int rankingPuntos = Integer.parseInt(panelJugador.getRankingPuntosField().getText().trim());
+				String tipoUsuarioJ = "Jugador";
 				
 				JugadorDto jugadorDto = new JugadorDto();
 				
@@ -300,6 +304,7 @@ public class AdminController implements ActionListener {
 				jugadorDto.setNivelCompetitivo(nivel);
 				jugadorDto.setGamerTag(gamerTag);
 				jugadorDto.setRankingPuntos(rankingPuntos);
+				jugadorDto.setTipoUsuario(tipoUsuarioJ);
 				
 				jugadorService.crearJugador(JugadorMapHandler.convertirAEntidad(jugadorDto), passworHashJ);
 				break;

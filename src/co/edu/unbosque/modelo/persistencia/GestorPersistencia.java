@@ -72,7 +72,7 @@ public class GestorPersistencia<E, D> {
         try (ObjectInputStream ois = 
                  new ObjectInputStream(new FileInputStream(ubicacionArchivo))) {
             List<D> dtos = (List<D>) ois.readObject();
-            List<E> entidades = new ArrayList<>(dtos.size());
+            List<E> entidades = new ArrayList<>();
             for (D dto : dtos) {
                 entidades.add(mapper.toEntity(dto));
             }
