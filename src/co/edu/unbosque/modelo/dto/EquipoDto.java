@@ -6,60 +6,43 @@ import java.util.List;
 
 public class EquipoDto implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private String id;
-    private String nombre;
-    private String idTorneo;
-    private List<String> jugadorIds = new ArrayList<>();
+	private String id;
+	private String nombre;
+	private String idTorneo;
 
-    public EquipoDto() { }
+	public EquipoDto() {
+	}
 
-    public EquipoDto(String id,
-                     String nombre,
-                     String idTorneo,
-                     List<String> jugadorIds) {
-        this.id = id;
-        this.nombre = nombre;
-        this.idTorneo = idTorneo;
-        this.jugadorIds = (jugadorIds != null ? jugadorIds : new ArrayList<>());
-    }
+	public EquipoDto(String id, String nombre, String idTorneo, List<String> jugadorIds) {
+		this.id = id;
+		this.nombre = nombre;
+		this.idTorneo = idTorneo;
+	}
 
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getNombre() {
-        return nombre;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getIdTorneo() {
-        return idTorneo;
-    }
-    public void setIdTorneo(String idTorneo) {
-        this.idTorneo = idTorneo;
-    }
+	public String getNombre() {
+		return nombre;
+	}
 
-    public List<String> getJugadorIds() {
-        return jugadorIds;
-    }
-    public void setJugadorIds(List<String> jugadorIds) {
-        this.jugadorIds = (jugadorIds != null ? jugadorIds : new ArrayList<>());
-    }
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
-    @Override
-    public String toString() {
-        return "EquipoDto{" +
-               "id='" + id + '\'' +
-               ", nombre='" + nombre + '\'' +
-               ", idTorneo='" + idTorneo + '\'' +
-               ", jugadorIds=" + jugadorIds +
-               '}';
-    }
+	public String getIdTorneo() {
+		return idTorneo;
+	}
+
+	public void setIdTorneo(String idTorneo) {
+		this.idTorneo = idTorneo;
+	}
+
 }
