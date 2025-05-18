@@ -4,14 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import co.edu.unbosque.modelo.dto.EntrenadorDto;
 import co.edu.unbosque.modelo.dto.JugadorDto;
@@ -32,6 +31,7 @@ import co.edu.unbosque.modelo.servicio.UsuarioService;
 import co.edu.unbosque.utils.Encriptador;
 import co.edu.unbosque.vista.admin.PanelEntrenador;
 import co.edu.unbosque.vista.admin.PanelJugador;
+import co.edu.unbosque.vista.admin.PanelUsuarioSuperior;
 import co.edu.unbosque.vista.admin.VistaAdmin;
 
 public class AdminController implements ActionListener {
@@ -125,6 +125,85 @@ public class AdminController implements ActionListener {
 		//vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getTipoUsuarioComboBox().setSelectedIndex(0);
 		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getFiltroComboBox().setSelectedIndex(0);
 	}
+	
+	private boolean validarDatosFormularioUsuarios() {
+	    PanelUsuarioSuperior panel = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior();
+
+	    String id = panel.getIdField().getText().trim();
+	    String nombres = panel.getNombreField().getText().trim();
+	    String apellidos = panel.getApellidoField().getText().trim();
+	    String correo = panel.getCorreoField().getText().trim();
+	    String celular = panel.getCelularField().getText().trim();
+	    String fechaNacimiento = panel.getFechaNacimientoField().getText().trim();
+
+	    String pais = panel.getPaisComboBox().getSelectedItem().toString();
+	    String ciudad = panel.getCiudadComboBox().getSelectedItem().toString();
+	    String zonaHoraria = panel.getZonaHorariaComboBox().getSelectedItem().toString();
+	    String tipoUsuario = panel.getTipoUsuarioComboBox().getSelectedItem().toString();
+
+	    if (id.isEmpty() || nombres.isEmpty() || apellidos.isEmpty() || correo.isEmpty()
+	            || celular.isEmpty() || fechaNacimiento.isEmpty()) {
+	        vistaAdmin.mostrarMensajeError("Todos los campos de texto deben estar completos.");
+	        return false;
+	    }
+
+	    if (!id.matches("\\d+")) {
+	        vistaAdmin.mostrarMensajeError("El ID solo debe contener números.");
+	        return false;
+	    }
+
+	    if (!nombres.matches("[a-zA-Z]+")) {
+	        vistaAdmin.mostrarMensajeError("El nombre solo debe contener letras.");
+	        return false;
+	    }
+
+	    if (!apellidos.matches("[a-zA-Z]+")) {
+	        vistaAdmin.mostrarMensajeError("El apellido solo debe contener letras.");
+	        return false;
+	    }
+
+	    if (!correo.contains("@") || !correo.contains(".")) {
+	        vistaAdmin.mostrarMensajeError("El correo ingresado no es válido.");
+	        return false;
+	    }
+
+	    if (!celular.matches("\\d{7,10}")) {
+	        vistaAdmin.mostrarMensajeError("El celular debe tener entre 7 y 10 dígitos numéricos.");
+	        return false;
+	    }
+
+	    try {
+	        LocalDate.parse(fechaNacimiento);
+	    } catch (DateTimeParseException e) {
+	        vistaAdmin.mostrarMensajeError("La fecha de nacimiento debe tener el formato yyyy-MM-dd.");
+	        return false;
+	    }
+
+	    if (pais.equals("Seleccionar")) {
+	        vistaAdmin.mostrarMensajeError("Debe seleccionar un país.");
+	        return false;
+	    }
+
+	    if (ciudad.equals("Seleccionar")) {
+	        vistaAdmin.mostrarMensajeError("Debe seleccionar una ciudad.");
+	        return false;
+	    }
+
+	    if (zonaHoraria.equals("Seleccionar")) {
+	        vistaAdmin.mostrarMensajeError("Debe seleccionar una zona horaria.");
+	        return false;
+	    }
+
+	    if (tipoUsuario.equals("Seleccionar")) {
+	        vistaAdmin.mostrarMensajeError("Debe seleccionar un tipo de usuario.");
+	        return false;
+	    }
+
+	    return true;
+	}
+
+
+
 	
 	private void mostrarPanelUsuarios() {
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(), "USUARIOS");
@@ -483,6 +562,7 @@ public class AdminController implements ActionListener {
 		String tipoUsuario = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().getSelectedItem().toString().toLowerCase();
 		switch(tipoUsuario) {
 			case "entrenador":
+				if(!validarDatosFormularioUsuarios()) return;
 				String id = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getIdField().getText().trim();
 				String nombres = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getNombreField().getText().trim();
 				String apellidos = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getApellidoField().getText().trim();
@@ -546,6 +626,7 @@ public class AdminController implements ActionListener {
 				break;
 				
 			case "jugador" :
+				if(!validarDatosFormularioUsuarios()) return;
 				String idJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getIdField().getText().trim();
 				String nombresJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getNombreField().getText().trim();
 				String apellidosJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getApellidoField().getText().trim();
@@ -611,6 +692,7 @@ public class AdminController implements ActionListener {
 	}
 	
 	private void editarGuardarUsuario() {
+		if(!validarDatosFormularioUsuarios()) return;
 		String[] datos = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().obtenerCamposFormulario();
 		String id = datos[0];
 		String nombres = datos[1];
