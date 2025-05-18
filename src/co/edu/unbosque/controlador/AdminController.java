@@ -585,7 +585,15 @@ public class AdminController implements ActionListener {
 	}
 	
 	private void editarGuardarUsuario() {
-		
+		String[] datos = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().obtenerCamposFormulario();
+		String id = datos[0];
+		String nombres = datos[1];
+		String apellidos = datos[2];
+		String correo = datos[3];
+		String celular = datos[4];
+		String pais = datos[5];
+		String ciudad = datos[6];
+		String zonaHoraria = datos[7];
 	}
 	
 	private void mostrarPanelDinamicoUsuario() {

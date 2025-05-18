@@ -80,7 +80,7 @@ public class PanelUsuarioSuperior extends JPanel {
 	}
 
 	public String[] obtenerCamposFormulario() {
-		String[] campos = new String[8];
+		String[] campos = new String[10];
 		campos[0] = idField.getText().trim();
 		campos[1] = nombreField.getText().trim();
 		campos[2] = apellidoField.getText().trim();
@@ -89,6 +89,8 @@ public class PanelUsuarioSuperior extends JPanel {
 		campos[5] = paisComboBox.getSelectedItem().toString();
 		campos[6] = zonaHorariaComboBox.getSelectedItem().toString();
 		campos[7] = ciudadComboBox.getSelectedItem().toString();
+		campos[8] = fechaNacimientoField.getText();
+		campos[9] = tipoUsuarioComboBox.getSelectedItem().toString();
 
 		return campos;
 	}
@@ -209,7 +211,7 @@ public class PanelUsuarioSuperior extends JPanel {
 		fechaNacimientoField.setText(usuarioDto.getFechaNacimiento().toString());
 		paisComboBox.setSelectedItem(usuarioDto.getPais());
 		ciudadComboBox.setSelectedItem(usuarioDto.getCiudad());
-		
+		tipoUsuarioComboBox.setSelectedItem(usuarioDto.getTipoUsuario());	
 	}
 	
 	
