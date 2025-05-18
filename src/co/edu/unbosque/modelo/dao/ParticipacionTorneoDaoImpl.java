@@ -10,18 +10,19 @@ import co.edu.unbosque.modelo.exception.AccesoDatosException;
 import co.edu.unbosque.modelo.mapper.ParticipacionTorneoMapHandler;
 import co.edu.unbosque.modelo.persistencia.ConstanteArchivo;
 import co.edu.unbosque.modelo.persistencia.GestorPersistencia;
+import co.edu.unbosque.modelo.servicio.EquipoService;
+import co.edu.unbosque.modelo.servicio.TorneoService;
 
 public class ParticipacionTorneoDaoImpl implements ICrudDao<ParticipacionTorneo> {
 	private final String RUTA_ARCHIVO = ConstanteArchivo.ARCHIVO_PARTICIPACIONES_TORNEO;
 	private final GestorPersistencia<ParticipacionTorneo, ParticipacionTorneoDto> gestor;
 	private List<ParticipacionTorneo> asignaciones;
 
-	public ParticipacionTorneoDaoImpl() throws AccesoDatosException {
-		this.asignaciones = new ArrayList<ParticipacionTorneo>();
-		ParticipacionTorneoMapHandler mapper = new ParticipacionTorneoMapHandler();
-		this.gestor = new GestorPersistencia<>(RUTA_ARCHIVO, mapper);
-		actualizarBD();
+	public ParticipacionTorneoDaoImpl(ParticipacionTorneoMapHandler mapper) throws AccesoDatosException {
+	    this.gestor = new GestorPersistencia<>(RUTA_ARCHIVO, mapper);
+	    actualizarBD();
 	}
+
 
 	private void actualizarBD() throws AccesoDatosException {
 		asignaciones = gestor.cargar();

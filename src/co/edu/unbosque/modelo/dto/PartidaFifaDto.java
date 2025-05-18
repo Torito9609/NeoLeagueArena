@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 import co.edu.unbosque.modelo.enums.EstadoPartida;
 
-public class PartidaFifaDto implements Serializable {
+public class PartidaFifaDto extends PartidaDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

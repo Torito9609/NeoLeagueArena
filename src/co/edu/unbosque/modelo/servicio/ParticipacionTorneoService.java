@@ -7,13 +7,15 @@ import java.util.List;
 import co.edu.unbosque.modelo.dao.ParticipacionTorneoDaoImpl;
 import co.edu.unbosque.modelo.entidad.ParticipacionTorneo;
 import co.edu.unbosque.modelo.exception.AccesoDatosException;
+import co.edu.unbosque.modelo.mapper.ParticipacionTorneoMapHandler;
 
 public class ParticipacionTorneoService {
 
     private final ParticipacionTorneoDaoImpl participacionDao;
 
-    public ParticipacionTorneoService() throws AccesoDatosException {
-        this.participacionDao = new ParticipacionTorneoDaoImpl();
+    public ParticipacionTorneoService(EquipoService equipoService, TorneoService torneoService) throws AccesoDatosException {
+        ParticipacionTorneoMapHandler mapper = new ParticipacionTorneoMapHandler(equipoService, torneoService);
+        this.participacionDao = new ParticipacionTorneoDaoImpl(mapper); 
     }
 
     public List<ParticipacionTorneo> obtenerTodos() throws AccesoDatosException {

@@ -5,13 +5,6 @@ public class Circuito {
 	private String nombre;
 	private String rutaFoto;
 
-	public Circuito(String id, String nombre, String rutaFoto) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.rutaFoto = rutaFoto;
-	}
-
 	public Circuito() {
 		super();
 	}

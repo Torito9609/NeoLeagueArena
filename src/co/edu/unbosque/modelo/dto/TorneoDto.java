@@ -21,21 +21,15 @@ public class TorneoDto implements Serializable {
 	public TorneoDto() {
 		this.idEquiposInscritos = new ArrayList<>();
 		this.partidas = new ArrayList<>();
-	}
-	
-	
+	}	
 
 	public String getTipoPartida() {
 		return tipoPartida;
 	}
 
-
-
 	public void setTipoPartida(String tipoPartida) {
 		this.tipoPartida = tipoPartida;
 	}
-
-
 
 	public String getId() {
 		return id;

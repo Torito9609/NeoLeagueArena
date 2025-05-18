@@ -14,9 +14,9 @@ public class ParticipacionTorneoMapHandler implements Mapper<ParticipacionTorneo
 	private final EquipoService equipoService;
 	private final TorneoService torneoService;
 
-	public ParticipacionTorneoMapHandler() throws AccesoDatosException {
-		this.equipoService = new EquipoService();
-		this.torneoService = new TorneoService();
+	public ParticipacionTorneoMapHandler(EquipoService equipoService, TorneoService torneoService) throws AccesoDatosException {
+		this.equipoService = equipoService;
+		this.torneoService = torneoService;
 	}
 
 	@Override

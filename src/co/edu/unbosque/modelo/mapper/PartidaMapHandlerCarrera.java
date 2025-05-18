@@ -45,7 +45,8 @@ public class PartidaMapHandlerCarrera extends PartidaMapHandler<ResultadoCampeon
 			participantes.add(construirEquipoDummy(id));
 		}
 
-		Circuito circuito = new Circuito(dto.getNombreCircuito()); 
+		Circuito circuito = new Circuito(); 
+		circuito.setNombre(dto.getNombreCircuito());
 		PartidaCarrera partida = new PartidaCarrera(dto.getId(), participantes, circuito, dto.getFecha());
 		partida.setEstadoPartida(dto.getEstado());
 

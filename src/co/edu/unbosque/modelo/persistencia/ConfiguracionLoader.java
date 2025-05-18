@@ -38,7 +38,11 @@ public class ConfiguracionLoader {
 				continue;
 			String nombre = props.getProperty("circuito." + id + ".nombre");
 			String rutaFoto = props.getProperty("circuito." + id + ".rutaFoto");
-			lista.add(new Circuito(id, nombre, rutaFoto));
+			Circuito circuito = new Circuito();
+			circuito.setId(id);
+			circuito.setNombre(nombre);
+			circuito.setRutaFoto(rutaFoto);
+			lista.add(circuito);
 		}
 		return lista;
 	}

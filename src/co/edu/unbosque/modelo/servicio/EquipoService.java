@@ -22,8 +22,9 @@ public class EquipoService {
 
     public EquipoService() throws AccesoDatosException {
         equipoDao = new EquipoDaoImpl();
-        participacionService = new ParticipacionTorneoService();
         torneoService = new TorneoService();
+        participacionService = new ParticipacionTorneoService(this, torneoService);
+      
     }
 
     public List<Equipo> obtenerTodos() throws AccesoDatosException {
