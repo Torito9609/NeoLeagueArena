@@ -5,12 +5,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
-import co.edu.unbosque.modelo.dto.UsuarioDto;
 import co.edu.unbosque.modelo.entidad.Entrenador;
 import co.edu.unbosque.modelo.entidad.Jugador;
 import co.edu.unbosque.modelo.entidad.Usuario;
-import co.edu.unbosque.modelo.dto.EntrenadorDto;
-import co.edu.unbosque.modelo.dto.JugadorDto;
 import co.edu.unbosque.modelo.exception.AccesoDatosException;
 import co.edu.unbosque.modelo.servicio.UsuarioService;
 import co.edu.unbosque.vista.login.VistaLogin;
@@ -54,10 +51,9 @@ public class LoginController implements ActionListener {
                 Usuario usuario = usuarioService.obtenerUsuarioPorCredenciales(correo, password);
 
                 if (usuario == null) {
+                	//System.out.println("El usuario es null");
                     controladorPrincipal.lanzarAdminController();
                 }
-
-                // Cerrar login
                 vistaLogin.getVentanaLogin().dispose();
 
                 if (usuario instanceof Jugador) {

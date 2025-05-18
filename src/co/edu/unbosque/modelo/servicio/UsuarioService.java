@@ -106,11 +106,13 @@ public class UsuarioService {
 
     public Usuario obtenerUsuarioPorCredenciales(String correo, String password) throws AccesoDatosException {
         String hash = Encriptador.encriptarSHA256(password);
-        for (Usuario u : usuarioDao.obtenerTodos()) {
-            if (u.getCorreo().equalsIgnoreCase(correo)
-             && u.getPasswordHash().equals(hash)) {
-                return u;
-            }
+        //System.out.println("La contraseña del hash es: " + hash);
+        Usuario usuarioEncontrado = buscarPorCorreo(correo);
+        //System.out.println("La contraseña de El usuario encontrado es: " + usuarioEncontrado.getPasswordHash());
+        if(usuarioEncontrado != null) {
+        	if(usuarioEncontrado.getPasswordHash().equals(hash)) { 
+        		return usuarioEncontrado;
+        	};
         }
         return null;
     }

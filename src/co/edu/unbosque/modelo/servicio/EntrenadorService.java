@@ -51,19 +51,23 @@ public class EntrenadorService {
 	}
 
 	public void crearEntrenador(Entrenador entrenador, String passwordInicial) 
-		    throws AccesoDatosException, RegistroDuplicadoException, RegistroNoEncontradoException {
+	        throws AccesoDatosException, RegistroDuplicadoException {
 
-		    if (buscarPorId(entrenador.getId()) != null) {
-		        throw new RegistroDuplicadoException("El ID ingresado ya existe: " + entrenador.getId());
-		    }
+	    try {
+	        buscarPorId(entrenador.getId());
+	        throw new RegistroDuplicadoException("El ID ingresado ya existe: " + entrenador.getId());
+	    } catch (RegistroNoEncontradoException e) {
+	       
+	    }
 
-		    if (usuarioService.correoExiste(entrenador.getCorreo())) {
-		        throw new RegistroDuplicadoException("El correo ya está en uso: " + entrenador.getCorreo());
-		    }
+	    if (usuarioService.correoExiste(entrenador.getCorreo())) {
+	        throw new RegistroDuplicadoException("El correo ya está en uso: " + entrenador.getCorreo());
+	    }
 
-		    usuarioService.crearUsuario(entrenador, passwordInicial);
-		    entrenadorDao.guardar(entrenador);
-		}
+	    usuarioService.crearUsuario(entrenador, passwordInicial);
+	    entrenadorDao.guardar(entrenador);
+	}
+
 
 
 	public void actualizarEntrenador(Entrenador entrenadorActualizado) throws AccesoDatosException, IOException {

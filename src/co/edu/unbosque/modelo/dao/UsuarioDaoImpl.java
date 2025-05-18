@@ -6,6 +6,7 @@ import java.util.List;
 
 import co.edu.unbosque.modelo.dto.EntrenadorDto;
 import co.edu.unbosque.modelo.dto.UsuarioDto;
+import co.edu.unbosque.modelo.entidad.Entrenador;
 import co.edu.unbosque.modelo.entidad.Usuario;
 import co.edu.unbosque.modelo.exception.AccesoDatosException;
 import co.edu.unbosque.modelo.mapper.UsuarioMapHandler;
@@ -49,6 +50,10 @@ public class UsuarioDaoImpl implements ICrudDao<Usuario> {
 		if (buscarPorId(u.getId()) == null) {
 			usuarios.add(u);
 			gestor.guardar(usuarios);
+			for (Usuario us : usuarios) {
+			    System.out.println("Entrenador guardado: " + us.getId());
+			    System.out.println("Hash guardado: " + us.getPasswordHash());
+			}
 			return true;
 		}
 		return false;

@@ -1,6 +1,7 @@
 package co.edu.unbosque.controlador;
 
 import co.edu.unbosque.modelo.dto.JugadorDto;
+import co.edu.unbosque.modelo.entidad.Jugador;
 import co.edu.unbosque.modelo.enums.NivelCompetitivoJugador; // Usar tu enum
 import co.edu.unbosque.vista.jugador.SubPanelMiPerfilJugador;
 import co.edu.unbosque.vista.jugador.VentanaPrincipalJugador;
@@ -17,7 +18,7 @@ public class JugadorController implements ActionListener {
     private Map<String, Runnable> comandos;
     private JugadorDto jugadorActual;
 
-    public JugadorController() {
+    public JugadorController(Jugador jugadorLoggeado) {
         vistaJugador = new VistaJugador();
         comandos = new HashMap<>();
 

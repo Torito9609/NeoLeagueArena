@@ -50,6 +50,10 @@ public class EntrenadorDaoImpl implements ICrudDao<Entrenador> {
 		if (buscarPorId(u.getId()) == null) {
 			entrenadores.add(u);
 			gestor.guardar(entrenadores);
+			for (Entrenador ent : entrenadores) {
+			    System.out.println("Entrenador guardado: " + ent.getId());
+			    System.out.println("Hash guardado: " + ent.getPasswordHash());
+			}
 			return true;
 		}
 		return false;

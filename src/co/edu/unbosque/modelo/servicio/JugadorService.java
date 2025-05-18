@@ -44,8 +44,11 @@ public class JugadorService {
 	}
 	
 	public void crearJugador(Jugador jugador, String passwordInicial) throws AccesoDatosException, RegistroDuplicadoException, RegistroNoEncontradoException{
-		if (buscarPorId(jugador.getId()) != null) {
+		try {
+	        buscarPorId(jugador.getId());
 	        throw new RegistroDuplicadoException("El ID ingresado ya existe: " + jugador.getId());
+	    } catch (RegistroNoEncontradoException e) {
+	       
 	    }
 
 	    if (usuarioService.correoExiste(jugador.getCorreo())) {

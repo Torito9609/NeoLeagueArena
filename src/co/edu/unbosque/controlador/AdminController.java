@@ -573,7 +573,9 @@ public class AdminController implements ActionListener {
 				String fechaString = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getFechaNacimientoField().getText().toString().trim();
 				LocalDate fechaNacimiento = LocalDate.parse(fechaString);
 				String zonaHoraria = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getZonaHorariaComboBox().getSelectedItem().toString();
-				String passwordHash = Encriptador.encriptarSHA256(nombres+apellidos+id+"*");
+				String passwordPlanoE = id + "*";
+				System.out.println("ID usado para el hash: " + id);
+				System.out.println("HASH generado y asignado: " + passwordPlanoE);
 				String rutaFoto = "";
 				boolean necesitaCambioPassword = true;
 				PanelEntrenador panelEntrenador = (PanelEntrenador) vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getPanelActual();
@@ -593,7 +595,6 @@ public class AdminController implements ActionListener {
 				entrenadorDto.setCiudad(ciudad);
 				entrenadorDto.setFechaNacimiento(fechaNacimiento);
 				entrenadorDto.setZonaHoraria(zonaHoraria);
-				entrenadorDto.setPasswordHash(passwordHash);
 				entrenadorDto.setRutaFoto(rutaFoto);
 				entrenadorDto.setNecesitaCambioPassword(necesitaCambioPassword);
 				entrenadorDto.setNickname(nickName);
@@ -605,7 +606,9 @@ public class AdminController implements ActionListener {
 			try {
 				int confirmacion = vistaAdmin.mostrarMensajeConfirmacion("¿Desea crear el nuevo usuario?");
 				if(confirmacion == JOptionPane.YES_OPTION) {
-					entrenadorService.crearEntrenador(EntrenadorMapHandler.convertirAEntidad(entrenadorDto), passwordHash);
+					Entrenador entidad = EntrenadorMapHandler.convertirAEntidad(entrenadorDto);
+					//System.out.println("Hash en entidad antes de guardar: " + entidad.getPasswordHash());
+					entrenadorService.crearEntrenador(entidad, passwordPlanoE);
 					reiniciarTablaUsuarios();
 					vistaAdmin.mostrarMensajeExito("Usuario creado con extito");
 					vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
@@ -619,8 +622,6 @@ public class AdminController implements ActionListener {
 				vistaAdmin.mostrarMensajeError(e.getMessage());
 				return;
 			} catch (RegistroDuplicadoException e) {
-				vistaAdmin.mostrarMensajeError(e.getMessage());
-			} catch (RegistroNoEncontradoException e) {
 				vistaAdmin.mostrarMensajeError(e.getMessage());
 			}
 				break;
@@ -637,7 +638,7 @@ public class AdminController implements ActionListener {
 				String fechaStringJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getFechaNacimientoField().getText().toString().trim();
 				LocalDate fechaNacimientoJ = LocalDate.parse(fechaStringJ);
 				String zonaHorariaJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getZonaHorariaComboBox().getSelectedItem().toString();
-				String passwordHashJ = Encriptador.encriptarSHA256(nombresJ.split(" ")[0] + apellidosJ.split(" ")[0] + idJ + "*");
+				String passwordPlanoJ = idJ + "*";
 				String rutaFotoJ = "";
 				boolean necesitaCambioPasswordJ = true;
 				PanelJugador panelJugador = (PanelJugador) vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getPanelActual();
@@ -657,7 +658,6 @@ public class AdminController implements ActionListener {
 				jugadorDto.setCiudad(ciudadJ);
 				jugadorDto.setFechaNacimiento(fechaNacimientoJ);
 				jugadorDto.setZonaHoraria(zonaHorariaJ);
-				jugadorDto.setPasswordHash(passwordHashJ);
 				jugadorDto.setRutaFoto(rutaFotoJ);
 				jugadorDto.setNecesitaCambioPassword(necesitaCambioPasswordJ);
 				jugadorDto.setNivelCompetitivo(nivel);
@@ -669,7 +669,7 @@ public class AdminController implements ActionListener {
 				int confirmacion = vistaAdmin.mostrarMensajeConfirmacion("¿Desea crear el nuevo usuario?");
 				if(confirmacion == JOptionPane.YES_OPTION) {
 					try {
-						jugadorService.crearJugador(JugadorMapHandler.convertirAEntidad(jugadorDto), passwordHashJ);
+						jugadorService.crearJugador(JugadorMapHandler.convertirAEntidad(jugadorDto), passwordPlanoJ);
 					} catch (RegistroDuplicadoException e) {
 						vistaAdmin.mostrarMensajeError(e.getMessage());
 					} catch (RegistroNoEncontradoException e) {

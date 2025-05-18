@@ -15,13 +15,11 @@ public class ControladorPrincipal {
     }
 
     public void lanzarJugadorController(Jugador jugador) {
-        //jugadorController = new JugadorController(jugador, this);
-        jugadorController = new JugadorController();
+        jugadorController = new JugadorController(jugador);
     }
 
     public void lanzarEntrenadorController(Entrenador entrenador) {
-        //entrenadorController = new EntrenadorController(entrenador, this);
-        entrenadorController = new EntrenadorController();
+        entrenadorController = new EntrenadorController(entrenador);
     }
     
     public void lanzarAdminController() {

@@ -10,6 +10,10 @@ import co.edu.unbosque.vista.entrenador.PanelOpcionesEntrenador;
 
 // Asumiendo DTOs
 import co.edu.unbosque.modelo.dto.EntrenadorDto;
+import co.edu.unbosque.modelo.dto.JugadorDto;
+import co.edu.unbosque.modelo.entidad.Entrenador;
+import co.edu.unbosque.modelo.entidad.Jugador;
+import co.edu.unbosque.modelo.mapper.EntrenadorMapHandler;
 
 
 public class EntrenadorController implements ActionListener {
@@ -20,9 +24,9 @@ public class EntrenadorController implements ActionListener {
 
     private EntrenadorDto entrenadorActual; // Se obtendría del modelo tras el login
 
-    public EntrenadorController() {
+    public EntrenadorController(Entrenador entrenador) {
         this.vistaEntrenador = new VistaEntrenador();
-     
+        this.entrenadorActual = EntrenadorMapHandler.convertirADto(entrenador);
         this.comandos = new HashMap<>();
 
      
