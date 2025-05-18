@@ -68,8 +68,6 @@ public class EntrenadorService {
 	    entrenadorDao.guardar(entrenador);
 	}
 
-
-
 	public void actualizarEntrenador(Entrenador entrenadorActualizado) throws AccesoDatosException, IOException {
 		usuarioService.actualizarUsuario(entrenadorActualizado);
 		entrenadorDao.actualizar(entrenadorActualizado.getId(), entrenadorActualizado);

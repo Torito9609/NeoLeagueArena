@@ -36,7 +36,7 @@ public class EquipoDaoImpl implements ICrudDao<Equipo>{
 	}
 
 	@Override
-	public List obtenerTodos() throws AccesoDatosException {
+	public List<Equipo> obtenerTodos() throws AccesoDatosException {
 		equipos = gestor.cargar();
 		return equipos;
 	}
