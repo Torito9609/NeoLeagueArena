@@ -104,17 +104,17 @@ public class UsuarioService {
     	usuario.setNecesitaCambioPassword(true);
     }
 
-    public boolean verificarCredenciales(String correo, String password) 
-            throws AccesoDatosException {
+    public Usuario obtenerUsuarioPorCredenciales(String correo, String password) throws AccesoDatosException {
         String hash = Encriptador.encriptarSHA256(password);
         for (Usuario u : usuarioDao.obtenerTodos()) {
             if (u.getCorreo().equalsIgnoreCase(correo)
              && u.getPasswordHash().equals(hash)) {
-                return true;
+                return u;
             }
         }
-        return false;
+        return null;
     }
+
 
     public void cambiarPassword(String idUsuario, String nuevaPassword)
             throws RegistroNoEncontradoException, AccesoDatosException, IOException, RegistroInvalidoException {

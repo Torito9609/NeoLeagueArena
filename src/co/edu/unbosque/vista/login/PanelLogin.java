@@ -41,7 +41,9 @@ public class PanelLogin extends JPanel {
 
         JPanel botonesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         ingresarButton = new JButton("Ingresar");
+        ingresarButton.setActionCommand("INGRESAR");
         cancelarButton = new JButton("Cancelar");
+        cancelarButton.setActionCommand("CANCELAR");
         botonesPanel.add(ingresarButton);
         botonesPanel.add(cancelarButton);
 
