@@ -8,6 +8,7 @@ public class ControladorPrincipal {
 	private TorneoController torneoController;
 	
 	public ControladorPrincipal() {
-		adminController = new AdminController();
+		//adminController = new AdminController();
+		loginController = new LoginController();
 	}
 }

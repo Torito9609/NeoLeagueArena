@@ -9,7 +9,7 @@ public class VentanaLogin extends JFrame {
     public VentanaLogin() {
         setTitle("Iniciar Sesión");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 200);
+        setSize(400, 400);
         setLocationRelativeTo(null); 
         setResizable(false);
 

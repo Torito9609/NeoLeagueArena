@@ -1,8 +1,8 @@
 package co.edu.unbosque.vista.login;
 
-
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class PanelLogin extends JPanel {
 
@@ -14,6 +14,19 @@ public class PanelLogin extends JPanel {
     public PanelLogin() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+
+        inicializarComponentes();
+    }
+
+    private void inicializarComponentes() {
+        JLabel logoLabel = new JLabel();
+        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        File archivo = new File("img/logoApp.png");
+        ImageIcon icono = new ImageIcon(archivo.getAbsolutePath());
+
+        Image imgEscalada = icono.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        logoLabel = new JLabel(new ImageIcon(imgEscalada));
 
         JPanel camposPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         JLabel correoLabel = new JLabel("Correo:");
@@ -32,6 +45,8 @@ public class PanelLogin extends JPanel {
         botonesPanel.add(ingresarButton);
         botonesPanel.add(cancelarButton);
 
+        add(logoLabel);
+        add(Box.createVerticalStrut(15));
         add(camposPanel);
         add(Box.createVerticalStrut(20));
         add(botonesPanel);
