@@ -21,6 +21,8 @@ import co.edu.unbosque.modelo.entidad.Jugador;
 import co.edu.unbosque.modelo.entidad.Usuario;
 import co.edu.unbosque.modelo.enums.NivelCompetitivoJugador;
 import co.edu.unbosque.modelo.exception.AccesoDatosException;
+import co.edu.unbosque.modelo.exception.RegistroDuplicadoException;
+import co.edu.unbosque.modelo.exception.RegistroNoEncontradoException;
 import co.edu.unbosque.modelo.mapper.EntrenadorMapHandler;
 import co.edu.unbosque.modelo.mapper.JugadorMapHandler;
 import co.edu.unbosque.modelo.mapper.UsuarioMapHandler;
@@ -70,18 +72,7 @@ public class AdminController implements ActionListener {
 		comandos.put("FILTRO_CIUDAD", this::filtrarPorCiudad);
 		comandos.put("CREAR_USUARIO", this::mostrarVentanaCrearUsuario);
 		comandos.put("EDITAR_USUARIO", this::mostrarVentanaEdicionUsuario);
-		comandos.put("CREAR_GUARDAR_USUARIO", () -> {
-			int confirmacion = vistaAdmin.mostrarMensajeConfirmacion("¿Esta seguro que desea crear el usuario?");
-			
-			if(confirmacion == JOptionPane.YES_OPTION) {
-				crearGuardarUsuario();
-				reiniciarTablaUsuarios();
-				vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
-				vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().reiniciarCamposEdicion();
-			}else {
-				vistaAdmin.getVentanaCreacionUsuario().setVisible(false);	
-			}
-		});
+		comandos.put("CREAR_GUARDAR_USUARIO", this::crearGuardarUsuario);
 		comandos.put("CANCELAR_GUARDAR_USUARIO", this::cancelarGuardarUsuario);
 		comandos.put("EDITAR_GUARDAR_USUARIO", this::editarGuardarUsuario);
 		comandos.put("ELIMINAR_USUARIO", this::eliminarUsuario);
@@ -410,36 +401,40 @@ public class AdminController implements ActionListener {
 		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getCrearButton().setVisible(false);
 		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getEditarButton().setVisible(true);
 		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getCancelarButton().addActionListener(this);
+		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getEditarButton().addActionListener(this);
 		int filaSeleccionada = vistaAdmin.getVentanaPrincipal().getPanelTabla().getTablaUsuarios().getSelectedRow();
 		if(filaSeleccionada == -1) {
 			vistaAdmin.mostrarMensajeError("Por favor seleccione un usuario para editar");
+			return;
 		}
 		else {
-			String cedulaEditar = vistaAdmin.getVentanaPrincipal().getPanelTabla().getTablaUsuarios().getValueAt(0, filaSeleccionada).toString();
+			String cedulaEditar = vistaAdmin.getVentanaPrincipal().getPanelTabla().getTablaUsuarios().getValueAt(filaSeleccionada,0).toString();
 			try {
-				Usuario usuario = usuarioService.buscarPorCorreo(cedulaEditar);
+				Usuario usuario = usuarioService.buscarPorId(cedulaEditar);
 				if(usuario instanceof Entrenador) {
 					EntrenadorDto usuarioEditar = (EntrenadorMapHandler.convertirADto((Entrenador)usuario));
-					PanelEntrenador panelEntrenador = (PanelEntrenador)vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getPanelActual();
 					vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().rellenarCamposFormulario(usuarioEditar);
+					mostrarPanelDinamicoUsuario();
+					PanelEntrenador panelEntrenador = (PanelEntrenador)vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getPanelActual();
 					panelEntrenador.getNickNameField().setText(usuarioEditar.getNickname());
 					panelEntrenador.getAniosXpField().setText(String.valueOf(usuarioEditar.getAniosExperiencia()));
 					panelEntrenador.getBioTextArea().setText(usuarioEditar.getBiografia());
+					
 				} else if(usuario instanceof Jugador) {
 					JugadorDto usuarioEditar = JugadorMapHandler.convertirADto((Jugador)usuario);
 					vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().rellenarCamposFormulario(usuarioEditar);
+					mostrarPanelDinamicoUsuario();
 					PanelJugador panelJugador = (PanelJugador)vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getPanelActual();
 					panelJugador.getNivelCompetitivoComboBox().setSelectedItem(usuarioEditar.getNivelCompetitivo().toString());
 					panelJugador.getGamerTagField().setText(usuarioEditar.getGamerTag());
 					panelJugador.getRankingPuntosField().setText(String.valueOf(usuarioEditar.getRankingPuntos()));
-				} else {
-					UsuarioDto usuarioEditar = (UsuarioMapHandler.convertirADto(usuario));
-					vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().rellenarCamposFormulario(usuarioEditar);
+					
 				}
 				
 				vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getIdField().setEditable(false);
 				vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().setEnabled(false);
 				vistaAdmin.getVentanaCreacionUsuario().setVisible(true);
+
 			} catch (AccesoDatosException e) {
 				vistaAdmin.mostrarMensajeError(e.getMessage());
 				return;
@@ -528,10 +523,25 @@ public class AdminController implements ActionListener {
 				
 				
 			try {
-				entrenadorService.crearEntrenador(EntrenadorMapHandler.convertirAEntidad(entrenadorDto), passwordHash);
+				int confirmacion = vistaAdmin.mostrarMensajeConfirmacion("¿Desea crear el nuevo usuario?");
+				if(confirmacion == JOptionPane.YES_OPTION) {
+					entrenadorService.crearEntrenador(EntrenadorMapHandler.convertirAEntidad(entrenadorDto), passwordHash);
+					reiniciarTablaUsuarios();
+					vistaAdmin.mostrarMensajeExito("Usuario creado con extito");
+					vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
+					vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().reiniciarCamposEdicion();
+				}else {
+					vistaAdmin.getVentanaCreacionUsuario().setVisible(false);	
+					vistaAdmin.mostrarMensajeExito("Operacion cancelada exitosamente");
+				}
+				
 			} catch (AccesoDatosException e) {
 				vistaAdmin.mostrarMensajeError(e.getMessage());
 				return;
+			} catch (RegistroDuplicadoException e) {
+				vistaAdmin.mostrarMensajeError(e.getMessage());
+			} catch (RegistroNoEncontradoException e) {
+				vistaAdmin.mostrarMensajeError(e.getMessage());
 			}
 				break;
 				
@@ -546,7 +556,7 @@ public class AdminController implements ActionListener {
 				String fechaStringJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getFechaNacimientoField().getText().toString().trim();
 				LocalDate fechaNacimientoJ = LocalDate.parse(fechaStringJ);
 				String zonaHorariaJ = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getZonaHorariaComboBox().getSelectedItem().toString();
-				String passworHashJ = Encriptador.encriptarSHA256(nombresJ.split(" ")[0] + apellidosJ.split(" ")[0] + idJ + "*");
+				String passwordHashJ = Encriptador.encriptarSHA256(nombresJ.split(" ")[0] + apellidosJ.split(" ")[0] + idJ + "*");
 				String rutaFotoJ = "";
 				boolean necesitaCambioPasswordJ = true;
 				PanelJugador panelJugador = (PanelJugador) vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getPanelActual();
@@ -566,7 +576,7 @@ public class AdminController implements ActionListener {
 				jugadorDto.setCiudad(ciudadJ);
 				jugadorDto.setFechaNacimiento(fechaNacimientoJ);
 				jugadorDto.setZonaHoraria(zonaHorariaJ);
-				jugadorDto.setPasswordHash(passworHashJ);
+				jugadorDto.setPasswordHash(passwordHashJ);
 				jugadorDto.setRutaFoto(rutaFotoJ);
 				jugadorDto.setNecesitaCambioPassword(necesitaCambioPasswordJ);
 				jugadorDto.setNivelCompetitivo(nivel);
@@ -575,7 +585,23 @@ public class AdminController implements ActionListener {
 				jugadorDto.setTipoUsuario(tipoUsuarioJ);
 				
 			try {
-				jugadorService.crearJugador(JugadorMapHandler.convertirAEntidad(jugadorDto), passworHashJ);
+				int confirmacion = vistaAdmin.mostrarMensajeConfirmacion("¿Desea crear el nuevo usuario?");
+				if(confirmacion == JOptionPane.YES_OPTION) {
+					try {
+						jugadorService.crearJugador(JugadorMapHandler.convertirAEntidad(jugadorDto), passwordHashJ);
+					} catch (RegistroDuplicadoException e) {
+						vistaAdmin.mostrarMensajeError(e.getMessage());
+					} catch (RegistroNoEncontradoException e) {
+						vistaAdmin.mostrarMensajeError(e.getMessage());
+					}
+					reiniciarTablaUsuarios();
+					vistaAdmin.mostrarMensajeExito("Usuario creado con extito");
+					vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
+					vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().reiniciarCamposEdicion();
+				}else {
+					vistaAdmin.getVentanaCreacionUsuario().setVisible(false);	
+					vistaAdmin.mostrarMensajeExito("Operacion cancelada exitosamente");
+				}
 			} catch (AccesoDatosException e) {
 				vistaAdmin.mostrarMensajeError(e.getMessage());
 			}
@@ -594,11 +620,85 @@ public class AdminController implements ActionListener {
 		String pais = datos[5];
 		String ciudad = datos[6];
 		String zonaHoraria = datos[7];
+		LocalDate fechaNacimiento = LocalDate.parse(datos[8]);
+		String tipoUsuario = datos[9];
+		String passwordHash = datos[10];
+		
+		if(tipoUsuario.equals("Entrenador")) {
+			EntrenadorDto usuarioGuardar = new EntrenadorDto();
+			PanelEntrenador panelEntrenador = (PanelEntrenador)vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getPanelActual();
+			String nickName = panelEntrenador.getNickNameField().getText();
+			int anioExp = Integer.parseInt(panelEntrenador.getAniosXpField().getText());
+			String biografia = panelEntrenador.getBioTextArea().getText();
+			usuarioGuardar.setId(id);
+			usuarioGuardar.setNombres(nombres);
+			usuarioGuardar.setApellidos(apellidos);
+			usuarioGuardar.setCorreo(correo);
+			usuarioGuardar.setCelular(celular);
+			usuarioGuardar.setPais(pais);
+			usuarioGuardar.setCiudad(ciudad);
+			usuarioGuardar.setZonaHoraria(zonaHoraria);
+			usuarioGuardar.setFechaNacimiento(fechaNacimiento);
+			usuarioGuardar.setNickname(nickName);
+			usuarioGuardar.setAniosExperiencia(anioExp);
+			usuarioGuardar.setBiografia(biografia);
+			usuarioGuardar.setPasswordHash(passwordHash);
+			
+			int confirmacion = vistaAdmin.mostrarMensajeConfirmacion("¿Esta seguro que desea editar el usuario?");
+			
+			if(confirmacion == JOptionPane.YES_OPTION) {
+				try {
+					entrenadorService.actualizarEntrenador(EntrenadorMapHandler.convertirAEntidad(usuarioGuardar));;
+					vistaAdmin.mostrarMensajeExito("Usuario editado con exito");
+					reiniciarTablaUsuarios();
+					vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
+				} catch (AccesoDatosException e) {
+					vistaAdmin.mostrarMensajeExito("Usuario editado con exito");
+				} catch (IOException e) {
+					vistaAdmin.mostrarMensajeError(e.getMessage());
+				}
+			}
+		} else if(tipoUsuario.equals("Jugador")) {
+			JugadorDto usuarioGuardar = new JugadorDto();
+			PanelJugador panelJugador = (PanelJugador)vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getPanelActual();
+			NivelCompetitivoJugador nivel = NivelCompetitivoJugador.valueOf(panelJugador.getNivelCompetitivoComboBox().getSelectedItem().toString());
+			String gamerTag = panelJugador.getGamerTagField().getText();
+			int rankingPuntos = Integer.parseInt(panelJugador.getRankingPuntosField().getText());
+			usuarioGuardar.setId(id);
+			usuarioGuardar.setNombres(nombres);
+			usuarioGuardar.setApellidos(apellidos);
+			usuarioGuardar.setCorreo(correo);
+			usuarioGuardar.setCelular(celular);
+			usuarioGuardar.setPais(pais);
+			usuarioGuardar.setCiudad(ciudad);
+			usuarioGuardar.setZonaHoraria(zonaHoraria);
+			usuarioGuardar.setFechaNacimiento(fechaNacimiento);
+			usuarioGuardar.setNivelCompetitivo(nivel);;
+			usuarioGuardar.setGamerTag(gamerTag);
+			usuarioGuardar.setRankingPuntos(rankingPuntos);;
+			usuarioGuardar.setPasswordHash(passwordHash);
+			
+			int confirmacion = vistaAdmin.mostrarMensajeConfirmacion("¿Esta seguro que desea editar el usuario?");
+			
+			if(confirmacion == JOptionPane.YES_OPTION) {
+				try {
+					jugadorService.actualizarJugador(JugadorMapHandler.convertirAEntidad(usuarioGuardar));;
+					vistaAdmin.mostrarMensajeExito("Usuario editado con exito");
+					reiniciarTablaUsuarios();
+					vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
+				} catch (AccesoDatosException e) {
+					vistaAdmin.mostrarMensajeExito("Usuario editado con exito");
+				} catch (IOException e) {
+					vistaAdmin.mostrarMensajeError(e.getMessage());
+				}
+			}
+		}
 	}
 	
 	private void mostrarPanelDinamicoUsuario() {
 		String tipoUsuario = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().getSelectedItem().toString();
-		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().mostrarPanel(tipoUsuario);	
+		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().mostrarPanel(tipoUsuario);
+		System.out.println("tipo usuario desde el controlador " + tipoUsuario);
 	}
 
 	// ------------------------------------------- GESTION DE USUARIOS  -------------------------------------------------------------------//

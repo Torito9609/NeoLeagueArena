@@ -6,11 +6,11 @@ import co.edu.unbosque.modelo.dto.UsuarioDto;
 
 import java.awt.*;
 
-public class PanelUsuarioSuperior extends JPanel {
+public class PanelUsuarioSuperior extends JPanel{
 
 	private JTextField idField, nombreField, apellidoField, correoField, celularField, fechaNacimientoField;
 	private JComboBox<String> paisComboBox, zonaHorariaComboBox, ciudadComboBox, tipoUsuarioComboBox;
-	private JLabel fotoLabel;
+	private JLabel fotoLabel, passwordLabel;
 	private JButton seleccionarFotoButton;
 
 	public PanelUsuarioSuperior() {
@@ -68,6 +68,10 @@ public class PanelUsuarioSuperior extends JPanel {
 		tipoUsuarioComboBox = new JComboBox<>(new String[] {"Seleccionar", "Entrenador", "Jugador"});
 		tipoUsuarioComboBox.setActionCommand("SELECCIONAR_TIPO_USUARIO");
 		add(tipoUsuarioComboBox);
+		
+		passwordLabel = new JLabel();
+		add(passwordLabel);
+		passwordLabel.setVisible(false);
 	}
 
 	public void limpiarCamposFormulario() {
@@ -80,7 +84,7 @@ public class PanelUsuarioSuperior extends JPanel {
 	}
 
 	public String[] obtenerCamposFormulario() {
-		String[] campos = new String[10];
+		String[] campos = new String[11];
 		campos[0] = idField.getText().trim();
 		campos[1] = nombreField.getText().trim();
 		campos[2] = apellidoField.getText().trim();
@@ -91,10 +95,11 @@ public class PanelUsuarioSuperior extends JPanel {
 		campos[7] = ciudadComboBox.getSelectedItem().toString();
 		campos[8] = fechaNacimientoField.getText();
 		campos[9] = tipoUsuarioComboBox.getSelectedItem().toString();
+		campos[10] = passwordLabel.getText();
 
 		return campos;
 	}
-	
+
 	public void reiniciarCamposEdicion() {
 		idField.setText("");
 		nombreField.setText("");
@@ -202,6 +207,14 @@ public class PanelUsuarioSuperior extends JPanel {
 		this.fechaNacimientoField = fechaNacimientoField;
 	}
 
+	public JLabel getPasswordLabel() {
+		return passwordLabel;
+	}
+
+	public void setPasswordLabel(JLabel passwordLabel) {
+		this.passwordLabel = passwordLabel;
+	}
+
 	public void rellenarCamposFormulario(UsuarioDto usuarioDto) {
 		idField.setText(usuarioDto.getId());
 		nombreField.setText(usuarioDto.getNombres());
@@ -211,7 +224,8 @@ public class PanelUsuarioSuperior extends JPanel {
 		fechaNacimientoField.setText(usuarioDto.getFechaNacimiento().toString());
 		paisComboBox.setSelectedItem(usuarioDto.getPais());
 		ciudadComboBox.setSelectedItem(usuarioDto.getCiudad());
-		tipoUsuarioComboBox.setSelectedItem(usuarioDto.getTipoUsuario());	
+		tipoUsuarioComboBox.setSelectedItem(usuarioDto.getTipoUsuario());
+		passwordLabel.setText(usuarioDto.getPasswordHash());
 	}
 	
 	

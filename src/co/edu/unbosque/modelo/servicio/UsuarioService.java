@@ -9,7 +9,9 @@ import co.edu.unbosque.modelo.entidad.Entrenador;
 import co.edu.unbosque.modelo.entidad.Jugador;
 import co.edu.unbosque.modelo.entidad.Usuario;
 import co.edu.unbosque.modelo.exception.AccesoDatosException;
-import co.edu.unbosque.modelo.exception.UsuarioNoEncontradoException;
+import co.edu.unbosque.modelo.exception.RegistroDuplicadoException;
+import co.edu.unbosque.modelo.exception.RegistroInvalidoException;
+import co.edu.unbosque.modelo.exception.RegistroNoEncontradoException;
 import co.edu.unbosque.utils.Encriptador;
 
 public class UsuarioService {
@@ -34,7 +36,14 @@ public class UsuarioService {
         return null;
     }
 
-    public void crearUsuario(Usuario usuario, String passwordInicial) throws AccesoDatosException {
+    public void crearUsuario(Usuario usuario, String passwordInicial) throws AccesoDatosException, RegistroDuplicadoException {
+    	if(buscarPorId(usuario.getId()) != null) {
+    		throw new RegistroDuplicadoException("El ID ingresado ya existe " + usuario.getId());
+    	}
+    	
+    	if(correoExiste(usuario.getCorreo())) {
+    		throw new RegistroDuplicadoException("El correo ya esta en uso " + usuario.getCorreo());
+    	}
         prepararNuevoUsuario(usuario, passwordInicial);
         usuarioDao.guardar(usuario);
     }
@@ -108,14 +117,49 @@ public class UsuarioService {
     }
 
     public void cambiarPassword(String idUsuario, String nuevaPassword)
-            throws UsuarioNoEncontradoException, AccesoDatosException, IOException {
+            throws RegistroNoEncontradoException, AccesoDatosException, IOException, RegistroInvalidoException {
+
+        if (!esPasswordValida(nuevaPassword)) {
+            throw new RegistroInvalidoException("La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial (!@#$%&*)");
+        }
+
         Usuario u = buscarPorId(idUsuario);
         if (u == null) {
-            throw new UsuarioNoEncontradoException("Usuario no encontrado");
+            throw new RegistroNoEncontradoException("Usuario no encontrado");
         }
+
         u.setPasswordHash(Encriptador.encriptarSHA256(nuevaPassword));
         u.setNecesitaCambioPassword(false);
         actualizarUsuario(u);
+    }
+    
+    private boolean esPasswordValida(String password) {
+        if (password == null || password.length() < 8) {
+            return false;
+        }
+
+        boolean tieneMayuscula = false;
+        boolean tieneNumero = false;
+        boolean tieneEspecial = false;
+
+        String especiales = "!@#$%&*";
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                tieneMayuscula = true;
+            } else if (Character.isDigit(c)) {
+                tieneNumero = true;
+            } else if (especiales.indexOf(c) >= 0) {
+                tieneEspecial = true;
+            }
+        }
+
+        return tieneMayuscula && tieneNumero && tieneEspecial;
+    }
+
+    
+    public boolean correoExiste(String correo) throws AccesoDatosException {
+    	return buscarPorCorreo(correo) != null;
     }
 
 }

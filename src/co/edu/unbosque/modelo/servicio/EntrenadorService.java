@@ -12,6 +12,8 @@ import co.edu.unbosque.modelo.entidad.Entrenador;
 import co.edu.unbosque.modelo.entidad.Equipo;
 import co.edu.unbosque.modelo.entidad.Usuario;
 import co.edu.unbosque.modelo.exception.AccesoDatosException;
+import co.edu.unbosque.modelo.exception.RegistroDuplicadoException;
+import co.edu.unbosque.modelo.exception.RegistroNoEncontradoException;
 
 public class EntrenadorService {
 	private final EntrenadorDaoImpl entrenadorDao;
@@ -36,18 +38,33 @@ public class EntrenadorService {
 		return entrenadores;
 	}
 
-	public Entrenador buscarPorId(String id) throws AccesoDatosException {
+	public Entrenador buscarPorId(String id) throws AccesoDatosException, RegistroNoEncontradoException {
 		Usuario u = usuarioService.buscarPorId(id);
+		
+		if(u == null) {
+			throw new RegistroNoEncontradoException("No se encontro el entrenador con id " + id);
+		}
 		if (u instanceof Entrenador) {
 			return (Entrenador) u;
 		}
 		return null;
 	}
 
-	public void crearEntrenador(Entrenador entrenador, String passwordInicial) throws AccesoDatosException {
-		usuarioService.crearUsuario(entrenador, passwordInicial);
-		entrenadorDao.guardar(entrenador);
-	}
+	public void crearEntrenador(Entrenador entrenador, String passwordInicial) 
+		    throws AccesoDatosException, RegistroDuplicadoException, RegistroNoEncontradoException {
+
+		    if (buscarPorId(entrenador.getId()) != null) {
+		        throw new RegistroDuplicadoException("El ID ingresado ya existe: " + entrenador.getId());
+		    }
+
+		    if (usuarioService.correoExiste(entrenador.getCorreo())) {
+		        throw new RegistroDuplicadoException("El correo ya está en uso: " + entrenador.getCorreo());
+		    }
+
+		    usuarioService.crearUsuario(entrenador, passwordInicial);
+		    entrenadorDao.guardar(entrenador);
+		}
+
 
 	public void actualizarEntrenador(Entrenador entrenadorActualizado) throws AccesoDatosException, IOException {
 		usuarioService.actualizarUsuario(entrenadorActualizado);
@@ -59,7 +76,7 @@ public class EntrenadorService {
 		entrenadorDao.eliminar(id);
 	}
 
-	public void asignarEquipo(String idEntrenador, String idEquipo) throws AccesoDatosException, IOException {
+	public void asignarEquipo(String idEntrenador, String idEquipo) throws AccesoDatosException, IOException, RegistroNoEncontradoException {
 		Entrenador e = buscarPorId(idEntrenador);
 		if (e == null) {
 			throw new AccesoDatosException("Entrenador no encontrado: " + idEntrenador);
