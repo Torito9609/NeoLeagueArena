@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class PanelBusquedaAdmin extends JPanel {
 
 	private JComboBox<String> buscarPorComboBox, filtroComboBox, tipoUsuarioComboBox, paisComboBox, ciudadComboBox;
-	private JButton buscarButton;
+	private JButton buscarButton, limpiarFiltrosButton;
 	private JTextField buscarTextField;
 	private JPanel panelFiltrosDinamico;
 
@@ -37,16 +37,20 @@ public class PanelBusquedaAdmin extends JPanel {
 	 */
 	private void inicializarComponentes() {
 		buscarPorComboBox = new JComboBox<>(new String[] { "Seleccionar", "Nombre", "Cedula", "Correo" });
-		buscarPorComboBox.setActionCommand("BUSCAR_POR");
+		//buscarPorComboBox.setActionCommand("BUSCAR_POR");
 
 		buscarTextField = new JTextField(20);
 		buscarButton = new JButton("Buscar");
 		buscarButton.setActionCommand("BUSCAR");
+		
+		limpiarFiltrosButton = new JButton("Limpiar filtros");
+		limpiarFiltrosButton.setActionCommand("LIMPIAR_FILTROS");
 
 		add(new JLabel("Buscar por:"));
 		add(buscarPorComboBox);
 		add(buscarTextField);
 		add(buscarButton);
+		add(limpiarFiltrosButton);
 
 		filtroComboBox = new JComboBox<>(new String[] { "Seleccionar", "Tipo Usuario", "Pais", "Ciudad" });
 		filtroComboBox.setActionCommand("FILTRO_POR");
@@ -209,4 +213,14 @@ public class PanelBusquedaAdmin extends JPanel {
 	public void setPanelFiltrosDinamico(JPanel panelFiltrosDinamico) {
 		this.panelFiltrosDinamico = panelFiltrosDinamico;
 	}
+
+	public JButton getLimpiarFiltrosButton() {
+		return limpiarFiltrosButton;
+	}
+
+	public void setLimpiarFiltrosButton(JButton limpiarFiltrosButton) {
+		this.limpiarFiltrosButton = limpiarFiltrosButton;
+	}
+	
+	
 }

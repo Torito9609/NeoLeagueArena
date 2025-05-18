@@ -47,6 +47,27 @@ public class UsuarioService {
     public void eliminarUsuario(String id) throws AccesoDatosException, IOException {
         usuarioDao.eliminar(id);
     }
+    
+    public List<Usuario> buscarPorNombre(String nombreParcial) throws AccesoDatosException{
+    	List<Usuario> resultadosBusqueda = new ArrayList<Usuario>();
+    	for(Usuario u : usuarioDao.obtenerTodos()) {
+    		String nombreCompleto = u.getNombres() + u.getApellidos();
+    		if(nombreCompleto.toLowerCase().contains(nombreParcial.toLowerCase())) {
+    			resultadosBusqueda.add(u);
+    		}
+    	}
+    	return resultadosBusqueda;
+    }
+    
+    public Usuario buscarPorCorreo(String correo) throws AccesoDatosException {
+    	List<Usuario> todos = usuarioDao.obtenerTodos();
+        for (Usuario u : todos) {
+            if (u.getCorreo().equals(correo)) {
+                return u;
+            }
+        }
+        return null;
+    } 
 
     public List<Usuario> filtrarPorPais(String pais) throws AccesoDatosException {
         List<Usuario> resultado = new ArrayList<>();

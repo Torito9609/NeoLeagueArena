@@ -62,8 +62,8 @@ public class AdminController implements ActionListener {
 		comandos.put("MODULO_NOTIFICACIONES", this::mostrarPanelNotificaciones);
 		comandos.put("IR_A_INICIO", this::mostrarPanelInicio);
 		comandos.put("CERRAR_SESION", this::cerrarSesion);
-		comandos.put("BUSCAR_POR", this::buscarPorOpcion);
 		comandos.put("BUSCAR", this::buscarUsuario);
+		comandos.put("LIMPIAR_FILTROS", this::limpiarFiltrosBusqueda);
 		comandos.put("FILTRO_POR", this::filtrarPorOpcion);
 		comandos.put("FILTRO_TIPO", this::filtrarPorTipoUsuario);
 		comandos.put("FILTRO_PAIS", this::filtrarPorPais);
@@ -127,11 +127,19 @@ public class AdminController implements ActionListener {
 		vistaAdmin.getVentanaPrincipal().getPanelTabla().actualizarTabla(todosUsuarios);
 	}
 	
+	private void limpiarFiltrosBusqueda() {
+		reiniciarTablaUsuarios();
+		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarTextField().setText("");
+		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getTipoUsuarioComboBox().setSelectedIndex(0);
+		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getFiltroComboBox().setSelectedIndex(0);
+	}
+	
 	private void mostrarPanelUsuarios() {
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(), "USUARIOS");
-		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarPorComboBox().addActionListener(this);
+		//vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarPorComboBox().addActionListener(this);
 		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getFiltroComboBox().addActionListener(this);
 		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarButton().addActionListener(this);
+		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getLimpiarFiltrosButton().addActionListener(this);
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(true);
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().getCrearButton().addActionListener(this);
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().getEditarButton().addActionListener(this);
@@ -162,18 +170,94 @@ public class AdminController implements ActionListener {
 	}
 
 	private void buscarUsuarioPorCorreo() {
-		// TODO Auto-generated method stub
-
+		String correoBuscar = vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarTextField().getText().trim().toLowerCase();
+		List<UsuarioDto> coincidencias = new ArrayList<UsuarioDto>();
+		
+		if(correoBuscar == null || correoBuscar.isEmpty()) {
+			vistaAdmin.mostrarMensajeError("Por favor seleccione un criterio de busqueda");
+		} 
+		
+		try {
+			Usuario usuario = usuarioService.buscarPorCorreo(correoBuscar);
+			if(usuario instanceof Entrenador) {
+				coincidencias.add(EntrenadorMapHandler.convertirADto((Entrenador)usuario));
+			} else if(usuario instanceof Jugador) {
+				coincidencias.add(JugadorMapHandler.convertirADto((Jugador)usuario));
+			} else {
+				coincidencias.add(UsuarioMapHandler.convertirADto(usuario));
+			}
+		} catch (AccesoDatosException e) {
+			vistaAdmin.mostrarMensajeError(e.getMessage());
+			return;
+		}
+		
+		if(coincidencias.isEmpty()) {
+			vistaAdmin.mostrarMensajeAdvertencia("No se encontro alguna coincidencia con el correo: " + correoBuscar);
+		} else {
+			vistaAdmin.getVentanaPrincipal().getPanelTabla().actualizarTabla(coincidencias);
+		}
+		
 	}
 
 	private void buscarUsuarioPorCedula() {
-		// TODO Auto-generated method stub
-
+		String cedulaBuscar = vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarTextField().getText().trim().toLowerCase();
+		List<UsuarioDto> coincidencias = new ArrayList<UsuarioDto>();
+		
+		if(cedulaBuscar == null || cedulaBuscar.isEmpty()) {
+			vistaAdmin.mostrarMensajeError("Por favor seleccione un criterio de busqueda");
+		} 
+		
+		try {
+			Usuario usuario = usuarioService.buscarPorId(cedulaBuscar);		
+			if(usuario instanceof Entrenador) {
+				coincidencias.add(EntrenadorMapHandler.convertirADto((Entrenador)usuario));
+			} else if(usuario instanceof Jugador) {
+				coincidencias.add(JugadorMapHandler.convertirADto((Jugador)usuario));
+			} else {
+				coincidencias.add(UsuarioMapHandler.convertirADto(usuario));
+			}
+		} catch (AccesoDatosException e) {
+			vistaAdmin.mostrarMensajeError(e.getMessage());
+			return;
+		}
+		
+		if(coincidencias.isEmpty()) {
+			vistaAdmin.mostrarMensajeAdvertencia("No se encontro alguna coincidencia con la cedula: " + cedulaBuscar);
+		} else {
+			vistaAdmin.getVentanaPrincipal().getPanelTabla().actualizarTabla(coincidencias);
+		}
+		
 	}
 
 	private void buscarUsuarioPorNombre() {
-		// TODO Auto-generated method stub
-
+		String texto = vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarTextField().getText().trim().toLowerCase();
+		List<UsuarioDto> coincidencias = new ArrayList<UsuarioDto>();
+		
+		if(texto == null || texto.isEmpty()) {
+			vistaAdmin.mostrarMensajeError("Por favor seleccione un criterio de busqueda");
+		} 
+		
+		String nombreBuscar = texto;
+		try {
+			for(Usuario u : usuarioService.buscarPorNombre(nombreBuscar)) {
+				if(u instanceof Entrenador) {
+					coincidencias.add(EntrenadorMapHandler.convertirADto((Entrenador)u));
+				}else if(u instanceof Jugador) {
+					coincidencias.add(JugadorMapHandler.convertirADto((Jugador)u));
+				}else {
+					coincidencias.add(UsuarioMapHandler.convertirADto(u));
+				}
+			}
+		} catch (AccesoDatosException e) {
+			vistaAdmin.mostrarMensajeError(e.getMessage());
+			return;
+		}
+		
+		if(coincidencias.isEmpty()) {
+			vistaAdmin.mostrarMensajeAdvertencia("No se encontro alguna coincidencia con el nombre: " + nombreBuscar);
+		} else {
+			vistaAdmin.getVentanaPrincipal().getPanelTabla().actualizarTabla(coincidencias);
+		}
 	}
 
 	private void filtrarPorOpcion() {
@@ -204,7 +288,7 @@ public class AdminController implements ActionListener {
 			break;
 		default:
 			vistaAdmin.mostrarMensajeError("Seleccione una opcion valida.");
-	}
+		}
 	}
 
 	private void filtrarPorTipoUsuario() {
