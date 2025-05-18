@@ -69,6 +69,7 @@ public class AdminController implements ActionListener {
 		comandos.put("FILTRO_PAIS", this::filtrarPorPais);
 		comandos.put("FILTRO_CIUDAD", this::filtrarPorCiudad);
 		comandos.put("CREAR_USUARIO", this::mostrarVentanaCrearUsuario);
+		comandos.put("EDITAR_USUARIO", this::mostrarVentanaEdicionUsuario);
 		comandos.put("CREAR_GUARDAR_USUARIO", () -> {
 			int confirmacion = vistaAdmin.mostrarMensajeConfirmacion("¿Esta seguro que desea crear el usuario?");
 			
@@ -130,7 +131,7 @@ public class AdminController implements ActionListener {
 	private void limpiarFiltrosBusqueda() {
 		reiniciarTablaUsuarios();
 		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarTextField().setText("");
-		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getTipoUsuarioComboBox().setSelectedIndex(0);
+		//vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getTipoUsuarioComboBox().setSelectedIndex(0);
 		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getFiltroComboBox().setSelectedIndex(0);
 	}
 	
@@ -165,7 +166,8 @@ public class AdminController implements ActionListener {
 			buscarUsuarioPorCorreo();
 			break;
 		default:
-			vistaAdmin.mostrarMensajeError("Por favor seleccione un criterio de busqueda.");
+			reiniciarTablaUsuarios();
+			//vistaAdmin.mostrarMensajeError("Por favor seleccione un criterio de busqueda.");
 		}
 	}
 
@@ -230,14 +232,13 @@ public class AdminController implements ActionListener {
 	}
 
 	private void buscarUsuarioPorNombre() {
-		String texto = vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarTextField().getText().trim().toLowerCase();
+		String nombreBuscar = vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarTextField().getText().trim().toLowerCase();
 		List<UsuarioDto> coincidencias = new ArrayList<UsuarioDto>();
 		
-		if(texto == null || texto.isEmpty()) {
+		if(nombreBuscar == null || nombreBuscar.isEmpty()) {
 			vistaAdmin.mostrarMensajeError("Por favor seleccione un criterio de busqueda");
 		} 
 		
-		String nombreBuscar = texto;
 		try {
 			for(Usuario u : usuarioService.buscarPorNombre(nombreBuscar)) {
 				if(u instanceof Entrenador) {
@@ -292,16 +293,105 @@ public class AdminController implements ActionListener {
 	}
 
 	private void filtrarPorTipoUsuario() {
+		String tipo = vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getTipoUsuarioComboBox().getSelectedItem().toString();
+		List<UsuarioDto> coincidencias = new ArrayList<>();
 		
+		switch(tipo) {
+			case "Entrenador":
+				try {
+					for(Entrenador e : entrenadorService.obtenerTodos()) {
+						coincidencias.add(EntrenadorMapHandler.convertirADto(e));
+					}
+				} catch (AccesoDatosException e) {
+					vistaAdmin.mostrarMensajeError(e.getMessage());
+					return;
+				}
+				break;
+				
+			case "Jugador":
+				try {
+					for(Jugador j : jugadorService.obtenerTodos()) {
+						coincidencias.add(JugadorMapHandler.convertirADto(j));
+					}
+				} catch (AccesoDatosException e) {
+					vistaAdmin.mostrarMensajeError(e.getMessage());
+					return;
+				}
+				break;
+				
+			default:
+				reiniciarTablaUsuarios();
+		}
+		
+		vistaAdmin.getVentanaPrincipal().getPanelTabla().actualizarTabla(coincidencias);
 	}
 
 	private void filtrarPorPais() {
+	    String paisSeleccionado = vistaAdmin.getVentanaPrincipal().getPanelBusqueda()
+	            .getPaisComboBox().getSelectedItem().toString();
 
+	    if (paisSeleccionado == null || paisSeleccionado.equals("Seleccionar")) {
+	        vistaAdmin.mostrarMensajeAdvertencia("Por favor seleccione un país para filtrar.");
+	        return;
+	    }
+
+	    List<UsuarioDto> coincidencias = new ArrayList<>();
+
+	    try {
+	        for (Usuario u : usuarioService.filtrarPorPais(paisSeleccionado)) {
+	            if (u instanceof Entrenador) {
+	                coincidencias.add(EntrenadorMapHandler.convertirADto((Entrenador) u));
+	            } else if (u instanceof Jugador) {
+	                coincidencias.add(JugadorMapHandler.convertirADto((Jugador) u));
+	            } else {
+	                coincidencias.add(UsuarioMapHandler.convertirADto(u));
+	            }
+	        }
+	    } catch (AccesoDatosException e) {
+	        vistaAdmin.mostrarMensajeError("Error al filtrar por país: " + e.getMessage());
+	        return;
+	    }
+
+	    if (coincidencias.isEmpty()) {
+	        vistaAdmin.mostrarMensajeAdvertencia("No se encontraron usuarios para el país: " + paisSeleccionado);
+	    } else {
+	        vistaAdmin.getVentanaPrincipal().getPanelTabla().actualizarTabla(coincidencias);
+	    }
 	}
 
 	private void filtrarPorCiudad() {
+	    String ciudadSeleccionada = vistaAdmin.getVentanaPrincipal().getPanelBusqueda()
+	            .getCiudadComboBox().getSelectedItem().toString();
 
+	    if (ciudadSeleccionada == null || ciudadSeleccionada.equals("Seleccionar")) {
+	        vistaAdmin.mostrarMensajeAdvertencia("Por favor seleccione una ciudad para filtrar.");
+	        return;
+	    }
+
+	    List<UsuarioDto> coincidencias = new ArrayList<>();
+
+	    try {
+	        for (Usuario u : usuarioService.filtrarPorCiudad(ciudadSeleccionada)) {
+	            if (u instanceof Entrenador) {
+	                coincidencias.add(EntrenadorMapHandler.convertirADto((Entrenador) u));
+	            } else if (u instanceof Jugador) {
+	                coincidencias.add(JugadorMapHandler.convertirADto((Jugador) u));
+	            } else {
+	                coincidencias.add(UsuarioMapHandler.convertirADto(u));
+	            }
+	        }
+	    } catch (AccesoDatosException e) {
+	        vistaAdmin.mostrarMensajeError("Error al filtrar por ciudad: " + e.getMessage());
+	        return;
+	    }
+
+	    if (coincidencias.isEmpty()) {
+	        vistaAdmin.mostrarMensajeAdvertencia("No se encontraron usuarios para la ciudad: " + ciudadSeleccionada);
+	    } else {
+	        vistaAdmin.getVentanaPrincipal().getPanelTabla().actualizarTabla(coincidencias);
+	    }
 	}
+
 	
 	private void mostrarVentanaCrearUsuario() {
 		vistaAdmin.getVentanaCreacionUsuario().setVisible(true);
@@ -309,7 +399,52 @@ public class AdminController implements ActionListener {
 		vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().addActionListener(this);
 		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getCrearButton().addActionListener(this);
 		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getEditarButton().setVisible(false);
+		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getCrearButton().setVisible(true);
 		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getCancelarButton().addActionListener(this);		
+	}
+	
+	private void mostrarVentanaEdicionUsuario() {
+		vistaAdmin.getVentanaCreacionUsuario().setVisible(true);
+		vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getSeleccionarFotoButton().addActionListener(this);
+		vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().addActionListener(this);
+		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getCrearButton().setVisible(false);
+		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getEditarButton().setVisible(true);
+		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getCancelarButton().addActionListener(this);
+		int filaSeleccionada = vistaAdmin.getVentanaPrincipal().getPanelTabla().getTablaUsuarios().getSelectedRow();
+		if(filaSeleccionada == -1) {
+			vistaAdmin.mostrarMensajeError("Por favor seleccione un usuario para editar");
+		}
+		else {
+			String cedulaEditar = vistaAdmin.getVentanaPrincipal().getPanelTabla().getTablaUsuarios().getValueAt(0, filaSeleccionada).toString();
+			try {
+				Usuario usuario = usuarioService.buscarPorCorreo(cedulaEditar);
+				if(usuario instanceof Entrenador) {
+					EntrenadorDto usuarioEditar = (EntrenadorMapHandler.convertirADto((Entrenador)usuario));
+					PanelEntrenador panelEntrenador = (PanelEntrenador)vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getPanelActual();
+					vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().rellenarCamposFormulario(usuarioEditar);
+					panelEntrenador.getNickNameField().setText(usuarioEditar.getNickname());
+					panelEntrenador.getAniosXpField().setText(String.valueOf(usuarioEditar.getAniosExperiencia()));
+					panelEntrenador.getBioTextArea().setText(usuarioEditar.getBiografia());
+				} else if(usuario instanceof Jugador) {
+					JugadorDto usuarioEditar = JugadorMapHandler.convertirADto((Jugador)usuario);
+					vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().rellenarCamposFormulario(usuarioEditar);
+					PanelJugador panelJugador = (PanelJugador)vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getPanelActual();
+					panelJugador.getNivelCompetitivoComboBox().setSelectedItem(usuarioEditar.getNivelCompetitivo().toString());
+					panelJugador.getGamerTagField().setText(usuarioEditar.getGamerTag());
+					panelJugador.getRankingPuntosField().setText(String.valueOf(usuarioEditar.getRankingPuntos()));
+				} else {
+					UsuarioDto usuarioEditar = (UsuarioMapHandler.convertirADto(usuario));
+					vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().rellenarCamposFormulario(usuarioEditar);
+				}
+				
+				vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getIdField().setEditable(false);
+				vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().setEnabled(false);
+				vistaAdmin.getVentanaCreacionUsuario().setVisible(true);
+			} catch (AccesoDatosException e) {
+				vistaAdmin.mostrarMensajeError(e.getMessage());
+				return;
+			}
+		}			
 	}
 	
 	private void cancelarGuardarUsuario() {

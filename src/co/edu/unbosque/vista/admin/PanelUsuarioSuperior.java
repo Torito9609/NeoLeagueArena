@@ -199,6 +199,18 @@ public class PanelUsuarioSuperior extends JPanel {
 	public void setFechaNacimientoField(JTextField fechaNacimientoField) {
 		this.fechaNacimientoField = fechaNacimientoField;
 	}
+
+	public void rellenarCamposFormulario(UsuarioDto usuarioDto) {
+		idField.setText(usuarioDto.getId());
+		nombreField.setText(usuarioDto.getNombres());
+		apellidoField.setText(usuarioDto.getApellidos());
+		correoField.setText(usuarioDto.getCorreo());
+		celularField.setText(usuarioDto.getCelular());
+		fechaNacimientoField.setText(usuarioDto.getFechaNacimiento().toString());
+		paisComboBox.setSelectedItem(usuarioDto.getPais());
+		ciudadComboBox.setSelectedItem(usuarioDto.getCiudad());
+		
+	}
 	
 	
 
