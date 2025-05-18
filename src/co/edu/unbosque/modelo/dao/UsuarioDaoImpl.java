@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.edu.unbosque.modelo.dto.EntrenadorDto;
 import co.edu.unbosque.modelo.dto.UsuarioDto;
 import co.edu.unbosque.modelo.entidad.Usuario;
 import co.edu.unbosque.modelo.exception.AccesoDatosException;

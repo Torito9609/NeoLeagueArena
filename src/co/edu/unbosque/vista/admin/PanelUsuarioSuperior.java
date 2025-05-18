@@ -40,11 +40,11 @@ public class PanelUsuarioSuperior extends JPanel {
 		add(celularField);
 
 		add(new JLabel("País:"));
-		paisComboBox = new JComboBox<>(new String[] { "Colombia", "México", "Argentina", "..." });
+		paisComboBox = new JComboBox<>(new String[] {"Seleccionar", "Colombia", "México", "Argentina", "..." });
 		add(paisComboBox);
 		
 		add(new JLabel("Ciudad:"));
-		ciudadComboBox = new JComboBox<>(new String[] { "Bogota", "Medellin", "Cali", "..." });
+		ciudadComboBox = new JComboBox<>(new String[] {"Seleccionar", "Bogota", "Medellin", "Cali", "..." });
 		add(ciudadComboBox);
 		
 		add(new JLabel("Fecha de Nacimiento"));
@@ -52,7 +52,7 @@ public class PanelUsuarioSuperior extends JPanel {
 		add(fechaNacimientoField);
 
 		add(new JLabel("Zona Horaria:"));
-		zonaHorariaComboBox = new JComboBox<>(new String[] { "GMT-5", "GMT-6", "GMT-3", "..." });
+		zonaHorariaComboBox = new JComboBox<>(new String[] {"Seleccionar", "GMT-5", "GMT-6", "GMT-3", "..." });
 		add(zonaHorariaComboBox);
 
 		add(new JLabel("Foto de perfil:"));
@@ -91,6 +91,17 @@ public class PanelUsuarioSuperior extends JPanel {
 		campos[7] = ciudadComboBox.getSelectedItem().toString();
 
 		return campos;
+	}
+	
+	public void reiniciarCamposEdicion() {
+		idField.setText("");
+		nombreField.setText("");
+		apellidoField.setText("");
+		correoField.setText("");
+		celularField.setText("");
+		paisComboBox.setSelectedIndex(0);
+		zonaHorariaComboBox.setSelectedIndex(0);
+		ciudadComboBox.setSelectedIndex(0);
 	}
 
 	public JTextField getIdField() {

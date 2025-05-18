@@ -1,5 +1,7 @@
 package co.edu.unbosque.modelo.mapper;
 
+import co.edu.unbosque.modelo.dto.EntrenadorDto;
+import co.edu.unbosque.modelo.dto.JugadorDto;
 import co.edu.unbosque.modelo.dto.UsuarioDto;
 import co.edu.unbosque.modelo.entidad.Usuario;
 import co.edu.unbosque.modelo.entidad.Entrenador;
@@ -9,14 +11,12 @@ public class UsuarioMapHandler implements Mapper<Usuario, UsuarioDto> {
 
     @Override
     public UsuarioDto toDto(Usuario entidad) {
-        String tipo;
+    	
         if (entidad instanceof Entrenador) {
-            tipo = "entrenador";
+        	return EntrenadorMapHandler.convertirADto((Entrenador) entidad);
         } else if (entidad instanceof Jugador) {
-            tipo = "jugador";
-        } else {
-            tipo = "usuario";
-        }
+            return JugadorMapHandler.convertirADto((Jugador) entidad); 
+        } 
         
         UsuarioDto uDto = new UsuarioDto();
         uDto.setId(entidad.getId());
@@ -31,7 +31,7 @@ public class UsuarioMapHandler implements Mapper<Usuario, UsuarioDto> {
         uDto.setPasswordHash(entidad.getPasswordHash());
         uDto.setRutaFoto(entidad.getRutaFoto());
         uDto.setNecesitaCambioPassword(entidad.isNecesitaCambioPassword());
-        uDto.setTipoUsuario(tipo);
+        uDto.setTipoUsuario("Usuario");
         return uDto;
     }
     
@@ -41,9 +41,20 @@ public class UsuarioMapHandler implements Mapper<Usuario, UsuarioDto> {
 
     @Override
     public Usuario toEntity(UsuarioDto dto) {
-        if (dto == null) {
-            return null;
+    	String tipo = dto.getTipoUsuario();
+    	//System.out.println("Print desde toEntity de usuario maphandler tipo usuario: " + dto.getClass().getName());
+        
+        if("Entrenador".equalsIgnoreCase(tipo)) {
+        	//System.out.println("He entrado al if del entrenador desde toentity en usuario maphandler");
+        	return EntrenadorMapHandler.convertirAEntidad((EntrenadorDto) dto);
+        	
+        } else if("Jugador".equalsIgnoreCase(tipo)) {
+        	//System.out.println("He entrado al if del jugador desde toentity en usuario maphandler");
+        	return JugadorMapHandler.convertirAEntidad((JugadorDto) dto);
+        	
         }
+        //System.out.println("No entre a ninguna condicion en toentity de usuarioMapHandler");
+        
         Usuario u = new Usuario(
             dto.getId(),
             dto.getNombres(),

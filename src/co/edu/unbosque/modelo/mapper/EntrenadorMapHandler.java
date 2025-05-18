@@ -6,30 +6,31 @@ import co.edu.unbosque.modelo.entidad.Entrenador;
 
 public class EntrenadorMapHandler implements Mapper<Entrenador, EntrenadorDto> {
 
+
     @Override
-    public EntrenadorDto toDto(Entrenador entidad) {
-    	
-    	var base = UsuarioMapHandler.convertirADto(entidad);
-        EntrenadorDto eDto = new EntrenadorDto();
-        
-        eDto.setNombres(base.getNombres());
-        eDto.setApellidos(base.getApellidos());
-        eDto.setId(base.getId());
-        eDto.setCorreo(base.getCorreo());
-        eDto.setCelular(base.getCelular());
-        eDto.setPais(base.getPais());
-        eDto.setCiudad(base.getCiudad());
-        eDto.setFechaNacimiento(base.getFechaNacimiento());
-        eDto.setZonaHoraria(base.getZonaHoraria());
-        eDto.setPasswordHash(base.getPasswordHash());
-        eDto.setRutaFoto(base.getRutaFoto());
-        eDto.setNecesitaCambioPassword(base.isNecesitaCambioPassword());
-        eDto.setNickname(entidad.getNickname());
-        eDto.setAniosExperiencia(entidad.getAniosExperiencia());
-        eDto.setBiografia(entidad.getBiografia());
-        eDto.setTipoUsuario("Entrenador");
-        return eDto;
+    public EntrenadorDto toDto(Entrenador e) {
+        EntrenadorDto dto = new EntrenadorDto();
+
+        dto.setId(e.getId());
+        dto.setNombres(e.getNombres());
+        dto.setApellidos(e.getApellidos());
+        dto.setCorreo(e.getCorreo());
+        dto.setCelular(e.getCelular());
+        dto.setPais(e.getPais());
+        dto.setCiudad(e.getCiudad());
+        dto.setFechaNacimiento(e.getFechaNacimiento());
+        dto.setZonaHoraria(e.getZonaHoraria());
+        dto.setPasswordHash(e.getPasswordHash());
+        dto.setRutaFoto(e.getRutaFoto());
+        dto.setNecesitaCambioPassword(e.isNecesitaCambioPassword());
+        dto.setNickname(e.getNickname());
+        dto.setAniosExperiencia(e.getAniosExperiencia());
+        dto.setBiografia(e.getBiografia());
+        dto.setTipoUsuario("Entrenador");
+
+        return dto;
     }
+
     
     public static Entrenador convertirAEntidad(EntrenadorDto dto) {
     	return new EntrenadorMapHandler().toEntity(dto);

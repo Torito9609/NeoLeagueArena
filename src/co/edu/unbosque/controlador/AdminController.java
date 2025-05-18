@@ -2,6 +2,7 @@ package co.edu.unbosque.controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import co.edu.unbosque.modelo.dto.EntrenadorDto;
 import co.edu.unbosque.modelo.dto.JugadorDto;
 import co.edu.unbosque.modelo.dto.UsuarioDto;
 import co.edu.unbosque.modelo.entidad.Entrenador;
+import co.edu.unbosque.modelo.entidad.Jugador;
 import co.edu.unbosque.modelo.entidad.Usuario;
 import co.edu.unbosque.modelo.enums.NivelCompetitivoJugador;
 import co.edu.unbosque.modelo.exception.AccesoDatosException;
@@ -49,8 +51,6 @@ public class AdminController implements ActionListener {
 		}
 		registrarComandos();
 		asignaOyentesPanelLateral();
-		System.out.println("xc");	
-		System.out.println("Prueba de github con Miguel");
 		}
 
 	private void registrarComandos() {
@@ -70,23 +70,20 @@ public class AdminController implements ActionListener {
 		comandos.put("FILTRO_CIUDAD", this::filtrarPorCiudad);
 		comandos.put("CREAR_USUARIO", this::mostrarVentanaCrearUsuario);
 		comandos.put("CREAR_GUARDAR_USUARIO", () -> {
-			try {
-				int confirmacion = vistaAdmin.mostrarMensajeConfirmacion("¿Esta seguro que desea crear el usuario?");
-				
-				if(confirmacion == JOptionPane.YES_OPTION) {
-					crearGuardarUsuario();
-					reiniciarTablaUsuarios();
-					vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
-				}else {
-					vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
-					return;
-				}		
-			} catch (AccesoDatosException e) {
-				vistaAdmin.mostrarMensajeAdvertencia(e.getMessage());
+			int confirmacion = vistaAdmin.mostrarMensajeConfirmacion("¿Esta seguro que desea crear el usuario?");
+			
+			if(confirmacion == JOptionPane.YES_OPTION) {
+				crearGuardarUsuario();
+				reiniciarTablaUsuarios();
+				vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
+				vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().reiniciarCamposEdicion();
+			}else {
+				vistaAdmin.getVentanaCreacionUsuario().setVisible(false);	
 			}
 		});
 		comandos.put("CANCELAR_GUARDAR_USUARIO", this::cancelarGuardarUsuario);
 		comandos.put("EDITAR_GUARDAR_USUARIO", this::editarGuardarUsuario);
+		comandos.put("ELIMINAR_USUARIO", this::eliminarUsuario);
 		comandos.put("SELECCIONAR_TIPO_USUARIO", this::mostrarPanelDinamicoUsuario);
 
 	}
@@ -109,8 +106,19 @@ public class AdminController implements ActionListener {
 		List<UsuarioDto> todosUsuarios = new ArrayList<UsuarioDto>();
 		try {
 			for(Usuario u : usuarioService.obtenerTodos()) {
-				System.out.println(u.getClass());
-				//todosUsuarios.add(UsuarioMapHandler.convertirADto(u));
+				String tipo = u.getClass().getName();
+				//System.out.println(tipo);
+				switch(tipo) {
+					case "Entrenador":
+						todosUsuarios.add(EntrenadorMapHandler.convertirADto((Entrenador)u));
+						break;
+					case "Jugador":
+						todosUsuarios.add(JugadorMapHandler.convertirADto((Jugador)u));
+						break;
+					default:
+						todosUsuarios.add(UsuarioMapHandler.convertirADto(u));
+				}
+				//System.out.println(UsuarioMapHandler.convertirADto(u).getTipoUsuario());
 			}
 		} catch (AccesoDatosException e) {
 			vistaAdmin.mostrarMensajeError(e.getMessage());
@@ -224,7 +232,40 @@ public class AdminController implements ActionListener {
 		vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
 	}
 	
-	private void crearGuardarUsuario() throws AccesoDatosException {
+	private void eliminarUsuario() {
+		int filaSeleccionada = vistaAdmin.getVentanaPrincipal().getPanelTabla().getTablaUsuarios().getSelectedRow();
+		if(filaSeleccionada == -1) {
+			vistaAdmin.mostrarMensajeError("Por favor, seleccione un usuario de la tabla para eliminar.");
+		}else {
+			int opcion = vistaAdmin.mostrarMensajeConfirmacion("¿Esta seguro que desea eliminar el Usuario?");
+			
+			if(opcion == JOptionPane.YES_OPTION) {
+				String cedulaEliminar = vistaAdmin.getVentanaPrincipal().getPanelTabla().getTablaUsuarios().getValueAt(opcion,0).toString();
+				String tipoEliminar = vistaAdmin.getVentanaPrincipal().getPanelTabla().getTablaUsuarios().getValueAt(opcion, 1).toString();
+				try {
+					usuarioService.eliminarUsuario(cedulaEliminar);
+					if("Entrenador".equalsIgnoreCase(tipoEliminar)) {
+						entrenadorService.eliminarEntrenador(cedulaEliminar);
+					}else if("Jugador".equalsIgnoreCase(cedulaEliminar)) {
+						jugadorService.eliminarJugador(cedulaEliminar);
+					}
+					
+				} catch (AccesoDatosException e) {
+					vistaAdmin.mostrarMensajeError(e.getMessage());
+					return;
+				} catch (IOException e) {
+					vistaAdmin.mostrarMensajeError(e.getMessage());
+					return;
+				}
+				vistaAdmin.mostrarMensajeExito("Usuario Eliminado Exitosamente");
+				reiniciarTablaUsuarios();
+			} else {
+				vistaAdmin.mostrarMensajeExito("Operacion cancelada exitosamente");
+			}
+		}
+	}
+	
+	private void crearGuardarUsuario() {
 		String tipoUsuario = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().getSelectedItem().toString().toLowerCase();
 		switch(tipoUsuario) {
 			case "entrenador":
@@ -238,7 +279,7 @@ public class AdminController implements ActionListener {
 				String fechaString = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getFechaNacimientoField().getText().toString().trim();
 				LocalDate fechaNacimiento = LocalDate.parse(fechaString);
 				String zonaHoraria = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getZonaHorariaComboBox().getSelectedItem().toString();
-				String passworHash = Encriptador.encriptarSHA256(nombres+apellidos+id+"*");
+				String passwordHash = Encriptador.encriptarSHA256(nombres+apellidos+id+"*");
 				String rutaFoto = "";
 				boolean necesitaCambioPassword = true;
 				PanelEntrenador panelEntrenador = (PanelEntrenador) vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getPanelActual();
@@ -258,15 +299,21 @@ public class AdminController implements ActionListener {
 				entrenadorDto.setCiudad(ciudad);
 				entrenadorDto.setFechaNacimiento(fechaNacimiento);
 				entrenadorDto.setZonaHoraria(zonaHoraria);
-				entrenadorDto.setPasswordHash(passworHash);
+				entrenadorDto.setPasswordHash(passwordHash);
 				entrenadorDto.setRutaFoto(rutaFoto);
 				entrenadorDto.setNecesitaCambioPassword(necesitaCambioPassword);
 				entrenadorDto.setNickname(nickName);
 				entrenadorDto.setAniosExperiencia(aniosExp);
 				entrenadorDto.setBiografia(biografia);
-				entrenadorDto.setTipoUsuario(tipoUsuario);
+				entrenadorDto.setTipoUsuario(tipoUsuarioE);
 				
-				entrenadorService.crearEntrenador(EntrenadorMapHandler.convertirAEntidad(entrenadorDto), passworHash);
+				
+			try {
+				entrenadorService.crearEntrenador(EntrenadorMapHandler.convertirAEntidad(entrenadorDto), passwordHash);
+			} catch (AccesoDatosException e) {
+				vistaAdmin.mostrarMensajeError(e.getMessage());
+				return;
+			}
 				break;
 				
 			case "jugador" :
@@ -308,7 +355,11 @@ public class AdminController implements ActionListener {
 				jugadorDto.setRankingPuntos(rankingPuntos);
 				jugadorDto.setTipoUsuario(tipoUsuarioJ);
 				
+			try {
 				jugadorService.crearJugador(JugadorMapHandler.convertirAEntidad(jugadorDto), passworHashJ);
+			} catch (AccesoDatosException e) {
+				vistaAdmin.mostrarMensajeError(e.getMessage());
+			}
 				break;
 		}
 		

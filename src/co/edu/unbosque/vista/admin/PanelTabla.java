@@ -49,7 +49,7 @@ public class PanelTabla extends JPanel {
      * con columnas predefinidas y comportamiento no editable.
      */
     private void inicializarComponentes() {
-        String[] columnas = { "Nombre", "Correo", "Rol", "País", "Ciudad" };
+        String[] columnas = {"Cedula", "Nombre", "Correo", "Rol", "País", "Ciudad" };
 
         modeloTabla = new DefaultTableModel(null, columnas) {
             @Override
@@ -75,6 +75,7 @@ public class PanelTabla extends JPanel {
 
         for (UsuarioDto usuario : usuarios) {
             Object[] fila = {
+            	usuario.getId(),
                 usuario.getNombres(),
                 usuario.getCorreo(),
                 usuario.getTipoUsuario(),
@@ -91,7 +92,7 @@ public class PanelTabla extends JPanel {
      * 
      * @return La instancia de {@code JTable} usada en el panel.
      */
-    public JTable getTablaProductos() {
+    public JTable getTablaUsuarios() {
         return tablaUsuarios;
     }
 }

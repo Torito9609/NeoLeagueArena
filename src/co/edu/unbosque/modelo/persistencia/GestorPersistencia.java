@@ -64,7 +64,6 @@ public class GestorPersistencia<E, D> {
      */
     @SuppressWarnings("unchecked")
     public List<E> cargar() throws AccesoDatosException {
-        // fichero vacío → lista vacía
         if (ubicacionArchivo.length() == 0) {
             return new ArrayList<>();
         }
