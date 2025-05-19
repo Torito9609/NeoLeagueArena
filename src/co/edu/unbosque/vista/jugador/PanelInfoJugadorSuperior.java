@@ -3,15 +3,26 @@ package co.edu.unbosque.vista.jugador;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.image.BufferedImage; // Para el placeholder
+import java.awt.image.BufferedImage;
 
+/**
+ * Representa el panel superior con la información del jugador en la interfaz.
+ * Muestra su foto, GamerTag, ID y un botón para cerrar sesión.
+ */
 public class PanelInfoJugadorSuperior extends JPanel {
+
     private JLabel lblFotoJugador;
-    private JLabel lblGamerTag; 
+    private JLabel lblGamerTag;
     private JLabel lblIdJugador;
     private JButton btnCerrarSesion;
-   
 
+    /**
+     * Constructor de la clase que inicializa los elementos visuales del panel.
+     * 
+     * @param idJugador   Identificador único del jugador.
+     * @param gamerTag    Nombre de usuario del jugador.
+     * @param rutaFotoActual Ruta de la imagen de perfil del jugador.
+     */
     public PanelInfoJugadorSuperior(String idJugador, String gamerTag, String rutaFotoActual) { 
         setLayout(new BorderLayout(10, 0));
         setBorder(new EmptyBorder(5, 10, 5, 10));
@@ -30,7 +41,7 @@ public class PanelInfoJugadorSuperior extends JPanel {
         panelTextos.setLayout(new BoxLayout(panelTextos, BoxLayout.Y_AXIS));
         panelTextos.setOpaque(false);
 
-        lblGamerTag = new JLabel(gamerTag); // Usar gamerTag
+        lblGamerTag = new JLabel(gamerTag);
         lblGamerTag.setForeground(Color.WHITE);
         lblGamerTag.setFont(new Font("Arial", Font.BOLD, 16));
         panelTextos.add(lblGamerTag);
@@ -44,7 +55,6 @@ public class PanelInfoJugadorSuperior extends JPanel {
         add(panelInfoIzquierda, BorderLayout.WEST);
 
         btnCerrarSesion = new JButton("Cerrar Sesión");
-        // ... (estilos del botón como estaban)
         btnCerrarSesion.setBackground(new Color(231, 76, 60));
         btnCerrarSesion.setForeground(Color.WHITE);
         btnCerrarSesion.setFocusPainted(false);
@@ -54,6 +64,11 @@ public class PanelInfoJugadorSuperior extends JPanel {
         add(panelBotonDerecha, BorderLayout.EAST);
     }
 
+    /**
+     * Actualiza la imagen de perfil del jugador.
+     * 
+     * @param nuevaRutaFoto Ruta de la nueva imagen de perfil.
+     */
     public void actualizarFoto(String nuevaRutaFoto) {
         ImageIcon icono;
         if (nuevaRutaFoto != null && !nuevaRutaFoto.isEmpty() && new java.io.File(nuevaRutaFoto).exists()) {
@@ -73,18 +88,41 @@ public class PanelInfoJugadorSuperior extends JPanel {
         this.repaint();
     }
 
+    /**
+     * Actualiza el GamerTag del jugador mostrado en la interfaz.
+     * 
+     * @param nuevoGamerTag Nuevo GamerTag.
+     */
     public void actualizarGamerTag(String nuevoGamerTag) {
         lblGamerTag.setText(nuevoGamerTag);
     }
 
+    /**
+     * Actualiza el ID del jugador mostrado en la interfaz.
+     * 
+     * @param nuevoId Nuevo identificador del jugador.
+     */
     public void actualizarId(String nuevoId) {
         lblIdJugador.setText("ID: " + nuevoId);
     }
 
+    /**
+     * Devuelve el botón de cerrar sesión del jugador.
+     * 
+     * @return Botón para cerrar sesión.
+     */
     public JButton getBtnCerrarSesion() {
         return btnCerrarSesion;
     }
 
+    /**
+     * Crea un icono de marcador de posición con texto.
+     * 
+     * @param width  Ancho del icono.
+     * @param height Alto del icono.
+     * @param text   Texto que se mostrará en el icono.
+     * @return Icono de marcador de posición.
+     */
     private ImageIcon createPlaceholderIcon(int width, int height, String text) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = image.createGraphics();

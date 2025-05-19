@@ -5,6 +5,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+/**
+ * Subpanel que muestra al jugador una tabla con los torneos en los que ha participado.
+ * <p>
+ * Incluye un botón para ver detalles del torneo seleccionado y una tabla no editable
+ * con información como ID, nombre, juego, equipo participante y estado actual.
+ */
 public class SubPanelMisTorneosJugador extends JPanel {
 
     private JTable tablaMisTorneos;
@@ -12,6 +18,10 @@ public class SubPanelMisTorneosJugador extends JPanel {
     private JScrollPane scrollPaneTorneos;
     private JButton btnVerDetallesTorneo;
 
+    /**
+     * Constructor que inicializa y organiza los componentes del subpanel.
+     * Crea una tabla para listar los torneos y un botón para visualizar detalles del torneo seleccionado.
+     */
     public SubPanelMisTorneosJugador() {
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -28,9 +38,11 @@ public class SubPanelMisTorneosJugador extends JPanel {
                 return false;
             }
         };
+
         tablaMisTorneos = new JTable(modeloTablaTorneos);
         tablaMisTorneos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tablaMisTorneos.setFillsViewportHeight(true);
+
         scrollPaneTorneos = new JScrollPane(tablaMisTorneos);
         add(scrollPaneTorneos, BorderLayout.CENTER);
 
@@ -43,6 +55,12 @@ public class SubPanelMisTorneosJugador extends JPanel {
         // cargarTorneosDeEjemplo();
     }
 
+    /**
+     * Método para actualizar la tabla con los torneos en los que participa el jugador.
+     * <p>
+     * Actualmente agrega datos de ejemplo y muestra un mensaje en consola.
+     * Se recomienda implementar con datos reales en producción.
+     */
     public void actualizarTablaTorneos(/* List<ParticipacionTorneoDto> participaciones */) {
         modeloTablaTorneos.setRowCount(0);
         // for (ParticipacionTorneoDto participacion : participaciones) {
@@ -51,18 +69,28 @@ public class SubPanelMisTorneosJugador extends JPanel {
         //         participacion.getTorneo().getNombre(),
         //         participacion.getTorneo().getJuego().getNombre(),
         //         participacion.getEquipo().getNombre(),
-        //         "Estado del jugador/equipo en el torneo" // Ej. "Fase de grupos", "Clasificado"
+        //         "Estado del jugador/equipo en el torneo"
         //     };
         //     modeloTablaTorneos.addRow(fila);
         // }
         System.out.println("SubPanelMisTorneosJugador: actualizarTablaTorneos() necesita implementación con datos reales.");
         modeloTablaTorneos.addRow(new Object[]{"TRN001", "Copa Verano NeoLeague", "Valorant", "Los Invencibles", "Cuartos de Final"});
     }
-    
+
+    /**
+     * Obtiene la tabla que contiene los torneos del jugador.
+     *
+     * @return tabla de torneos.
+     */
     public JTable getTablaMisTorneos() {
         return tablaMisTorneos;
     }
 
+    /**
+     * Devuelve el botón para ver detalles del torneo seleccionado.
+     *
+     * @return botón de ver detalles del torneo.
+     */
     public JButton getBtnVerDetallesTorneo() {
         return btnVerDetallesTorneo;
     }

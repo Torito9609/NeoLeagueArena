@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Panel para gestión de notificaciones, permite escribir y enviar notificaciones por correo.
+ * Representa un panel para la gestión de notificaciones dentro del módulo de administración.
+ * Permite redactar y enviar notificaciones por correo a los usuarios del sistema.
  */
 public class PanelNotificacionesAdmin extends JPanel {
 
@@ -12,6 +13,9 @@ public class PanelNotificacionesAdmin extends JPanel {
     private JTextArea areaMensaje;
     private JButton enviarBtn;
 
+    /**
+     * Constructor que inicializa el panel con su distribución y configuración de estilo.
+     */
     public PanelNotificacionesAdmin() {
         setLayout(new BorderLayout(15, 15));
         setVisible(false);
@@ -21,8 +25,11 @@ public class PanelNotificacionesAdmin extends JPanel {
         inicializarComponentes();
     }
 
+    /**
+     * Inicializa los componentes gráficos del panel, incluyendo los campos de entrada y el botón de envío.
+     */
     private void inicializarComponentes() {
-    	JPanel panelCampos = new JPanel(new GridLayout(2, 1, 10, 10));
+        JPanel panelCampos = new JPanel(new GridLayout(2, 1, 10, 10));
         campoAsunto = new JTextField();
         areaMensaje = new JTextArea();
         areaMensaje.setLineWrap(true);
@@ -38,17 +45,33 @@ public class PanelNotificacionesAdmin extends JPanel {
         JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelBoton.add(enviarBtn);
         add(panelBoton, BorderLayout.SOUTH);
-		
-	}
+    }
 
-	public JTextField getCampoAsunto() {
+    // Métodos de acceso a los componentes del panel
+
+    /**
+     * Devuelve el campo de texto para ingresar el asunto de la notificación.
+     * 
+     * @return Campo de texto para el asunto.
+     */
+    public JTextField getCampoAsunto() {
         return campoAsunto;
     }
 
+    /**
+     * Devuelve el área de texto donde se redacta el mensaje de la notificación.
+     * 
+     * @return Área de texto para el mensaje.
+     */
     public JTextArea getAreaMensaje() {
         return areaMensaje;
     }
 
+    /**
+     * Devuelve el botón de envío de la notificación.
+     * 
+     * @return Botón para enviar la notificación.
+     */
     public JButton getEnviarBtn() {
         return enviarBtn;
     }

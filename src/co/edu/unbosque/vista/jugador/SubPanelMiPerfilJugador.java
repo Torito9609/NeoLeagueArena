@@ -1,357 +1,125 @@
-package co.edu.unbosque.vista.jugador;
+/**
+ * Carga los datos del jugador en el formulario para su edición.
+ *
+ * @param jugadorDto Objeto {@link JugadorDto} que contiene los datos del jugador.
+ */
+public void cargarDatosPerfil(JugadorDto jugadorDto)
 
-import co.edu.unbosque.modelo.dto.JugadorDto;
-import co.edu.unbosque.modelo.enums.NivelCompetitivoJugador;
+/**
+ * Obtiene los datos ingresados en el formulario para ser guardados.
+ *
+ * @return Un objeto {@link JugadorDto} con los nuevos valores del perfil.
+ */
+public JugadorDto obtenerDatosParaGuardar()
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+/**
+ * Devuelve el botón para seleccionar una nueva foto de perfil.
+ *
+ * @return El botón de tipo {@link JButton}.
+ */
+public JButton getBtnSeleccionarFoto()
 
-public class SubPanelMiPerfilJugador extends JPanel {
-	private JLabel lblFotoPerfilGrande;
-	private JButton btnSeleccionarFoto;
-	private File archivoFotoSeleccionada;
+/**
+ * Devuelve el botón para guardar los cambios del perfil del jugador.
+ *
+ * @return El botón de tipo {@link JButton}.
+ */
+public JButton getBtnGuardarCambiosPerfil()
 
-	private JTextField txtId;
-	private JTextField txtNombres;
-	private JTextField txtApellidos;
-	private JTextField txtCorreo;
-	private JTextField txtCelular;
-	private JTextField txtPais;
-	private JTextField txtCiudad;
-	private JTextField txtFechaNacimiento;
-	private JComboBox<String> comboZonaHoraria;
+/**
+ * Devuelve el campo de texto para el GamerTag.
+ *
+ * @return Campo de texto {@link JTextField}.
+ */
+public JTextField getTxtGamerTag()
 
-	private JTextField txtGamerTag;
-	private JComboBox<NivelCompetitivoJugador> comboNivelCompetitivo;
-	private JLabel lblRankingPuntos;
+/**
+ * Devuelve el campo de texto para los nombres del jugador.
+ *
+ * @return Campo de texto {@link JTextField}.
+ */
+public JTextField getTxtNombres()
 
-	private JButton btnGuardarCambiosPerfil;
+/**
+ * Devuelve el campo de texto para los apellidos del jugador.
+ *
+ * @return Campo de texto {@link JTextField}.
+ */
+public JTextField getTxtApellidos()
 
-	private final DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+/**
+ * Devuelve el campo de texto para el correo electrónico del jugador.
+ *
+ * @return Campo de texto {@link JTextField}.
+ */
+public JTextField getTxtCorreo()
 
-	public SubPanelMiPerfilJugador() {
-		setLayout(new BorderLayout(15, 15));
-		setBorder(new EmptyBorder(20, 20, 20, 20));
-		setBackground(Color.WHITE);
+/**
+ * Devuelve el campo de texto para el número de celular del jugador.
+ *
+ * @return Campo de texto {@link JTextField}.
+ */
+public JTextField getTxtCelular()
 
-		JPanel panelLateralFoto = new JPanel(new BorderLayout(10, 10));
-		panelLateralFoto.setPreferredSize(new Dimension(180, 200));
-		lblFotoPerfilGrande = new JLabel("Sin foto", SwingConstants.CENTER);
-		lblFotoPerfilGrande.setPreferredSize(new Dimension(150, 150));
-		lblFotoPerfilGrande.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-		mostrarPrevisualizacionFoto(null);
-		btnSeleccionarFoto = new JButton("Cambiar Foto");
-		btnSeleccionarFoto.setActionCommand("SELECCIONAR_FOTO_JUGADOR");
-		panelLateralFoto.add(lblFotoPerfilGrande, BorderLayout.CENTER);
-		panelLateralFoto.add(btnSeleccionarFoto, BorderLayout.SOUTH);
-		add(panelLateralFoto, BorderLayout.WEST);
+/**
+ * Devuelve el campo de texto para el país del jugador.
+ *
+ * @return Campo de texto {@link JTextField}.
+ */
+public JTextField getTxtPais()
 
-		JPanel panelFormulario = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(5, 5, 5, 5);
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		int fila = 0;
+/**
+ * Devuelve el campo de texto para la ciudad del jugador.
+ *
+ * @return Campo de texto {@link JTextField}.
+ */
+public JTextField getTxtCiudad()
 
-		gbc.gridx = 0;
-		gbc.gridy = fila;
-		gbc.weightx = 0.2;
-		panelFormulario.add(new JLabel("ID Usuario:"), gbc);
-		gbc.gridx = 1;
-		gbc.weightx = 0.8;
-		txtId = new JTextField(20);
-		txtId.setEditable(false);
-		panelFormulario.add(txtId, gbc);
-		fila++;
+/**
+ * Devuelve el campo de texto para la fecha de nacimiento del jugador.
+ *
+ * @return Campo de texto {@link JTextField}.
+ */
+public JTextField getTxtFechaNacimiento()
 
-		gbc.gridx = 0;
-		gbc.gridy = fila;
-		panelFormulario.add(new JLabel("GamerTag:"), gbc);
-		gbc.gridx = 1;
-		txtGamerTag = new JTextField(20);
-		panelFormulario.add(txtGamerTag, gbc);
-		fila++;
+/**
+ * Devuelve el combo box con las opciones de zona horaria.
+ *
+ * @return ComboBox de tipo {@link JComboBox}.
+ */
+public JComboBox<String> getComboZonaHoraria()
 
-		gbc.gridx = 0;
-		gbc.gridy = fila;
-		panelFormulario.add(new JLabel("Nombres:"), gbc);
-		gbc.gridx = 1;
-		txtNombres = new JTextField(20);
-		panelFormulario.add(txtNombres, gbc);
-		fila++;
+/**
+ * Devuelve el combo box con los niveles competitivos.
+ *
+ * @return ComboBox de tipo {@link JComboBox<NivelCompetitivoJugador>}.
+ */
+public JComboBox<NivelCompetitivoJugador> getComboNivelCompetitivo()
 
-		gbc.gridx = 0;
-		gbc.gridy = fila;
-		panelFormulario.add(new JLabel("Apellidos:"), gbc);
-		gbc.gridx = 1;
-		txtApellidos = new JTextField(20);
-		panelFormulario.add(txtApellidos, gbc);
-		fila++;
+/**
+ * Devuelve la etiqueta que muestra los puntos de ranking.
+ *
+ * @return Etiqueta de tipo {@link JLabel}.
+ */
+public JLabel getLblRankingPuntos()
 
-		gbc.gridx = 0;
-		gbc.gridy = fila;
-		panelFormulario.add(new JLabel("Correo Electrónico:"), gbc);
-		gbc.gridx = 1;
-		txtCorreo = new JTextField(20);
-		panelFormulario.add(txtCorreo, gbc);
-		fila++;
+/**
+ * Devuelve el archivo seleccionado para la nueva foto de perfil.
+ *
+ * @return Archivo de tipo {@link File}.
+ */
+public File getArchivoFotoSeleccionada()
 
-		gbc.gridx = 0;
-		gbc.gridy = fila;
-		panelFormulario.add(new JLabel("Celular:"), gbc);
-		gbc.gridx = 1;
-		txtCelular = new JTextField(20);
-		panelFormulario.add(txtCelular, gbc);
-		fila++;
+/**
+ * Devuelve la etiqueta de la foto de perfil.
+ *
+ * @return Etiqueta de tipo {@link JLabel}.
+ */
+public JLabel getLblFotoPerfilGrande()
 
-		gbc.gridx = 0;
-		gbc.gridy = fila;
-		panelFormulario.add(new JLabel("País:"), gbc);
-		gbc.gridx = 1;
-		txtPais = new JTextField(20);
-		panelFormulario.add(txtPais, gbc);
-		fila++;
-
-		gbc.gridx = 0;
-		gbc.gridy = fila;
-		panelFormulario.add(new JLabel("Ciudad:"), gbc);
-		gbc.gridx = 1;
-		txtCiudad = new JTextField(20);
-		panelFormulario.add(txtCiudad, gbc);
-		fila++;
-
-		gbc.gridx = 0;
-		gbc.gridy = fila;
-		panelFormulario.add(new JLabel("Fecha Nacimiento (YYYY-MM-DD):"), gbc);
-		gbc.gridx = 1;
-		txtFechaNacimiento = new JTextField(10);
-		panelFormulario.add(txtFechaNacimiento, gbc);
-		fila++;
-
-		gbc.gridx = 0;
-		gbc.gridy = fila;
-		panelFormulario.add(new JLabel("Zona Horaria:"), gbc);
-		gbc.gridx = 1;
-		comboZonaHoraria = new JComboBox<>(
-				new String[] { "GMT-5 (Bogotá)", "GMT-6 (CDMX)", "GMT-3 (Buenos Aires)", "Otra" });
-		panelFormulario.add(comboZonaHoraria, gbc);
-		fila++;
-
-		gbc.gridx = 0;
-		gbc.gridy = fila;
-		panelFormulario.add(new JLabel("Nivel Competitivo:"), gbc);
-		gbc.gridx = 1;
-		comboNivelCompetitivo = new JComboBox<>(NivelCompetitivoJugador.values());
-		panelFormulario.add(comboNivelCompetitivo, gbc);
-		fila++;
-
-		gbc.gridx = 0;
-		gbc.gridy = fila;
-		panelFormulario.add(new JLabel("Puntos de Ranking:"), gbc);
-		gbc.gridx = 1;
-		lblRankingPuntos = new JLabel("0");
-		panelFormulario.add(lblRankingPuntos, gbc);
-		fila++;
-
-		gbc.gridx = 0;
-		gbc.gridy = fila;
-		gbc.gridwidth = 2;
-		gbc.weighty = 1.0;
-		panelFormulario.add(new JLabel(" "), gbc);
-
-		JScrollPane scrollFormulario = new JScrollPane(panelFormulario);
-		scrollFormulario.setBorder(BorderFactory.createEmptyBorder());
-		add(scrollFormulario, BorderLayout.CENTER);
-
-		btnGuardarCambiosPerfil = new JButton("Guardar Cambios de Perfil");
-		btnGuardarCambiosPerfil.setActionCommand("GUARDAR_PERFIL_JUGADOR");
-		JPanel panelBotonGuardar = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		panelBotonGuardar.setBorder(new EmptyBorder(10, 0, 0, 0));
-		panelBotonGuardar.add(btnGuardarCambiosPerfil);
-		add(panelBotonGuardar, BorderLayout.SOUTH);
-
-		btnSeleccionarFoto.addActionListener(e -> seleccionarNuevaFoto());
-	}
-
-	private void seleccionarNuevaFoto() {
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setDialogTitle("Seleccionar Foto de Perfil");
-		fileChooser.setAcceptAllFileFilterUsed(false);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png",
-				"gif");
-		fileChooser.addChoosableFileFilter(filter);
-		int resultado = fileChooser.showOpenDialog(this);
-		if (resultado == JFileChooser.APPROVE_OPTION) {
-			archivoFotoSeleccionada = fileChooser.getSelectedFile();
-			mostrarPrevisualizacionFoto(archivoFotoSeleccionada.getAbsolutePath());
-		}
-	}
-
-	public void mostrarPrevisualizacionFoto(String rutaFoto) {
-		ImageIcon icono;
-		if (rutaFoto != null && !rutaFoto.isEmpty() && new File(rutaFoto).exists()) {
-			icono = new ImageIcon(rutaFoto);
-		} else {
-			icono = createPlaceholderIcon(150, 150, "Perfil");
-		}
-		if (icono.getImageLoadStatus() == MediaTracker.COMPLETE) {
-			Image img = icono.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-			lblFotoPerfilGrande.setIcon(new ImageIcon(img));
-			lblFotoPerfilGrande.setText("");
-		} else {
-			lblFotoPerfilGrande.setIcon(createPlaceholderIcon(150, 150, "Error"));
-			lblFotoPerfilGrande.setText("");
-		}
-	}
-
-	private ImageIcon createPlaceholderIcon(int width, int height, String text) {
-		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = image.createGraphics();
-		g2d.setColor(Color.LIGHT_GRAY);
-		g2d.fillRect(0, 0, width, height);
-		g2d.setColor(Color.DARK_GRAY);
-		g2d.drawRect(0, 0, width - 1, height - 1);
-		g2d.setFont(new Font("Arial", Font.BOLD, 14));
-		FontMetrics fm = g2d.getFontMetrics();
-		int x = (width - fm.stringWidth(text)) / 2;
-		int y = (fm.getAscent() + (height - (fm.getAscent() + fm.getDescent())) / 2);
-		g2d.drawString(text, x, y);
-		g2d.dispose();
-		return new ImageIcon(image);
-	}
-
-	public void cargarDatosPerfil(JugadorDto jugadorDto) {
-		if (jugadorDto == null) { // Limpiar el formulario
-			txtId.setText("");
-			txtGamerTag.setText("");
-			txtNombres.setText("");
-			txtApellidos.setText("");
-			txtCorreo.setText("");
-			txtCelular.setText("");
-			txtPais.setText("");
-			txtCiudad.setText("");
-			txtFechaNacimiento.setText(""); // Reintroducido
-			comboZonaHoraria.setSelectedIndex(-1); // -1 para ningún ítem seleccionado si es posible
-			comboNivelCompetitivo.setSelectedIndex(-1);
-			lblRankingPuntos.setText("0");
-			mostrarPrevisualizacionFoto(null);
-			this.archivoFotoSeleccionada = null;
-			return;
-		}
-		txtId.setText(jugadorDto.getId() != null ? jugadorDto.getId() : "");
-		txtGamerTag.setText(jugadorDto.getGamerTag() != null ? jugadorDto.getGamerTag() : "");
-		txtNombres.setText(jugadorDto.getNombres() != null ? jugadorDto.getNombres() : "");
-		txtApellidos.setText(jugadorDto.getApellidos() != null ? jugadorDto.getApellidos() : "");
-		txtCorreo.setText(jugadorDto.getCorreo() != null ? jugadorDto.getCorreo() : "");
-		txtCelular.setText(jugadorDto.getCelular() != null ? jugadorDto.getCelular() : "");
-		txtPais.setText(jugadorDto.getPais() != null ? jugadorDto.getPais() : "");
-		txtCiudad.setText(jugadorDto.getCiudad() != null ? jugadorDto.getCiudad() : "");
-		txtFechaNacimiento.setText(
-				jugadorDto.getFechaNacimiento() != null ? jugadorDto.getFechaNacimiento().format(dateFormatter) : ""); // Reintroducido
-		comboZonaHoraria.setSelectedItem(jugadorDto.getZonaHoraria());
-		comboNivelCompetitivo.setSelectedItem(jugadorDto.getNivelCompetitivo());
-		lblRankingPuntos.setText(String.valueOf(jugadorDto.getRankingPuntos()));
-		mostrarPrevisualizacionFoto(jugadorDto.getRutaFoto());
-		this.archivoFotoSeleccionada = null;
-	}
-
-	public JugadorDto obtenerDatosParaGuardar() {
-		JugadorDto datosNuevos = new JugadorDto();
-		// El ID se mantiene del jugador actual, no se toma del campo editable (o no
-		// editable)
-		// datosNuevos.setId(txtId.getText());
-		datosNuevos.setGamerTag(txtGamerTag.getText());
-		datosNuevos.setNombres(txtNombres.getText());
-		datosNuevos.setApellidos(txtApellidos.getText());
-		datosNuevos.setCorreo(txtCorreo.getText());
-		datosNuevos.setCelular(txtCelular.getText());
-		datosNuevos.setPais(txtPais.getText());
-		datosNuevos.setCiudad(txtCiudad.getText());
-		try { // Reintroducido
-			if (!txtFechaNacimiento.getText().trim().isEmpty()) {
-				datosNuevos.setFechaNacimiento(LocalDate.parse(txtFechaNacimiento.getText(), dateFormatter));
-			}
-		} catch (DateTimeParseException e) {
-			System.err
-					.println("Formato de fecha inválido: " + txtFechaNacimiento.getText() + ". Se guardará como null.");
-			datosNuevos.setFechaNacimiento(null);
-		}
-		datosNuevos.setZonaHoraria(
-				comboZonaHoraria.getSelectedItem() != null ? comboZonaHoraria.getSelectedItem().toString() : null);
-		datosNuevos.setNivelCompetitivo((NivelCompetitivoJugador) comboNivelCompetitivo.getSelectedItem());
-		// RankingPuntos y rutaFoto se manejan por separado o vienen del DTO original.
-		return datosNuevos;
-	}
-
-	// Getters
-	public JButton getBtnSeleccionarFoto() {
-		return btnSeleccionarFoto;
-	}
-
-	public JButton getBtnGuardarCambiosPerfil() {
-		return btnGuardarCambiosPerfil;
-	}
-
-	public JTextField getTxtGamerTag() {
-		return txtGamerTag;
-	}
-
-	public JTextField getTxtNombres() {
-		return txtNombres;
-	}
-
-	public JTextField getTxtApellidos() {
-		return txtApellidos;
-	}
-
-	public JTextField getTxtCorreo() {
-		return txtCorreo;
-	}
-
-	public JTextField getTxtCelular() {
-		return txtCelular;
-	}
-
-	public JTextField getTxtPais() {
-		return txtPais;
-	}
-
-	public JTextField getTxtCiudad() {
-		return txtCiudad;
-	}
-
-	public JTextField getTxtFechaNacimiento() {
-		return txtFechaNacimiento;
-	} // Reintroducido
-
-	public JComboBox<String> getComboZonaHoraria() {
-		return comboZonaHoraria;
-	}
-
-	public JComboBox<NivelCompetitivoJugador> getComboNivelCompetitivo() {
-		return comboNivelCompetitivo;
-	}
-
-	public JLabel getLblRankingPuntos() {
-		return lblRankingPuntos;
-	}
-
-	public File getArchivoFotoSeleccionada() {
-		return archivoFotoSeleccionada;
-	}
-
-	public JLabel getLblFotoPerfilGrande() {
-		return lblFotoPerfilGrande;
-	}
-
-	public JTextField getTxtId() {
-		return txtId;
-	}
-}
+/**
+ * Devuelve el campo de texto para el ID del jugador.
+ *
+ * @return Campo de texto {@link JTextField}.
+ */
+public JTextField getTxtId()

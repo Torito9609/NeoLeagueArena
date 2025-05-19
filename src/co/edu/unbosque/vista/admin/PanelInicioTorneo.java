@@ -3,6 +3,10 @@ package co.edu.unbosque.vista.admin;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Representa un panel para la configuración y el inicio de un torneo dentro del sistema de administración.
+ * Permite seleccionar el torneo, definir la estructura de la fase y gestionar la configuración dinámica.
+ */
 public class PanelInicioTorneo extends JPanel {
 
     private JComboBox<String> comboTorneos;
@@ -10,6 +14,9 @@ public class PanelInicioTorneo extends JPanel {
     private JPanel panelConfiguracionDinamica;
     private JButton botonIniciarTorneo;
 
+    /**
+     * Constructor que inicializa el panel con su diseño y configuración.
+     */
     public PanelInicioTorneo() {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createTitledBorder("Inicio de torneo"));
@@ -17,8 +24,11 @@ public class PanelInicioTorneo extends JPanel {
         inicializarComponentes();
     }
 
+    /**
+     * Inicializa los componentes gráficos del panel, incluyendo selección de torneo y configuración de fase.
+     */
     private void inicializarComponentes() {
-        // Zona superior
+        // Panel superior para selección de torneo y fase
         JPanel panelSeleccion = new JPanel(new GridLayout(2, 2, 10, 10));
         panelSeleccion.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -34,36 +44,57 @@ public class PanelInicioTorneo extends JPanel {
         panelSeleccion.add(new JLabel("Tipo de fase:"));
         panelSeleccion.add(comboTipoFase);
 
-        // Zona central dinámica
+        // Panel central dinámico para configuración de fase
         panelConfiguracionDinamica = new JPanel();
         panelConfiguracionDinamica.setLayout(new BorderLayout());
         panelConfiguracionDinamica.setBorder(BorderFactory.createTitledBorder("Configuración de fase"));
 
-        // Zona inferior
+        // Panel inferior con botón de inicio de torneo
         JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         botonIniciarTorneo = new JButton("Iniciar Torneo");
         botonIniciarTorneo.setActionCommand("INICIAR_TORNEO");
         panelBoton.add(botonIniciarTorneo);
 
-        // Agregar todo
+        // Agregar los paneles al diseño principal
         add(panelSeleccion, BorderLayout.NORTH);
         add(panelConfiguracionDinamica, BorderLayout.CENTER);
         add(panelBoton, BorderLayout.SOUTH);
     }
 
-    // Getters
+    // Métodos de acceso a los componentes del panel
+
+    /**
+     * Devuelve el combo box de selección de torneos.
+     * 
+     * @return Combo box con la lista de torneos disponibles.
+     */
     public JComboBox<String> getComboTorneos() {
         return comboTorneos;
     }
 
+    /**
+     * Devuelve el combo box para seleccionar la estructura de la fase del torneo.
+     * 
+     * @return Combo box con las opciones de estructura de torneo.
+     */
     public JComboBox<String> getComboTipoFase() {
         return comboTipoFase;
     }
 
+    /**
+     * Devuelve el panel dinámico para configuración específica de la fase del torneo.
+     * 
+     * @return Panel para configuración de fase.
+     */
     public JPanel getPanelConfiguracionDinamica() {
         return panelConfiguracionDinamica;
     }
 
+    /**
+     * Devuelve el botón para iniciar el torneo.
+     * 
+     * @return Botón para ejecutar la acción de inicio de torneo.
+     */
     public JButton getBotonIniciarTorneo() {
         return botonIniciarTorneo;
     }

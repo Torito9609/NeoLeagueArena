@@ -5,6 +5,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+/**
+ * Panel que muestra los equipos a los que pertenece un jugador.
+ * Permite visualizar detalles y abandonar un equipo seleccionado.
+ */
 public class SubPanelMisEquiposJugador extends JPanel {
 
     private JTable tablaMisEquipos;
@@ -13,6 +17,9 @@ public class SubPanelMisEquiposJugador extends JPanel {
     private JButton btnVerDetallesEquipo; 
     private JButton btnAbandonarEquipo;  
 
+    /**
+     * Construye el panel con el diseño, la tabla de equipos y botones de acción.
+     */
     public SubPanelMisEquiposJugador() {
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -22,7 +29,6 @@ public class SubPanelMisEquiposJugador extends JPanel {
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
         add(titulo, BorderLayout.NORTH);
 
-      
         String[] columnas = {"ID Equipo", "Nombre del Equipo", "Juego Principal", "Rol en el Equipo"};
         modeloTablaEquipos = new DefaultTableModel(null, columnas) {
             @Override
@@ -36,55 +42,62 @@ public class SubPanelMisEquiposJugador extends JPanel {
         scrollPaneEquipos = new JScrollPane(tablaMisEquipos);
         add(scrollPaneEquipos, BorderLayout.CENTER);
 
-      
         JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnVerDetallesEquipo = new JButton("Ver Detalles del Equipo Seleccionado");
         btnAbandonarEquipo = new JButton("Abandonar Equipo Seleccionado");
 
-       
         btnVerDetallesEquipo.setActionCommand("VER_DETALLES_EQUIPO_JUGADOR");
         btnAbandonarEquipo.setActionCommand("ABANDONAR_EQUIPO_JUGADOR");
 
         panelAcciones.add(btnVerDetallesEquipo);
         panelAcciones.add(btnAbandonarEquipo);
         add(panelAcciones, BorderLayout.SOUTH);
-
-        // Cargar datos de ejemplo o dejar para el controlador
-        // cargarEquiposDeEjemplo();
     }
 
-    // Método para que el controlador actualice los datos de la tabla
-    public void actualizarTablaEquipos(/* List<EquipoDto> equiposDelJugador */) {
+    /**
+     * Actualiza la tabla de equipos con los datos del jugador.
+     * Este método debe ser llamado por el controlador con los datos reales.
+     */
+    public void actualizarTablaEquipos() {
         modeloTablaEquipos.setRowCount(0); // Limpiar tabla
-        // for (EquipoDto equipo : equiposDelJugador) {
-        //     Object[] fila = {
-        //         equipo.getId(),
-        //         equipo.getNombre(),
-        //         equipo.getJuegoPrincipal() != null ? equipo.getJuegoPrincipal().getNombre() : "N/A",
-        //         "Rol del jugador en este equipo" // Este dato vendría de la asignación o de otro lugar
-        //     };
-        //     modeloTablaEquipos.addRow(fila);
-        // }
-        System.out.println("SubPanelMisEquiposJugador: actualizarTablaEquipos() necesita implementación con datos reales.");
-        // Ejemplo con datos falsos:
+
+        // Ejemplo con datos falsos. Reemplazar con datos reales desde el controlador.
         modeloTablaEquipos.addRow(new Object[]{"EQ001", "Los Invencibles", "Valorant", "Duelista"});
         modeloTablaEquipos.addRow(new Object[]{"EQ002", "Titanes del Rift", "League of Legends", "Mid Laner"});
     }
 
+    /**
+     * Retorna la tabla que muestra los equipos del jugador.
+     *
+     * @return la tabla de equipos.
+     */
     public JTable getTablaMisEquipos() {
         return tablaMisEquipos;
     }
 
+    /**
+     * Retorna el botón para ver detalles del equipo seleccionado.
+     *
+     * @return el botón de ver detalles.
+     */
     public JButton getBtnVerDetallesEquipo() {
         return btnVerDetallesEquipo;
     }
 
+    /**
+     * Retorna el botón para abandonar el equipo seleccionado.
+     *
+     * @return el botón de abandonar equipo.
+     */
     public JButton getBtnAbandonarEquipo() {
         return btnAbandonarEquipo;
     }
 
-
+    /**
+     * Método de ejemplo para cargar equipos falsos.
+     * Puede ser usado para pruebas temporales.
+     */
     private void cargarEquiposDeEjemplo() {
-        actualizarTablaEquipos(/* pasar una lista vacía o de ejemplo */);
+        actualizarTablaEquipos();
     }
 }

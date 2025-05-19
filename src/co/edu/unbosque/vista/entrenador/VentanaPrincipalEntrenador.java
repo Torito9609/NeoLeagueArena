@@ -4,6 +4,10 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * Representa la ventana principal de la interfaz del entrenador en NeoLeague Arena.
+ * Organiza los distintos paneles de información, opciones y partidas.
+ */
 public class VentanaPrincipalEntrenador extends JFrame {
 
     private PanelPerfilEntrenador panelPerfil;
@@ -16,6 +20,9 @@ public class VentanaPrincipalEntrenador extends JFrame {
     private String idEntrenador = "ID 1028796325";
     private ImageIcon fotoPerfilEntrenador;
 
+    /**
+     * Constructor de la clase que inicializa la ventana principal y sus componentes.
+     */
     public VentanaPrincipalEntrenador() {
         String rutaImagenPerfil = "imagenes/default_perfil.jpg";
         fotoPerfilEntrenador = new ImageIcon(rutaImagenPerfil);
@@ -30,17 +37,19 @@ public class VentanaPrincipalEntrenador extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
         getContentPane().setBackground(new Color(240, 240, 240));
-        ((JPanel)getContentPane()).setBorder(new EmptyBorder(10, 10, 10, 10));
+        ((JPanel) getContentPane()).setBorder(new EmptyBorder(10, 10, 10, 10));
 
         inicializarComponentes();
         setVisible(true);
     }
 
+    /**
+     * Inicializa los componentes y paneles de la interfaz del entrenador.
+     */
     private void inicializarComponentes() {
-        JPanel panelSuperior = new JPanel(new BorderLayout(10,0));
+        JPanel panelSuperior = new JPanel(new BorderLayout(10, 0));
         panelSuperior.setOpaque(false);
 
-      
         panelPerfil = new PanelPerfilEntrenador(nombreEntrenador, idEntrenador, fotoPerfilEntrenador);
         panelSuperior.add(panelPerfil, BorderLayout.WEST);
 
@@ -81,13 +90,38 @@ public class VentanaPrincipalEntrenador extends JFrame {
         add(panelProximasPartidas, BorderLayout.SOUTH);
     }
 
-    // Getters para los componentes principales y paneles
+    /**
+     * Devuelve el botón de cerrar sesión.
+     * 
+     * @return Botón de cerrar sesión.
+     */
     public JButton getBtnCerrarSesion() { return btnCerrarSesion; }
+
+    /**
+     * Devuelve el panel de perfil del entrenador.
+     * 
+     * @return Panel de perfil.
+     */
     public PanelPerfilEntrenador getPanelPerfil() { return panelPerfil; }
+
+    /**
+     * Devuelve el panel de equipos del entrenador.
+     * 
+     * @return Panel de equipos.
+     */
     public PanelEquiposEntrenador getPanelEquipos() { return panelEquipos; }
+
+    /**
+     * Devuelve el panel de opciones del entrenador.
+     * 
+     * @return Panel de opciones.
+     */
     public PanelOpcionesEntrenador getPanelOpciones() { return panelOpciones; }
+
+    /**
+     * Devuelve el panel de próximas partidas del entrenador.
+     * 
+     * @return Panel de próximas partidas.
+     */
     public PanelProximasPartidas getPanelProximasPartidas() { return panelProximasPartidas; }
-
-
-   
 }

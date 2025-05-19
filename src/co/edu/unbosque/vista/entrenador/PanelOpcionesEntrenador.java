@@ -4,12 +4,19 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
+/**
+ * Representa un panel con las opciones disponibles para el entrenador.
+ * Incluye botones para gestionar torneos, comparar equipos y consultar el historial de partidas.
+ */
 public class PanelOpcionesEntrenador extends JPanel {
-   
+
     private JButton btnTorneo;
     private JButton btnCompararEquipos;
     private JButton btnHistorialPartidas;
 
+    /**
+     * Constructor que inicializa el panel y sus botones con un diseño estructurado.
+     */
     public PanelOpcionesEntrenador() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setOpaque(false);
@@ -27,7 +34,7 @@ public class PanelOpcionesEntrenador extends JPanel {
         Color buttonBgColor = new Color(70, 130, 180);
         Color buttonFgColor = Color.WHITE;
 
-        // Inicialización de los atributos de botón
+        // Inicialización de los botones del panel
         btnTorneo = new JButton("Torneo");
         styleButton(btnTorneo, buttonSize, buttonFont, buttonBgColor, buttonFgColor);
 
@@ -46,6 +53,15 @@ public class PanelOpcionesEntrenador extends JPanel {
         add(Box.createVerticalGlue());
     }
 
+    /**
+     * Aplica estilos a un botón especificado.
+     *
+     * @param button Botón a personalizar.
+     * @param size Tamaño del botón.
+     * @param font Fuente del texto del botón.
+     * @param bgColor Color de fondo del botón.
+     * @param fgColor Color de texto del botón.
+     */
     private void styleButton(JButton button, Dimension size, Font font, Color bgColor, Color fgColor) {
         button.setPreferredSize(size);
         button.setMaximumSize(size);
@@ -55,7 +71,13 @@ public class PanelOpcionesEntrenador extends JPanel {
         button.setFocusPainted(false);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
-    
+
+    /**
+     * Crea un panel contenedor para un botón, alineando su presentación en la interfaz.
+     *
+     * @param button Botón a encapsular en el panel.
+     * @return Panel contenedor del botón.
+     */
     private JPanel createButtonPanel(JButton button) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panel.setOpaque(false);
@@ -64,7 +86,7 @@ public class PanelOpcionesEntrenador extends JPanel {
         return panel;
     }
 
-    // el controlador
+    // Métodos de acceso a los botones del panel
     public JButton getBtnTorneo() { return btnTorneo; }
     public JButton getBtnCompararEquipos() { return btnCompararEquipos; }
     public JButton getBtnHistorialPartidas() { return btnHistorialPartidas; }

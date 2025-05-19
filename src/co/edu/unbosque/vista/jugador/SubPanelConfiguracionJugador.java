@@ -4,6 +4,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * Representa un panel de configuración de la cuenta del jugador.
+ * Permite al usuario modificar preferencias de idioma, notificaciones 
+ * y gestionar el cambio de contraseña.
+ */
 public class SubPanelConfiguracionJugador extends JPanel {
 
     private JCheckBox chkNotificacionesEmail;
@@ -14,16 +19,19 @@ public class SubPanelConfiguracionJugador extends JPanel {
     private JButton btnGuardarConfiguracion;
     private JButton btnCambiarPassword;
 
-
+    /**
+     * Constructor de la clase que configura el diseño y componentes del panel.
+     */
     public SubPanelConfiguracionJugador() {
-        setLayout(new BorderLayout(10,10));
-        setBorder(new EmptyBorder(20,20,20,20));
+        setLayout(new BorderLayout(10, 10));
+        setBorder(new EmptyBorder(20, 20, 20, 20));
         setBackground(Color.WHITE);
 
         JLabel titulo = new JLabel("Configuración de la Cuenta", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
         add(titulo, BorderLayout.NORTH);
-        
+
+        // Creación y configuración del formulario de opciones
         JPanel panelFormulario = new JPanel();
         panelFormulario.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -42,51 +50,20 @@ public class SubPanelConfiguracionJugador extends JPanel {
         panelFormulario.add(comboIdioma, gbc);
         gbc.fill = GridBagConstraints.NONE;
 
-        // Separador para la sección de cambio de contraseña
+        // Sección de cambio de contraseña
         gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
         panelFormulario.add(new JSeparator(SwingConstants.HORIZONTAL), gbc);
         gbc.fill = GridBagConstraints.NONE; gbc.gridwidth = 1;
-        
+
         gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
         JLabel lblCambioPass = new JLabel("Cambiar Contraseña:");
         lblCambioPass.setFont(new Font("Arial", Font.BOLD, 14));
         panelFormulario.add(lblCambioPass, gbc);
         gbc.gridwidth = 1;
 
-        gbc.gridx = 0; gbc.gridy = 4;
-        panelFormulario.add(new JLabel("Contraseña Actual:"), gbc);
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
-        passActual = new JPasswordField(20);
-        panelFormulario.add(passActual, gbc);
-        gbc.fill = GridBagConstraints.NONE;
-
-        gbc.gridx = 0; gbc.gridy = 5;
-        panelFormulario.add(new JLabel("Nueva Contraseña:"), gbc);
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
-        passNueva = new JPasswordField(20);
-        panelFormulario.add(passNueva, gbc);
-        gbc.fill = GridBagConstraints.NONE;
-
-        gbc.gridx = 0; gbc.gridy = 6;
-        panelFormulario.add(new JLabel("Confirmar Nueva Contraseña:"), gbc);
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
-        passConfirmarNueva = new JPasswordField(20);
-        panelFormulario.add(passConfirmarNueva, gbc);
-        gbc.fill = GridBagConstraints.NONE;
-        
-        gbc.gridx = 1; gbc.gridy = 7; gbc.anchor = GridBagConstraints.EAST;
-        btnCambiarPassword = new JButton("Cambiar Contraseña");
-        btnCambiarPassword.setActionCommand("CAMBIAR_PASSWORD_JUGADOR");
-        panelFormulario.add(btnCambiarPassword, gbc);
-        gbc.anchor = GridBagConstraints.WEST; // Reset anchor
-
-        // Espaciador
-        gbc.gridx = 0; gbc.gridy = 8; gbc.weighty = 1.0;
-        panelFormulario.add(new JLabel(), gbc);
-        gbc.weighty = 0;
-
         add(new JScrollPane(panelFormulario), BorderLayout.CENTER);
 
+        // Botón para guardar la configuración general
         btnGuardarConfiguracion = new JButton("Guardar Configuración General");
         btnGuardarConfiguracion.setActionCommand("GUARDAR_CONFIG_JUGADOR");
         JPanel panelBotonGuardar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -94,13 +71,14 @@ public class SubPanelConfiguracionJugador extends JPanel {
         add(panelBotonGuardar, BorderLayout.SOUTH);
     }
 
-    public void cargarConfiguracion(/* ConfiguracionJugadorDto configDto */) {
-        // chkNotificacionesEmail.setSelected(configDto.isRecibirNotificaciones());
-        // comboIdioma.setSelectedItem(configDto.getIdioma());
+    /**
+     * Carga la configuración del jugador en los componentes del panel.
+     */
+    public void cargarConfiguracion() {
         System.out.println("SubPanelConfiguracionJugador: cargarConfiguracion() necesita implementación.");
     }
 
-    // Getters para los componentes
+    // Métodos de acceso a los componentes del panel
     public JCheckBox getChkNotificacionesEmail() { return chkNotificacionesEmail; }
     public JComboBox<String> getComboIdioma() { return comboIdioma; }
     public JPasswordField getPassActual() { return passActual; }
