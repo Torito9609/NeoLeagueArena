@@ -12,12 +12,26 @@ import co.edu.unbosque.modelo.exception.AccesoDatosException;
 import co.edu.unbosque.modelo.servicio.UsuarioService;
 import co.edu.unbosque.vista.login.VistaLogin;
 
+/**
+ * Controlador encargado de gestionar el proceso de inicio de sesión en el sistema NeoLeague Arena.
+ * <p>
+ * Esta clase se comunica con la vista de login y el servicio de usuarios para validar las credenciales
+ * ingresadas y redirigir al usuario al controlador correspondiente según su rol (administrador, entrenador o jugador).
+ * <p>
+ * Implementa {@link ActionListener} para escuchar eventos sobre los botones de ingreso y cancelación.
+ */
 public class LoginController implements ActionListener {
 
     private VistaLogin vistaLogin;
     private UsuarioService usuarioService;
     private ControladorPrincipal controladorPrincipal;
 
+    /**
+     * Constructor del controlador de login. Inicializa la vista y el servicio de usuario,
+     * asigna los oyentes a los botones y muestra la ventana de login.
+     *
+     * @param controlador referencia al controlador principal del sistema
+     */
     public LoginController(ControladorPrincipal controlador) {
         this.controladorPrincipal = controlador;
 
@@ -34,11 +48,23 @@ public class LoginController implements ActionListener {
         vistaLogin.getVentanaLogin().setVisible(true);
     }
 
+    /**
+     * Asigna los listeners a los botones de ingreso y cancelación en la vista de login.
+     */
     private void asignaOyentes() {
         vistaLogin.getVentanaLogin().getPanelLogin().getIngresarButton().addActionListener(this);
         vistaLogin.getVentanaLogin().getPanelLogin().getCancelarButton().addActionListener(this);
     }
 
+    /**
+     * Maneja los eventos de los botones de la vista de login.
+     * <p>
+     * - Si se presiona "INGRESAR", valida las credenciales ingresadas.  
+     * - Si el usuario es válido, redirige al controlador correspondiente según su tipo.  
+     * - Si se presiona "CANCELAR", permite cerrar la aplicación previa confirmación.
+     *
+     * @param e evento generado por los botones
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();
@@ -51,9 +77,9 @@ public class LoginController implements ActionListener {
                 Usuario usuario = usuarioService.obtenerUsuarioPorCredenciales(correo, password);
 
                 if (usuario == null) {
-                	//System.out.println("El usuario es null");
-                    controladorPrincipal.lanzarAdminController();
+                    controladorPrincipal.lanzarAdminController();  // temporal si no se encuentra usuario
                 }
+
                 vistaLogin.getVentanaLogin().dispose();
 
                 if (usuario instanceof Jugador) {
@@ -67,9 +93,8 @@ public class LoginController implements ActionListener {
             } catch (AccesoDatosException ex) {
                 vistaLogin.mostrarMensajeError("Error al acceder a los datos: " + ex.getMessage());
             }
-        }
 
-        else if (comando.equals("CANCELAR")) {
+        } else if (comando.equals("CANCELAR")) {
             int confirmacion = vistaLogin.mostrarMensajeConfirmacion("¿Esta seguro que desea salir?");
             if (confirmacion == JOptionPane.YES_OPTION) {
                 System.exit(0);
@@ -77,10 +102,20 @@ public class LoginController implements ActionListener {
         }
     }
 
+    /**
+     * Devuelve la vista de login asociada a este controlador.
+     *
+     * @return la vista de login
+     */
     public VistaLogin getVistaLogin() {
         return vistaLogin;
     }
 
+    /**
+     * Asigna una vista de login a este controlador.
+     *
+     * @param vistaLogin la nueva vista de login
+     */
     public void setVistaLogin(VistaLogin vistaLogin) {
         this.vistaLogin = vistaLogin;
     }

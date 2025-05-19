@@ -34,13 +34,39 @@ import co.edu.unbosque.vista.admin.PanelJugador;
 import co.edu.unbosque.vista.admin.PanelUsuarioSuperior;
 import co.edu.unbosque.vista.admin.VistaAdmin;
 
+/**
+ * Controlador principal para el rol de administrador en el sistema NeoLeague Arena.
+ * <p>
+ * Gestiona la interacción entre la interfaz gráfica del administrador y los servicios
+ * que manejan usuarios, entrenadores y jugadores. Coordina la navegación entre
+ * paneles, validación de formularios, acciones CRUD sobre usuarios, y filtros de búsqueda.
+ * <p>
+ * Este controlador actúa como núcleo de administración general del sistema, conectando
+ * directamente con la {@code VistaAdmin} y delegando lógica de negocio a los servicios del modelo.
+ * 
+ * <p><b>Responsabilidades cubiertas en esta sección:</b></p>
+ * <ul>
+ *   <li>Inicialización de servicios y vista principal.</li>
+ *   <li>Registro de comandos administrativos.</li>
+ *   <li>Asignación de oyentes a botones laterales.</li>
+ *   <li>Reinicio y filtrado de la tabla de usuarios.</li>
+ *   <li>Validación de campos en el formulario de creación o edición de usuarios.</li>
+ * </ul>
+ */
 public class AdminController implements ActionListener {
 	private VistaAdmin vistaAdmin;
 	private Map<String, Runnable> comandos;
 	private UsuarioService usuarioService;
 	private EntrenadorService entrenadorService;
 	private JugadorService jugadorService;
-
+	
+	/**
+     * Constructor del controlador del administrador. Inicializa la vista y los servicios
+     * necesarios para la gestión de usuarios, entrenadores y jugadores.
+     * <p>
+     * También registra los comandos disponibles y asigna oyentes a los botones
+     * del panel lateral de navegación.
+     */
 	public AdminController() {
 		vistaAdmin = new VistaAdmin();
 		comandos = new HashMap<>();
@@ -54,7 +80,11 @@ public class AdminController implements ActionListener {
 		registrarComandos();
 		asignaOyentesPanelLateral();
 		}
-
+	
+	/**
+     * Registra todos los comandos disponibles para la vista del administrador,
+     * asociando cada acción con un método específico.
+     */
 	private void registrarComandos() {
 		comandos.put("GESTIONAR_USUARIOS", this::mostrarPanelUsuarios);
 		comandos.put("GESTIONAR_EQUIPOS", this::mostrarPanelEquipos);
@@ -81,7 +111,11 @@ public class AdminController implements ActionListener {
 		comandos.put("MOSTRAR_PANEL_INICIO_TORNEO", this::mostraVentanaIniciarTorneo);
 
 	}
-
+	
+	/**
+     * Asigna los listeners a los botones del panel lateral de navegación,
+     * permitiendo al administrador cambiar de módulo dentro del sistema.
+     */
 	private void asignaOyentesPanelLateral() {
 		vistaAdmin.getVentanaPrincipal().getPanelLateral().getGestionarTorneoBtn().addActionListener(this);
 		vistaAdmin.getVentanaPrincipal().getPanelLateral().getGestionarEquipoBtn().addActionListener(this);
@@ -96,6 +130,10 @@ public class AdminController implements ActionListener {
 
 	// ---------------------------------- GESTION DE USUARIOS --------------------------------------------------------------------------------------------//
 	
+	/**
+     * Reinicia la tabla de usuarios con todos los registros disponibles,
+     * convirtiendo las entidades a sus respectivos DTOs antes de mostrarlos.
+     */
 	private void reiniciarTablaUsuarios() {
 		List<UsuarioDto> todosUsuarios = new ArrayList<UsuarioDto>();
 		try {
@@ -121,6 +159,9 @@ public class AdminController implements ActionListener {
 		vistaAdmin.getVentanaPrincipal().getPanelTabla().actualizarTabla(todosUsuarios);
 	}
 	
+	/**
+     * Limpia los filtros y campos del panel de búsqueda, y reinicia la tabla de usuarios.
+     */
 	private void limpiarFiltrosBusqueda() {
 		reiniciarTablaUsuarios();
 		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarTextField().setText("");
@@ -128,6 +169,11 @@ public class AdminController implements ActionListener {
 		vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getFiltroComboBox().setSelectedIndex(0);
 	}
 	
+	 /**
+     * Valida los datos ingresados en el formulario de creación o edición de usuarios.
+     *
+     * @return {@code true} si todos los campos son válidos; {@code false} en caso contrario.
+     */
 	private boolean validarDatosFormularioUsuarios() {
 	    PanelUsuarioSuperior panel = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior();
 
@@ -206,7 +252,11 @@ public class AdminController implements ActionListener {
 
 
 
-	
+	/**
+     * Muestra el panel de gestión de usuarios en la interfaz principal del administrador.
+     * También asigna oyentes a los botones de búsqueda, filtros y acciones CRUD,
+     * y actualiza la tabla con todos los usuarios disponibles.
+     */
 	private void mostrarPanelUsuarios() {
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(), "USUARIOS");
 		//vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarPorComboBox().addActionListener(this);
@@ -219,11 +269,21 @@ public class AdminController implements ActionListener {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().getEliminarButton().addActionListener(this);
 		reiniciarTablaUsuarios();
 	}
-
+	
+	/**
+     * Obtiene la opción seleccionada en el combo box "Buscar por" del panel de búsqueda,
+     * utilizada para decidir el criterio de filtrado (nombre, cédula o correo).
+     *
+     * @return el criterio de búsqueda seleccionado como cadena de texto
+     */
 	private String buscarPorOpcion() {
 		return vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarPorComboBox().getSelectedItem().toString();
 	}
-
+	
+	/**
+     * Ejecuta la búsqueda de un usuario según el criterio seleccionado (nombre, cédula o correo).
+     * Si no se selecciona una opción válida, reinicia la tabla de usuarios.
+     */
 	private void buscarUsuario() {
 		String opcion = buscarPorOpcion();
 
@@ -242,7 +302,12 @@ public class AdminController implements ActionListener {
 			//vistaAdmin.mostrarMensajeError("Por favor seleccione un criterio de busqueda.");
 		}
 	}
-
+	
+	/**
+     * Realiza la búsqueda de un usuario por su correo electrónico, utilizando el servicio correspondiente.
+     * Si se encuentra una coincidencia, se actualiza la tabla con el resultado.
+     * En caso contrario, se muestra una advertencia.
+     */
 	private void buscarUsuarioPorCorreo() {
 		String correoBuscar = vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarTextField().getText().trim().toLowerCase();
 		List<UsuarioDto> coincidencias = new ArrayList<UsuarioDto>();
@@ -272,7 +337,12 @@ public class AdminController implements ActionListener {
 		}
 		
 	}
-
+	
+	 /**
+     * Realiza la búsqueda de un usuario por su número de cédula (ID), utilizando el servicio correspondiente.
+     * Si se encuentra una coincidencia, se actualiza la tabla con el resultado.
+     * En caso contrario, se muestra una advertencia.
+     */
 	private void buscarUsuarioPorCedula() {
 		String cedulaBuscar = vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarTextField().getText().trim().toLowerCase();
 		List<UsuarioDto> coincidencias = new ArrayList<UsuarioDto>();
@@ -302,7 +372,11 @@ public class AdminController implements ActionListener {
 		}
 		
 	}
-
+	
+	/**
+     * Realiza la búsqueda de usuarios por nombre, consultando el servicio de usuarios.
+     * Convierte las coincidencias a DTOs y actualiza la tabla. Si no hay resultados, muestra una advertencia.
+     */
 	private void buscarUsuarioPorNombre() {
 		String nombreBuscar = vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getBuscarTextField().getText().trim().toLowerCase();
 		List<UsuarioDto> coincidencias = new ArrayList<UsuarioDto>();
@@ -332,7 +406,11 @@ public class AdminController implements ActionListener {
 			vistaAdmin.getVentanaPrincipal().getPanelTabla().actualizarTabla(coincidencias);
 		}
 	}
-
+	
+	/**
+     * Determina el tipo de filtro seleccionado por el administrador (tipo, ciudad o país)
+     * y muestra dinámicamente el filtro correspondiente en la vista.
+     */
 	private void filtrarPorOpcion() {
 		String tipo = vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getFiltroComboBox().getSelectedItem().toString();
 		switch(tipo.trim().toLowerCase()) {
@@ -363,7 +441,11 @@ public class AdminController implements ActionListener {
 			vistaAdmin.mostrarMensajeError("Seleccione una opcion valida.");
 		}
 	}
-
+	
+	/**
+     * Aplica un filtro por tipo de usuario (Entrenador o Jugador), usando los servicios respectivos.
+     * Actualiza la tabla de usuarios con las coincidencias encontradas.
+     */
 	private void filtrarPorTipoUsuario() {
 		String tipo = vistaAdmin.getVentanaPrincipal().getPanelBusqueda().getTipoUsuarioComboBox().getSelectedItem().toString();
 		List<UsuarioDto> coincidencias = new ArrayList<>();
@@ -397,7 +479,11 @@ public class AdminController implements ActionListener {
 		
 		vistaAdmin.getVentanaPrincipal().getPanelTabla().actualizarTabla(coincidencias);
 	}
-
+	
+	/**
+     * Aplica un filtro por país, mostrando los usuarios registrados en el país seleccionado.
+     * Si no hay coincidencias, muestra una advertencia.
+     */
 	private void filtrarPorPais() {
 	    String paisSeleccionado = vistaAdmin.getVentanaPrincipal().getPanelBusqueda()
 	            .getPaisComboBox().getSelectedItem().toString();
@@ -431,6 +517,10 @@ public class AdminController implements ActionListener {
 	    }
 	}
 
+	/**
+     * Aplica un filtro por ciudad, mostrando los usuarios registrados en la ciudad seleccionada.
+     * Si no hay coincidencias, muestra una advertencia.
+     */
 	private void filtrarPorCiudad() {
 	    String ciudadSeleccionada = vistaAdmin.getVentanaPrincipal().getPanelBusqueda()
 	            .getCiudadComboBox().getSelectedItem().toString();
@@ -464,7 +554,10 @@ public class AdminController implements ActionListener {
 	    }
 	}
 
-	
+	/**
+     * Muestra la ventana para crear un nuevo usuario.
+     * Asigna los oyentes necesarios y configura la visibilidad de los botones adecuados.
+     */
 	private void mostrarVentanaCrearUsuario() {
 		vistaAdmin.getVentanaCreacionUsuario().setVisible(true);
 		vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getSeleccionarFotoButton().addActionListener(this);
@@ -475,6 +568,11 @@ public class AdminController implements ActionListener {
 		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().getCancelarButton().addActionListener(this);		
 	}
 	
+	/**
+     * Muestra la ventana para editar un usuario existente.
+     * Carga los datos del usuario seleccionado y los muestra en el formulario.
+     * Si no hay selección en la tabla, muestra un mensaje de error.
+     */
 	private void mostrarVentanaEdicionUsuario() {
 		vistaAdmin.getVentanaCreacionUsuario().setVisible(true);
 		vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getSeleccionarFotoButton().addActionListener(this);
@@ -523,10 +621,18 @@ public class AdminController implements ActionListener {
 		}			
 	}
 	
+	/**
+     * Cierra la ventana de creación/edición de usuario sin guardar cambios.
+     */
 	private void cancelarGuardarUsuario() {
 		vistaAdmin.getVentanaCreacionUsuario().setVisible(false);
 	}
 	
+	/**
+     * Elimina el usuario seleccionado de la tabla.
+     * Solicita confirmación al administrador y, en caso afirmativo,
+     * elimina tanto del archivo general como del archivo específico según el tipo de usuario.
+     */
 	private void eliminarUsuario() {
 		int filaSeleccionada = vistaAdmin.getVentanaPrincipal().getPanelTabla().getTablaUsuarios().getSelectedRow();
 		if(filaSeleccionada == -1) {
@@ -560,6 +666,11 @@ public class AdminController implements ActionListener {
 		}
 	}
 	
+	/**
+     * Crea un nuevo usuario (entrenador o jugador) a partir del formulario actual,
+     * validando los datos y solicitando confirmación. Si es confirmado, convierte el DTO
+     * a entidad y lo guarda usando el servicio correspondiente.
+     */
 	private void crearGuardarUsuario() {
 		String tipoUsuario = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().getSelectedItem().toString().toLowerCase();
 		switch(tipoUsuario) {
@@ -693,6 +804,10 @@ public class AdminController implements ActionListener {
 		
 	}
 	
+	/**
+     * Guarda los cambios realizados sobre un usuario existente (jugador o entrenador),
+     * actualizándolo en el sistema si el administrador lo confirma.
+     */
 	private void editarGuardarUsuario() {
 		if(!validarDatosFormularioUsuarios()) return;
 		String[] datos = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().obtenerCamposFormulario();
@@ -779,6 +894,10 @@ public class AdminController implements ActionListener {
 		}
 	}
 	
+	/**
+     * Muestra el panel dinámico correspondiente al tipo de usuario seleccionado (Entrenador o Jugador)
+     * para adaptar el formulario de edición/creación.
+     */
 	private void mostrarPanelDinamicoUsuario() {
 		String tipoUsuario = vistaAdmin.getVentanaCreacionUsuario().getPanelSuperior().getTipoUsuarioComboBox().getSelectedItem().toString();
 		vistaAdmin.getVentanaCreacionUsuario().getPanelDinamico().mostrarPanel(tipoUsuario);
@@ -788,7 +907,11 @@ public class AdminController implements ActionListener {
 	// ------------------------------------------- GESTION DE USUARIOS  -------------------------------------------------------------------//
 	
 	// ------------------------------------------- GESTION DE EQUIPOS  -------------------------------------------------------------------//
-
+	
+	/**
+     * Muestra el panel de gestión de equipos en la interfaz.
+     * También asigna oyentes a los botones del módulo.
+     */
 	private void mostrarPanelEquipos() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(), "EQUIPOS");
@@ -797,6 +920,9 @@ public class AdminController implements ActionListener {
 		vistaAdmin.getVentanaPrincipal().getPanelEquipos().getEliminarBtn().addActionListener(this);
 	}
 	
+	/**
+     * Muestra la ventana modal para crear un nuevo equipo.
+     */
 	private void mostrarVentanaCreacionEquipo(){
 		vistaAdmin.getVentanaCreacionEquipo().setVisible(true);
 	}
@@ -804,13 +930,19 @@ public class AdminController implements ActionListener {
 	// ------------------------------------------- GESTION DE EQUIPOS  -------------------------------------------------------------------//
 	
 	// ------------------------------------------- GESTION DE TORNEOS  -------------------------------------------------------------------//
-
+	
+	/**
+     * Muestra el panel de gestión de torneos en la vista principal y asigna oyentes relevantes.
+     */
 	private void mostrarPanelTorneos() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(), "TORNEOS");
 		vistaAdmin.getVentanaPrincipal().getPanelTorneos().getBotonIniciarTorneo().addActionListener(this);
 	}
 	
+	/**
+     * Muestra la ventana para iniciar un torneo desde la interfaz de administrador.
+     */
 	private void mostraVentanaIniciarTorneo() {
 		vistaAdmin.getVentanaInicioTorneo().setVisible(true);
 	}
@@ -818,7 +950,11 @@ public class AdminController implements ActionListener {
 	// ------------------------------------------- GESTION DE TORNEOS  -------------------------------------------------------------------//
 	
 	// ------------------------------------------- GESTION DE PARTIDAS  -------------------------------------------------------------------//
-
+	
+	/**
+     * Muestra el panel de gestión de partidas.
+     * Actualmente solo oculta el panel inferior.
+     */
 	private void mostrarPanelPartidas() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 	}
@@ -826,7 +962,10 @@ public class AdminController implements ActionListener {
 	// ------------------------------------------- GESTION DE PARTIDAS  -------------------------------------------------------------------//
 	
 	// ------------------------------------------- GESTION DE REPORTES  -------------------------------------------------------------------//
-
+	
+	/**
+     * Muestra el panel de análisis de reportes estadísticos y datos del sistema.
+     */
 	private void mostrarPanelReportes() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(),
@@ -836,7 +975,10 @@ public class AdminController implements ActionListener {
 	// ------------------------------------------- GESTION DE REPORTES  -------------------------------------------------------------------//
 	
 	// ------------------------------------------- GESTION DE NOTIFICACIONES  -------------------------------------------------------------------//
-
+	
+	/**
+     * Muestra el panel donde el administrador puede gestionar o consultar notificaciones del sistema.
+     */
 	private void mostrarPanelNotificaciones() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(),
@@ -844,17 +986,29 @@ public class AdminController implements ActionListener {
 	}
 	
 	// ------------------------------------------- GESTION DE NOTIFICACIONES  -------------------------------------------------------------------//
-
+	
+	/**
+     * Muestra el panel de inicio (dashboard) para el administrador.
+     */
 	private void mostrarPanelInicio() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(),
 				"INICIO");
 	}
 
+	/**
+     * Cierra la sesión del administrador, ocultando la vista principal.
+     */
 	private void cerrarSesion() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 	}
 
+	/**
+     * Maneja todos los eventos de acción asociados a los botones en la interfaz del administrador.
+     * Busca el comando en el mapa de acciones y ejecuta la correspondiente si está definida.
+     *
+     * @param e evento generado por la acción del usuario
+     */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String comando = e.getActionCommand();
