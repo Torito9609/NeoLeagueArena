@@ -77,6 +77,7 @@ public class AdminController implements ActionListener {
 		comandos.put("EDITAR_GUARDAR_USUARIO", this::editarGuardarUsuario);
 		comandos.put("ELIMINAR_USUARIO", this::eliminarUsuario);
 		comandos.put("SELECCIONAR_TIPO_USUARIO", this::mostrarPanelDinamicoUsuario);
+		comandos.put("CREAR_EQUIPO", this::mostrarVentanaCreacionEquipo);
 
 	}
 
@@ -789,6 +790,14 @@ public class AdminController implements ActionListener {
 
 	private void mostrarPanelEquipos() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
+		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(), "EQUIPOS");
+		vistaAdmin.getVentanaPrincipal().getPanelEquipos().getCrearBtn().addActionListener(this);
+		vistaAdmin.getVentanaPrincipal().getPanelEquipos().getActualizarBtn().addActionListener(this);
+		vistaAdmin.getVentanaPrincipal().getPanelEquipos().getEliminarBtn().addActionListener(this);
+	}
+	
+	private void mostrarVentanaCreacionEquipo(){
+		
 	}
 	
 	// ------------------------------------------- GESTION DE EQUIPOS  -------------------------------------------------------------------//

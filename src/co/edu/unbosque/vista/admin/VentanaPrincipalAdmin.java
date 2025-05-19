@@ -186,4 +186,11 @@ public class VentanaPrincipalAdmin extends JFrame {
 		this.panelNotificaciones = panelNotificaciones;
 	}
 
+	public PanelGestionEquipos getPanelEquipos() {
+		return panelEquipos;
+	}
+
+	public void setPanelEquipos(PanelGestionEquipos panelEquipos) {
+		this.panelEquipos = panelEquipos;
+	}
 }

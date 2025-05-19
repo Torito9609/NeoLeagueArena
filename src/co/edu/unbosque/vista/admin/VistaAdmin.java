@@ -6,10 +6,12 @@ import javax.swing.UIManager;
 public class VistaAdmin {
 	private VentanaPrincipalAdmin ventanaPrincipal;
 	private VentanaCreacionUsuario ventanaCreacionUsuario;
+	private VentanaCreacionEquipo ventanaCreacionEquipo;
 
 	public VistaAdmin() {
 		ventanaPrincipal = new VentanaPrincipalAdmin();
 		ventanaCreacionUsuario = new VentanaCreacionUsuario();
+		ventanaCreacionEquipo = new VentanaCreacionEquipo();
 	}
 
 	public VentanaPrincipalAdmin getVentanaPrincipal() {
@@ -26,6 +28,18 @@ public class VistaAdmin {
 
 	public void setVentanaProducto(VentanaCreacionUsuario ventanaProducto) {
 		this.ventanaCreacionUsuario = ventanaProducto;
+	}
+
+	public VentanaCreacionEquipo getVentanaCreacionEquipo() {
+		return ventanaCreacionEquipo;
+	}
+
+	public void setVentanaCreacionEquipo(VentanaCreacionEquipo ventanaCreacionEquipo) {
+		this.ventanaCreacionEquipo = ventanaCreacionEquipo;
+	}
+
+	public void setVentanaCreacionUsuario(VentanaCreacionUsuario ventanaCreacionUsuario) {
+		this.ventanaCreacionUsuario = ventanaCreacionUsuario;
 	}
 
 	public void mostrarMensajeExito(String mensaje) {
