@@ -24,6 +24,7 @@ public class VentanaPrincipalAdmin extends JFrame {
 	private PanelAnalisisReportesAdmin panelAnalisis;
 	private PanelNotificacionesAdmin panelNotificaciones;
 	private PanelGestionEquipos panelEquipos;
+	private PanelTorneoAdmin panelTorneos;
 	private CardLayout layoutCentral;
 	private JPanel panelCentral;
 
@@ -59,6 +60,7 @@ public class VentanaPrincipalAdmin extends JFrame {
 		panelAnalisis = new PanelAnalisisReportesAdmin();
 		panelNotificaciones = new PanelNotificacionesAdmin();
 		panelEquipos = new PanelGestionEquipos();
+		panelTorneos = new PanelTorneoAdmin();
 
 		JPanel panelContenido = new JPanel(new BorderLayout());
 		panelContenido.add(panelBusqueda, BorderLayout.NORTH);
@@ -72,6 +74,7 @@ public class VentanaPrincipalAdmin extends JFrame {
 		panelCentral.add(panelAnalisis, "ANALISIS");
 		panelCentral.add(panelNotificaciones, "NOTIFICACIONES");
 		panelCentral.add(panelEquipos, "EQUIPOS");
+		panelCentral.add(panelTorneos, "TORNEOS");
 
 		add(panelLateral, BorderLayout.WEST);
 		add(panelInferior, BorderLayout.SOUTH);

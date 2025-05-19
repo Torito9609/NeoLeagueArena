@@ -797,7 +797,7 @@ public class AdminController implements ActionListener {
 	}
 	
 	private void mostrarVentanaCreacionEquipo(){
-		
+		vistaAdmin.getVentanaCreacionEquipo().setVisible(true);
 	}
 	
 	// ------------------------------------------- GESTION DE EQUIPOS  -------------------------------------------------------------------//
@@ -806,6 +806,7 @@ public class AdminController implements ActionListener {
 
 	private void mostrarPanelTorneos() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
+		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(), "TORNEOS");
 	}
 	
 	// ------------------------------------------- GESTION DE TORNEOS  -------------------------------------------------------------------//

@@ -18,7 +18,7 @@ public class VentanaCreacionEquipo extends JFrame {
         setLayout(new BorderLayout());
 
         inicializarComponentes();
-        setVisible(true);
+        setVisible(false);
     }
 
     private void inicializarComponentes() {
