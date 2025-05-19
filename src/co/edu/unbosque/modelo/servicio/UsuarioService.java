@@ -12,7 +12,7 @@ import co.edu.unbosque.modelo.exception.AccesoDatosException;
 import co.edu.unbosque.modelo.exception.RegistroDuplicadoException;
 import co.edu.unbosque.modelo.exception.RegistroInvalidoException;
 import co.edu.unbosque.modelo.exception.RegistroNoEncontradoException;
-import co.edu.unbosque.utils.Encriptador;
+import co.edu.unbosque.modelo.utils.Encriptador;
 
 public class UsuarioService {
 

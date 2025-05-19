@@ -28,7 +28,7 @@ import co.edu.unbosque.modelo.mapper.UsuarioMapHandler;
 import co.edu.unbosque.modelo.servicio.EntrenadorService;
 import co.edu.unbosque.modelo.servicio.JugadorService;
 import co.edu.unbosque.modelo.servicio.UsuarioService;
-import co.edu.unbosque.utils.Encriptador;
+import co.edu.unbosque.modelo.utils.Encriptador;
 import co.edu.unbosque.vista.admin.PanelEntrenador;
 import co.edu.unbosque.vista.admin.PanelJugador;
 import co.edu.unbosque.vista.admin.PanelUsuarioSuperior;

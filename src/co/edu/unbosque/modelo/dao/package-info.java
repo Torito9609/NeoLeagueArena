@@ -1,19 +1,24 @@
 /**
- * Este paquete contiene las clases controladoras del sistema NeoLeague Arena.
+ * Este paquete contiene las clases DAO (Data Access Object) del sistema NeoLeague Arena,
+ * responsables de realizar las operaciones de persistencia sobre archivos binarios.
  * <p>
- * Incluye:
- * <ul>
- *   <li><b>AplMain</b>: Punto de entrada principal de la aplicación, responsable de inicializar la vista y el modelo, y lanzar el controlador correspondiente.</li>
- *   <li><b>ControladorLogin</b>: Gestiona el proceso de autenticación de los usuarios.</li>
- *   <li><b>ControladorAdmin</b>: Coordina la lógica de administración, como la gestión de usuarios, torneos y reportes.</li>
- *   <li><b>ControladorEntrenador</b>: Permite la administración de equipos, alineaciones y seguimiento de jugadores.</li>
- *   <li><b>ControladorJugador</b>: Maneja la interacción del jugador con sus partidas, estadísticas y perfil.</li>
- *   <li><b>ControladorTorneo</b>: Se encarga de la creación, edición e inicio de torneos, así como de sus fases y partidas.</li>
- * </ul>
+ * Cada clase DAO implementa la interfaz genérica {@code ICrudDao<T>}, la cual define
+ * los métodos básicos para crear, leer, actualizar y eliminar datos de una entidad.
+ * <p>
+ * Estas clases actúan como puente entre el modelo de datos y los servicios, 
+ * asegurando el acceso eficiente a la información persistida, sin exponer
+ * detalles internos de la estructura de archivos al resto del sistema.
+ * <p>
+ * Se proveen DAOs específicos para usuarios (administradores, entrenadores, jugadores),
+ * torneos, equipos, juegos, partidas por tipo (FIFA, Rocket League, Fórmula 1, Gran Turismo),
+ * resultados, asignaciones y participaciones.
+ * <p>
+ * La implementación incluye mecanismos de serialización y deserialización, garantizando
+ * la integridad de los datos y facilitando su recuperación para uso en la aplicación.
  * 
- * Cada controlador sigue el patrón MVC, actuando como intermediario entre la vista correspondiente y el modelo de datos.
+ * @see co.edu.unbosque.dao.ICrudDao
  * 
+ * @author Andres
  * @version 1.0
  */
-package co.edu.unbosque.modelo.dao;  
-
+package co.edu.unbosque.modelo.dao;

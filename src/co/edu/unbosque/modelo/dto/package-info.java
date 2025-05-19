@@ -1,19 +1,30 @@
 /**
- * Este paquete contiene las clases controladoras del sistema NeoLeague Arena.
+ * Este paquete contiene los Data Transfer Objects (DTOs) utilizados en el sistema NeoLeague Arena,
+ * encargados de transportar datos entre la vista, los controladores y los servicios, manteniendo 
+ * la separación entre las capas de presentación y lógica de negocio.
  * <p>
- * Incluye:
+ * Los DTOs definidos aquí representan de manera simplificada las entidades del modelo, y se utilizan
+ * tanto para la visualización en tablas como para la persistencia de datos en archivos binarios y CSV.
+ * <p>
+ * Entre los DTOs principales se encuentran:
  * <ul>
- *   <li><b>AplMain</b>: Punto de entrada principal de la aplicación, responsable de inicializar la vista y el modelo, y lanzar el controlador correspondiente.</li>
- *   <li><b>ControladorLogin</b>: Gestiona el proceso de autenticación de los usuarios.</li>
- *   <li><b>ControladorAdmin</b>: Coordina la lógica de administración, como la gestión de usuarios, torneos y reportes.</li>
- *   <li><b>ControladorEntrenador</b>: Permite la administración de equipos, alineaciones y seguimiento de jugadores.</li>
- *   <li><b>ControladorJugador</b>: Maneja la interacción del jugador con sus partidas, estadísticas y perfil.</li>
- *   <li><b>ControladorTorneo</b>: Se encarga de la creación, edición e inicio de torneos, así como de sus fases y partidas.</li>
+ *   <li><b>UsuarioDto</b> y subtipos: encapsulan información de administradores, entrenadores y jugadores.</li>
+ *   <li><b>EquipoDto</b>: contiene los datos de cada equipo registrado.</li>
+ *   <li><b>JuegoDto</b>: representa un videojuego disponible para torneos.</li>
+ *   <li><b>TorneoDto</b>: describe los torneos organizados, su tipo y configuración.</li>
+ *   <li><b>ParticipacionTorneoDto</b>: vincula equipos con torneos.</li>
+ *   <li><b>AsignacionEntrenadorDto</b>: gestiona la asignación de entrenadores a equipos.</li>
+ *   <li><b>PartidaDto</b> y subtipos:
+ *     <ul>
+ *       <li><b>PartidaFifaDto</b>, <b>PartidaRocketLeagueDto</b>: contienen resultados tipo campeonato.</li>
+ *       <li><b>PartidaCarreraDto</b>: utilizada para juegos como Fórmula 1 o Gran Turismo, con tiempos por circuito.</li>
+ *     </ul>
+ *   </li>
  * </ul>
+ * Este enfoque permite mantener el diseño desacoplado, facilitar las pruebas, y optimizar el manejo de datos
+ * en interfaces gráficas y procesos de serialización.
  * 
- * Cada controlador sigue el patrón MVC, actuando como intermediario entre la vista correspondiente y el modelo de datos.
- * 
+ * @author Andres
  * @version 1.0
  */
-package co.edu.unbosque.modelo.dto;  
-
+package co.edu.unbosque.modelo.dto;

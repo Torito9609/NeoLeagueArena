@@ -1,4 +1,4 @@
-package co.edu.unbosque.utils;
+package co.edu.unbosque.modelo.utils;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
