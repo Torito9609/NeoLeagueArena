@@ -1,6 +1,5 @@
 package co.edu.unbosque.modelo.mapper;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,12 +9,12 @@ import co.edu.unbosque.modelo.entidad.Circuito;
 import co.edu.unbosque.modelo.entidad.Equipo;
 import co.edu.unbosque.modelo.entidad.Partida;
 import co.edu.unbosque.modelo.entidad.PartidaCarrera;
-import co.edu.unbosque.modelo.entidad.ResultadoCampeonato;
 
-public class PartidaMapHandlerCarrera extends PartidaMapHandler<ResultadoCampeonato> {
+
+public class PartidaMapHandlerCarrera implements PartidaMapHandlerI {
 
 	@Override
-	public PartidaDto toDto(Partida<ResultadoCampeonato> entidad) {
+	public PartidaDto toDto(Partida<?> entidad) {
 		if (!(entidad instanceof PartidaCarrera)) return null;
 
 		PartidaCarrera carrera = (PartidaCarrera) entidad;
@@ -35,7 +34,7 @@ public class PartidaMapHandlerCarrera extends PartidaMapHandler<ResultadoCampeon
 	}
 
 	@Override
-	public Partida<ResultadoCampeonato> toEntity(PartidaDto dtoBase) {
+	public Partida<?> toEntity(PartidaDto dtoBase) {
 		if (!(dtoBase instanceof PartidaCarreraDto)) return null;
 
 		PartidaCarreraDto dto = (PartidaCarreraDto) dtoBase;
@@ -45,16 +44,18 @@ public class PartidaMapHandlerCarrera extends PartidaMapHandler<ResultadoCampeon
 			participantes.add(construirEquipoDummy(id));
 		}
 
-		Circuito circuito = new Circuito(); 
+		Circuito circuito = new Circuito();
 		circuito.setNombre(dto.getNombreCircuito());
+
 		PartidaCarrera partida = new PartidaCarrera(dto.getId(), participantes, circuito, dto.getFecha());
 		partida.setEstadoPartida(dto.getEstado());
 
 		return partida;
 	}
 
-	@Override
-	protected Partida<ResultadoCampeonato> construirPartida(String id, Equipo local, Equipo visitante, LocalDate fecha) {
-		throw new UnsupportedOperationException("No usar este método para PartidaCarrera");
+	private Equipo construirEquipoDummy(String id) {
+		Equipo dummy = new Equipo();
+		dummy.setId(id);
+		return dummy;
 	}
 }

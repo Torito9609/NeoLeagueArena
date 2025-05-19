@@ -8,21 +8,20 @@ import co.edu.unbosque.modelo.dto.TorneoDto;
 import co.edu.unbosque.modelo.entidad.Partida;
 import co.edu.unbosque.modelo.entidad.ParticipacionTorneo;
 import co.edu.unbosque.modelo.entidad.Torneo;
-import co.edu.unbosque.modelo.entidad.Resultado;
 
-public class TorneoMapHandler<R extends Resultado> implements Mapper<Torneo<R>, TorneoDto> {
+public class TorneoMapHandler implements Mapper<Torneo, TorneoDto> {
 
-	private final PartidaMapHandler<R> partidaMapper;
+	private final PartidaMapHandlerI partidaMapper;
 
-	public TorneoMapHandler(PartidaMapHandler<R> partidaMapper) {
-		this.partidaMapper = partidaMapper;
+	public TorneoMapHandler(String tipoPartida) {
+		this.partidaMapper = PartidaMapHandlerFactory.getHandler(tipoPartida);
 	}
 
 	@Override
-	public TorneoDto toDto(Torneo<R> entidad) {
+	public TorneoDto toDto(Torneo entidad) {
 		if (entidad == null) return null;
 
-		// Convertir lista de participaciones a IDs
+		// IDs de equipos
 		List<String> idEquipos = new ArrayList<>();
 		for (ParticipacionTorneo p : entidad.getParticipaciones()) {
 			if (p.getEquipo() != null) {
@@ -30,13 +29,13 @@ public class TorneoMapHandler<R extends Resultado> implements Mapper<Torneo<R>, 
 			}
 		}
 
-		// Convertir partidas
+		// Partidas a DTO
 		List<PartidaDto> partidasDto = new ArrayList<>();
-		for (Partida<R> partida : entidad.getPartidas()) {
+		for (Partida<?> partida : entidad.getPartidas()) {
 			partidasDto.add(partidaMapper.toDto(partida));
 		}
 
-		// Crear DTO
+		// Construcción del DTO
 		TorneoDto dto = new TorneoDto();
 		dto.setId(entidad.getId());
 		dto.setNombre(entidad.getNombre());
@@ -45,7 +44,7 @@ public class TorneoMapHandler<R extends Resultado> implements Mapper<Torneo<R>, 
 		dto.setIdEquiposInscritos(idEquipos);
 		dto.setPartidas(partidasDto);
 
-		// Tipo de partida desde la primera (si existe)
+		// Guardamos el tipo de partida para la deserialización
 		String tipoPartida = entidad.getPartidas().isEmpty()
 				? "DESCONOCIDO"
 				: entidad.getPartidas().get(0).getClass().getSimpleName();
@@ -55,22 +54,24 @@ public class TorneoMapHandler<R extends Resultado> implements Mapper<Torneo<R>, 
 	}
 
 	@Override
-	public Torneo<R> toEntity(TorneoDto dto) {
+	public Torneo toEntity(TorneoDto dto) {
 		if (dto == null) return null;
 
-		Torneo<R> torneo = new Torneo<>();
+		PartidaMapHandlerI handler = PartidaMapHandlerFactory.getHandler(dto.getTipoPartida());
+
+		Torneo torneo = new Torneo();
 		torneo.setId(dto.getId());
 		torneo.setNombre(dto.getNombre());
 		torneo.setEstado(dto.getEstado());
 
-		// Juego y participaciones se setean después vía servicios
-		torneo.setJuego(null);
 		torneo.setParticipaciones(new ArrayList<>());
+		torneo.setJuego(null); // Setear después por servicios
 
-		// Reconstruir partidas
-		List<Partida<R>> partidas = new ArrayList<>();
-		for (PartidaDto pDto : dto.getPartidas()) {
-			partidas.add(partidaMapper.toEntity(pDto));
+		List<Partida<?>> partidas = new ArrayList<>();
+		if (handler != null) {
+			for (PartidaDto pDto : dto.getPartidas()) {
+				partidas.add(handler.toEntity(pDto));
+			}
 		}
 		torneo.setPartidas(partidas);
 

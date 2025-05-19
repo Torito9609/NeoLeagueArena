@@ -4,10 +4,9 @@ import java.util.List;
 
 public interface Fase {
 
-	String getNombre();
+    String getNombre();
 
-	<R extends Resultado> List<Partida<R>> generarPartidas(List<Equipo> participantes, Juego<R> juego);
+    List<Partida<?>> generarPartidas(List<Equipo> participantes, Juego<?> juego);
 
-	<R extends Resultado> List<Equipo> calcularAvanzadores(List<Partida<R>> partidas);
-
+    List<Equipo> calcularAvanzadores(List<Partida<?>> partidas);
 }

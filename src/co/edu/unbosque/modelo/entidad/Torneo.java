@@ -7,29 +7,33 @@ import java.util.Objects;
 
 import co.edu.unbosque.modelo.enums.EstadoTorneo;
 
-public class Torneo<R extends Resultado> implements Serializable {
+public class Torneo implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     private String id;
     private String nombre;
-    private Juego<R> juego;
+    private Juego<?> juego;
     private EstadoTorneo estado;
     private List<ParticipacionTorneo> participaciones = new ArrayList<>();
     private List<Fase> fases = new ArrayList<>();
-    private List<Partida<R>> partidas = new ArrayList<>();
+    private List<Partida<?>> partidas = new ArrayList<>();
 
     public Torneo() { }
 
-    public Torneo(String id, String nombre, Juego<R> juego, EstadoTorneo estado) {
-        this.id     = id;
+    public Torneo(String id, String nombre, Juego<?> juego, EstadoTorneo estado) {
+        this.id = id;
         this.nombre = nombre;
-        this.juego  = juego;
+        this.juego = juego;
         this.estado = estado;
     }
+
+    // —— Getters y Setters ——
 
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -37,20 +41,23 @@ public class Torneo<R extends Resultado> implements Serializable {
     public String getNombre() {
         return nombre;
     }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    public Juego<R> getJuego() {
+    public Juego<?> getJuego() {
         return juego;
     }
-    public void setJuego(Juego<R> juego) {
+
+    public void setJuego(Juego<?> juego) {
         this.juego = juego;
     }
 
     public EstadoTorneo getEstado() {
         return estado;
     }
+
     public void setEstado(EstadoTorneo estado) {
         this.estado = estado;
     }
@@ -58,47 +65,39 @@ public class Torneo<R extends Resultado> implements Serializable {
     public List<ParticipacionTorneo> getParticipaciones() {
         return participaciones;
     }
+
     public void setParticipaciones(List<ParticipacionTorneo> participaciones) {
-        this.participaciones = participaciones != null
-            ? participaciones
-            : new ArrayList<>();
+        this.participaciones = participaciones != null ? participaciones : new ArrayList<>();
     }
 
     public List<Fase> getFases() {
         return fases;
     }
+
     public void setFases(List<Fase> fases) {
-        this.fases = fases != null
-            ? fases
-            : new ArrayList<>();
+        this.fases = fases != null ? fases : new ArrayList<>();
     }
 
-    public List<Partida<R>> getPartidas() {
+    public List<Partida<?>> getPartidas() {
         return partidas;
     }
-    public void setPartidas(List<Partida<R>> partidas) {
-        this.partidas = partidas != null
-            ? partidas
-            : new ArrayList<>();
+
+    public void setPartidas(List<Partida<?>> partidas) {
+        this.partidas = partidas != null ? partidas : new ArrayList<>();
     }
 
-    // —— Inscripción de equipos ——
+    // —— Gestión de Participaciones ——
 
-    /** Inscribe un equipo (vía ParticipacionTorneo) en el torneo */
     public void inscribirEquipo(ParticipacionTorneo p) {
-        if (p != null
-         && p.getTorneo().equals(this)
-         && !participaciones.contains(p)) {
+        if (p != null && p.getTorneo().equals(this) && !participaciones.contains(p)) {
             participaciones.add(p);
         }
     }
 
-    /** Elimina la inscripción de un equipo */
     public void removerParticipacion(ParticipacionTorneo p) {
         participaciones.remove(p);
     }
 
-    /** Devuelve la lista de equipos actualmente inscritos */
     public List<Equipo> listarEquipos() {
         List<Equipo> lista = new ArrayList<>();
         for (ParticipacionTorneo p : participaciones) {
@@ -107,40 +106,28 @@ public class Torneo<R extends Resultado> implements Serializable {
         return lista;
     }
 
-    // —— Ejecución del torneo ——
+    // —— Lógica de ejecución del torneo ——
 
-    /**
-     * Ejecuta todas las fases en orden:
-     *  1) Genera las partidas de la fase
-     *  2) (aquí se registrarían resultados)
-     *  3) Calcula avanzadores
-     *  4) Repite hasta acabar
-     */
     public void ejecutarTorneo() {
         List<Equipo> actuales = listarEquipos();
         partidas.clear();
 
         for (Fase fase : fases) {
-            // 1) Generar partidas para esta fase
-            List<Partida<R>> fasePartidas = fase.generarPartidas(actuales, juego);
-
-            // 2) (El registro de resultados se haría externamente, 
-            //    antes de calcular avanzadores)
+            List<Partida<?>> fasePartidas = fase.generarPartidas(actuales, juego);
             partidas.addAll(fasePartidas);
-
-            // 3) Extraer avanzadores
             actuales = fase.calcularAvanzadores(fasePartidas);
         }
 
-        // 4) Marcar torneo como finalizado
         estado = EstadoTorneo.FINALIZADO;
     }
+
+    // —— Métodos estándar ——
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Torneo)) return false;
-        Torneo<?> that = (Torneo<?>) o;
+        Torneo that = (Torneo) o;
         return Objects.equals(id, that.id);
     }
 
