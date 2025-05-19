@@ -7,11 +7,13 @@ public class VistaAdmin {
 	private VentanaPrincipalAdmin ventanaPrincipal;
 	private VentanaCreacionUsuario ventanaCreacionUsuario;
 	private VentanaCreacionEquipo ventanaCreacionEquipo;
+	private VentanaInicioTorneo ventanaInicioTorneo;
 
 	public VistaAdmin() {
 		ventanaPrincipal = new VentanaPrincipalAdmin();
 		ventanaCreacionUsuario = new VentanaCreacionUsuario();
 		ventanaCreacionEquipo = new VentanaCreacionEquipo();
+		ventanaInicioTorneo = new VentanaInicioTorneo();
 	}
 
 	public VentanaPrincipalAdmin getVentanaPrincipal() {
@@ -40,6 +42,14 @@ public class VistaAdmin {
 
 	public void setVentanaCreacionUsuario(VentanaCreacionUsuario ventanaCreacionUsuario) {
 		this.ventanaCreacionUsuario = ventanaCreacionUsuario;
+	}
+
+	public VentanaInicioTorneo getVentanaInicioTorneo() {
+		return ventanaInicioTorneo;
+	}
+
+	public void setVentanaInicioTorneo(VentanaInicioTorneo ventanaInicioTorneo) {
+		this.ventanaInicioTorneo = ventanaInicioTorneo;
 	}
 
 	public void mostrarMensajeExito(String mensaje) {

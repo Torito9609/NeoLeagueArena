@@ -78,6 +78,7 @@ public class AdminController implements ActionListener {
 		comandos.put("ELIMINAR_USUARIO", this::eliminarUsuario);
 		comandos.put("SELECCIONAR_TIPO_USUARIO", this::mostrarPanelDinamicoUsuario);
 		comandos.put("CREAR_EQUIPO", this::mostrarVentanaCreacionEquipo);
+		comandos.put("MOSTRAR_PANEL_INICIO_TORNEO", this::mostraVentanaIniciarTorneo);
 
 	}
 
@@ -807,6 +808,11 @@ public class AdminController implements ActionListener {
 	private void mostrarPanelTorneos() {
 		vistaAdmin.getVentanaPrincipal().getPanelInferior().setVisible(false);
 		vistaAdmin.getVentanaPrincipal().getLayoutCentral().show(vistaAdmin.getVentanaPrincipal().getPanelCentral(), "TORNEOS");
+		vistaAdmin.getVentanaPrincipal().getPanelTorneos().getBotonIniciarTorneo().addActionListener(this);
+	}
+	
+	private void mostraVentanaIniciarTorneo() {
+		vistaAdmin.getVentanaInicioTorneo().setVisible(true);
 	}
 	
 	// ------------------------------------------- GESTION DE TORNEOS  -------------------------------------------------------------------//

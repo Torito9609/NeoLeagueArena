@@ -14,6 +14,7 @@ public class PanelTorneoAdmin extends JPanel {
     private JButton botonCrear;
     private JButton botonAsignarEquipo;
     private JButton botonRemoverEquipo;
+    private JButton botonIniciarTorneo;
     private JTable tablaTorneos;
     private DefaultTableModel modeloTabla;
 
@@ -72,10 +73,14 @@ public class PanelTorneoAdmin extends JPanel {
 
         botonRemoverEquipo = new JButton("Remover Equipo");
         botonRemoverEquipo.setActionCommand("REMOVER_EQUIPO_TORNEO");
+        
+        botonIniciarTorneo = new JButton("Iniciar Torneo");
+        botonIniciarTorneo.setActionCommand("MOSTRAR_PANEL_INICIO_TORNEO");
 
         panelBotones.add(botonCrear);
         panelBotones.add(botonAsignarEquipo);
         panelBotones.add(botonRemoverEquipo);
+        panelBotones.add(botonIniciarTorneo);
 
         JPanel panelSuperior = new JPanel(new BorderLayout(10, 10));
         panelSuperior.add(panelCampos, BorderLayout.CENTER);
@@ -133,4 +138,14 @@ public class PanelTorneoAdmin extends JPanel {
     public DefaultTableModel getModeloTabla() {
         return modeloTabla;
     }
+
+	public JButton getBotonIniciarTorneo() {
+		return botonIniciarTorneo;
+	}
+
+	public void setBotonIniciarTorneo(JButton botonIniciarTorneo) {
+		this.botonIniciarTorneo = botonIniciarTorneo;
+	}
+    
+    
 }
